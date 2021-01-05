@@ -5,12 +5,11 @@ import java.util.*;
 import svc.*;
 import vo.*;
 
-public class OrdListAction implements action.Action {
+public class OrdListAction implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("OrdListAction");
+		//System.out.println("OrdListAction");
 		
 		ArrayList<OrdListInfo> ordList = new ArrayList<OrdListInfo>();
-
 		request.setCharacterEncoding("utf-8");
 		int cpage = 1, pcnt, spage, epage, rcnt, bsize = 10, psize = 12;
 		// 페이징에 필요한 값들을 저장할 변수 선언 및 초기화
@@ -21,10 +20,13 @@ public class OrdListAction implements action.Action {
 		//buyer = (String)request.getAttribute("id");
 		HttpSession session = request.getSession();	
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
+		
+		
 		if(loginMember != null) {	//회원인 경우
-			buyer = loginMember.getMl_id();
-		} else	buyer = "sungda123";	//비회원인 경우(test용으로 성다 넣음)
-		System.out.println(buyer);
+			buyer = loginMember.getMlid();
+		} else	{					//비회원인 경우
+			buyer = session.getId();	
+		}
 		
 		OrdListSvc ordListSvc = new OrdListSvc();
 		rcnt = ordListSvc.getOrdCount(buyer);	// 주문의 총 개수(페이지 개수를 구하기 위해 필요)

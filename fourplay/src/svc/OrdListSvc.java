@@ -25,7 +25,6 @@ public class OrdListSvc {
 		System.out.println("svc getOrdList");
 		
 		ArrayList<OrdListInfo> ordList = new ArrayList<OrdListInfo>();
-		// 상품 목록을 저장할 ArrayList객체로 PdtInfo형 인스턴스만 저장함
 		Connection conn = getConnection();
 		OrdDao ordDao = OrdDao.getInstance();
 		ordDao.setConnection(conn);
@@ -33,5 +32,19 @@ public class OrdListSvc {
 		close(conn);
 
 		return ordList;
+	}
+	
+	public OrdListInfo getOrd(String olid, String where) {
+		System.out.println("svc getOrd");
+		
+		OrdListInfo ordInfo = new OrdListInfo();
+		Connection conn = getConnection();
+		OrdDao ordDao = OrdDao.getInstance();
+		ordDao.setConnection(conn);
+		
+		ordInfo = ordDao.getOrd(olid, where);
+		close(conn);
+		
+		return ordInfo;
 	}
 }

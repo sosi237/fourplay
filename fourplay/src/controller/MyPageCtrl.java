@@ -7,28 +7,25 @@ import javax.servlet.http.*;
 import action.*;
 import vo.*;
 
-
 @WebServlet("*.mpg")
 public class MyPageCtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
     public MyPageCtrl() {
         super();
     }
-
     protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	request.setCharacterEncoding("utf-8");
 		String requestUri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String command = requestUri.substring(contextPath.length());
-
 		ActionForward forward = null;
 		Action action = null;
 
 		switch (command) {
 			case "/order_list.mpg" :			// 주문내역 화면
-				System.out.println("ctrl doprocess");
 				action = new OrdListAction();		break;
+			case "/order_detail.mpg" :		// 주문상세내역 화면
+				action = new OrdDetailAction();		break;
 		}
 
 		try {
@@ -36,7 +33,6 @@ public class MyPageCtrl extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		if (forward != null) {
 			if (forward.isRedirect()) {
 				response.sendRedirect(forward.getPath());
