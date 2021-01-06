@@ -7,7 +7,6 @@ request.setCharacterEncoding("utf-8");
 MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 ArrayList<OrdListInfo> ordList = (ArrayList<OrdListInfo>)request.getAttribute("ordList");
 OrdPageInfo ordPageInfo = (OrdPageInfo)request.getAttribute("ordPageInfo");
-
 int cpage	= ordPageInfo.getCpage();	// 현재 페이지 번호
 int pcnt	= ordPageInfo.getPcnt();	// 전체 페이지 수
 int psize	= ordPageInfo.getPsize();	// 페이지 크기
@@ -20,8 +19,10 @@ int rcnt	= ordPageInfo.getRcnt();	// 검색된 게시물 개수
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<!-- 
 <link href="css/reset.css" type="text/css" rel="stylesheet" />
 <link href="css/base.css" type="text/css" rel="stylesheet" />
+ -->
 <script>
 function ordCancel(olid){
 	if(confirm('주문을 취소하시겠습니까?\n취소 철회는 불가능합니다.')){
@@ -49,20 +50,17 @@ if(ordList != null && rcnt > 0){
 		<td>
 		<%
 		for (int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++) {
+			String plid = ordList.get(i).getOrdDetailList().get(j).getPl_id();
+			String plname = ordList.get(i).getOrdDetailList().get(j).getPl_name();
 			String opt = ordList.get(i).getOrdDetailList().get(j).getOd_opt();
+			if(opt == null)		opt = "옵션없음";
+			
 			if (j == ordList.get(i).getOrdDetailList().size() -1)	{
-				out.print("<a href='/product/product_detail.jsp?id="+ordList.get(i).getOrdDetailList().get(j).getPl_id()+"'>" 
-				+ ordList.get(i).getOrdDetailList().get(j).getPl_name() + "[" 
-				+ opt + "]</a><br />");
+				out.print("<a href='/product/product_detail.jsp?id="+plid+"'>" 
+				+ plname + "[" + opt + "]</a><br />");
 			}else {
-				if(opt != null && !opt.equals("null")){
-					out.print("<a href='/product/product_detail.jsp?id="+ordList.get(i).getOrdDetailList().get(j).getPl_id()+"'>" 
-							+ ordList.get(i).getOrdDetailList().get(j).getPl_name() + "[" + opt + "]</a>, <br />");
-				}else{
-					out.print("<a href='/product/product_detail.jsp?id="+ordList.get(i).getOrdDetailList().get(j).getPl_id()+"'>" 
-							+ ordList.get(i).getOrdDetailList().get(j).getPl_name() + "</a>, <br />");
-				}
-				
+				out.print("<a href='/product/product_detail.jsp?id=" + plid + "'>" 
+						+ plname + "[" + opt + "]</a>, <br />");
 			}
 		} %>
 		</td>
@@ -87,13 +85,13 @@ if(ordList != null && rcnt > 0){
 			case "g": 	out.print("교환완료");	break;
 			case "h": 	out.print("환불요청");	break;
 			case "i": 	out.print("환불완료");	break;
-			case "j": 	out.print("취소");		break;
+			case "j": 	out.print("취소");	break;
 		}
 		%></td>
 		<td>
 		<% switch(ordList.get(i).getOl_status()){
 			case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		break;
-			case "d": case "g":	out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
+			case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
 			case "e":	out.print("<input type='button' value='구매후기' onclick='location.href=\"product_detail.jsp\" '/>");							break;
 			case "f": 	out.print("교환요청");	break;
 			case "h": 	out.print("환불요청");	break;
@@ -127,7 +125,6 @@ if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 �
 		out.print("<a href='order_list.mpg?cpage=" + (cpage - 1) +  "'>");
 		out.println("<</a>&nbsp;&nbsp;");
 	}
-
 	for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
 		if (cpage == j) {
 			out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
@@ -136,7 +133,6 @@ if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 �
 			out.println(j + "</a>&nbsp;");
 		}
 	}
-
 	if (cpage == pcnt) {
 		out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
 	} else {

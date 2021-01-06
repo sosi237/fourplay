@@ -17,7 +17,7 @@ OrdListInfo ordInfo = (OrdListInfo)request.getAttribute("ordInfo");
  -->
 </head>
 <body>
-<h2>ORDER DETAIL</h2>
+<h2>비회원 ORDER DETAIL</h2>
 <div id="wrapper">
 <div>
 <table cellpadding="5" border="0">
@@ -35,7 +35,7 @@ OrdListInfo ordInfo = (OrdListInfo)request.getAttribute("ordInfo");
 switch(ordInfo.getOl_payment()){
 case "a": 	out.print("카드");		break;
 case "b": 	out.print("휴대폰");		break;
-case "c": 	out.print("계좌이체");	break;
+case "c": 	out.print("계좌이체");		break;
 case "d": 	out.print("무통장입금");	break;
 }
  %>
@@ -45,14 +45,14 @@ case "d": 	out.print("무통장입금");	break;
 <td>
 <% switch(ordInfo.getOl_status()){
 	case "a": 	out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
-	case "b": 	out.print("입금 확인");	break;
+	case "b": 	out.print("입금 확인");		break;
 	case "c": 	out.print("상품준비중");	break;
 	case "d": 	out.print("배송중<br/>한진택배: 419079564046");		break;
-	case "e": case "k": 	out.print("배송완료");				break;
-	case "f": 	out.print("교환요청");	break;
-	case "g": 	out.print("교환완료");	break;
-	case "h": 	out.print("환불요청");	break;
-	case "i": 	out.print("환불완료");	break;
+	case "e": case "k": 		out.print("배송완료");				break;
+	case "f": 	out.print("교환요청");		break;
+	case "g": 	out.print("교환완료");		break;
+	case "h": 	out.print("환불요청");		break;
+	case "i": 	out.print("환불완료");		break;
 	case "j": 	out.print("취소");		break;
 }
 %>
@@ -76,14 +76,14 @@ for (int i = 0; i < ordInfo.getOrdDetailList().size(); i++){
 <td>
 <% switch(ordInfo.getOl_status()){
 	case "a": 	out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
-	case "b": 	out.print("입금 확인");	break;
+	case "b": 	out.print("입금 확인");		break;
 	case "c": 	out.print("상품준비중");	break;
 	case "d": 	out.print("배송중<br/>한진택배: 419079564046");		break;
-	case "e": 	out.print("배송완료");	break;
-	case "f": 	out.print("교환요청");	break;
-	case "g": 	out.print("교환완료");	break;
-	case "h": 	out.print("환불요청");	break;
-	case "i": 	out.print("환불완료");	break;
+	case "e": 	out.print("배송완료");		break;
+	case "f": 	out.print("교환요청");		break;
+	case "g": 	out.print("교환완료");		break;
+	case "h": 	out.print("환불요청");		break;
+	case "i": 	out.print("환불완료");		break;
 	case "j": 	out.print("취소");		break;
 }%> 
 </td>
@@ -91,17 +91,11 @@ for (int i = 0; i < ordInfo.getOrdDetailList().size(); i++){
 <% switch(ordInfo.getOl_status()){
 	case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordInfo.getOl_id()+");'/>");		break;
 	case "d": case "g":	out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
-	case "e":	
-		if(loginMember != null){
-			out.print("<input type='button' value='구매후기' onclick='location.href=\"product_detail.jsp\" '/>");							
-		} else{
-			out.print("배송완료");
-		}
-		break;
-	case "f": 	out.print("교환요청");	break;
-	case "h": 	out.print("환불요청");	break;
-	case "i": 	out.print("환불완료");	break;
-	case "j": 	out.print("취소완료");	break;
+	case "e":	out.print("<input type='button' value='구매후기' onclick='location.href=\"product_detail.jsp\" '/>");							break;
+	case "f": 	out.print("교환요청");		break;
+	case "h": 	out.print("환불요청");		break;
+	case "i": 	out.print("환불완료");		break;
+	case "j": 	out.print("취소완료");		break;
 }
 %>
 </td>

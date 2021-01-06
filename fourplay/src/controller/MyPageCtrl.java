@@ -20,14 +20,20 @@ public class MyPageCtrl extends HttpServlet {
 		String command = requestUri.substring(contextPath.length());
 		ActionForward forward = null;
 		Action action = null;
-
-		switch (command) {
-			case "/order_list.mpg" :			// 주문내역 화면
-				action = new OrdListAction();		break;
-			case "/order_detail.mpg" :		// 주문상세내역 화면
-				action = new OrdDetailAction();		break;
+		String bname = request.getParameter("bname"); 
+		String olid = request.getParameter("olid");
+		HttpSession session = request.getSession();	
+		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
+		if(command.equals("/order_list.mpg")) {
+			if(loginMember != null) { //로그인한 상태이면
+				action = new OrdListAction();
+			} else {	//로그인하지 않은 상태에서 주문조회 버튼을 눌렀으면
+				if(bname == null || olid == null)		response.sendRedirect("login_form.jsp");
+				if(bname != null && olid != null)		action = new OrdListAction();
+			}
+		} else if(command.equals("/order_detail.mpg")) {
+			action = new OrdDetailAction();	
 		}
-
 		try {
 			forward = action.execute(request, response);
 		} catch (Exception e) {

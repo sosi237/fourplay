@@ -20,7 +20,7 @@ public class OrdDao {
 	public void setConnection(Connection conn) {
 		this.conn = conn;
 	}
-	public int getOrdCount(String buyer) {	// 주문들의 총 개수를 리턴하는 메소드
+	public int getOrdCount(String buyer) {	// 특정회원의 주문들 총 개수를 리턴하는 메소드
 		//System.out.println("getOrdCount");
 		int rcnt = 0;
 		Statement stmt = null;
@@ -119,7 +119,7 @@ public class OrdDao {
 		return ordDetailList;
 	}
 	
-	public OrdListInfo getOrd(String olid, String where) {
+	public OrdListInfo getOrd(String olid, String where) {	//특정한 하나의 주문내역 정보만을 리턴
 		OrdListInfo ordInfo = null;
 		Statement stmt = null;
 		ResultSet rs = null;
