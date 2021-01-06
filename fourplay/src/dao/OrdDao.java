@@ -127,7 +127,7 @@ public class OrdDao {
 		try {
 			int saleCnt = 0;
 			stmt = conn.createStatement();
-			String sql = "select * from t_order_list where ol_id ='" + olid + "' " + where;
+			String sql = "select * from t_order_list where ol_id ='" + olid + "' and ol_ismember = 'n' " + where;
 			//System.out.println(sql);
 			rs = stmt.executeQuery(sql);
 			if (rs.next()) {

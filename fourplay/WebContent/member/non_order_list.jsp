@@ -68,16 +68,16 @@ function ordCancel(olid){
 	<td>
 	<%
 	switch(ordInfo.getOl_status()){
-		case "a": 	out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
-		case "b": 	out.print("입금 확인");		break;
-		case "c": 	out.print("상품준비중");	break;
-		case "d": 	out.print("배송중<br/>한진택배: 419079564046");		break;
-		case "e": 	case "k":				out.print("배송완료");		break;
-		case "f": 	out.print("교환요청");		break;
-		case "g": 	out.print("교환완료");		break;
-		case "h": 	out.print("환불요청");		break;
-		case "i": 	out.print("환불완료");		break;
-		case "j": 	out.print("취소");		break;
+		case "a": 							out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
+		case "b": 							out.print("입금 확인");														break;
+		case "c": 							out.print("상품준비중");													break;
+		case "d": 							out.print("배송중<br/>한진택배: 419079564046");								break;
+		case "e": 	case "k":				out.print("배송완료");														break;
+		case "f": 							out.print("교환요청");														break;
+		case "g": 							out.print("교환완료");														break;
+		case "h": 							out.print("환불요청");														break;
+		case "i": 							out.print("환불완료");														break;
+		case "j": 							out.print("취소");														break;
 	}
 	%></td>
 	<td>
@@ -85,11 +85,11 @@ function ordCancel(olid){
 	switch(ordInfo.getOl_status()){
 		case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordInfo.getOl_id()+");'/>");		break;
 		case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");											break;
-		case "e":			out.print("배송완료");	break;
-		case "f": 			out.print("교환요청");	break;
-		case "h": 			out.print("환불요청");	break;
-		case "i": 			out.print("환불완료");	break;
-		case "j": 			out.print("취소완료");	break;
+		case "e":						out.print("배송완료");	break;
+		case "f": 						out.print("교환요청");	break;
+		case "h": 						out.print("환불요청");	break;
+		case "i": 						out.print("환불완료");	break;
+		case "j": 						out.print("취소완료");	break;
 	}
 	%>
 	</td>
