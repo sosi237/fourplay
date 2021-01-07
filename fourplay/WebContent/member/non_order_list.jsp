@@ -14,9 +14,14 @@ OrdListInfo ordInfo = (OrdListInfo)request.getAttribute("ordInfo");
 <link href="css/reset.css" type="text/css" rel="stylesheet" />
 <link href="css/base.css" type="text/css" rel="stylesheet" />
  -->
- <style>
-#wrapper {font-size:10px;}
-table td {border-top:1px solid lightgray;}
+<style>
+#wrapper {font-size:12px;}
+#wrapper table td {border-bottom:1px solid lightgray; align:center;}
+a:link { color:#4f4f4f; text-decoration:none; }
+a:visited { color:#4f4f4f; text-decoration:none; }
+a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
+a:active { color:#f00; text-decoration:none; }	
+a:focus { color:#f00; text-decoration:underline; }
 </style>
 <script>
 function ordCancel(olid){
@@ -51,10 +56,10 @@ function ordCancel(olid){
 		if(opt == null)		opt = "옵션없음";
 		if(i == ordInfo.getOrdDetailList().size() -1){	//해당 주문의 마지막 상품이면
 			out.print("<a href='/product/product_detail.jsp?id=" + plid + "'>"
-				+ plname + "[" + opt + "]</a> <br />");
+				+ plname + "<br />[" + opt + "]</a> <br />");
 		} else {
 			out.print("<a href='/product/product_detail.jsp?id=" + plid + "'>"
-					+ plname + "[" + opt + "]</a>, <br />");
+					+ plname + "<br />[" + opt + "]</a>, <br />");
 		}
 	} 
 	%>

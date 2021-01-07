@@ -11,6 +11,20 @@ OrdListInfo detailInfo = (OrdListInfo)request.getAttribute("detailInfo");
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style>
+#wrapper {font-size:13px;}
+#wrapper table {width:800px;  border:0px; }
+#wrapper table td {border-bottom:1px solid lightgray; align:center;}
+#ordInfo th { background-color:lightgray; }
+#pdtInfo th { background-color:lightgray; }
+#delivery th { background-color:lightgray; }
+#delivery {}
+a:link { color:#4f4f4f; text-decoration:none; }
+a:visited { color:#4f4f4f; text-decoration:none; }
+a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
+a:active { color:#f00; text-decoration:none; }	
+a:focus { color:#f00; text-decoration:underline; }
+</style>
 <!-- 
 <link href="css/reset.css" type="text/css" rel="stylesheet" />
 <link href="css/base.css" type="text/css" rel="stylesheet" />
@@ -19,9 +33,9 @@ OrdListInfo detailInfo = (OrdListInfo)request.getAttribute("detailInfo");
 <body>
 <h2>ORDER DETAIL</h2>
 <div id="wrapper">
-<div>
+<div id="ordInfo">
 <%if (detailInfo != null){ %>
-<table cellpadding="5" border="0">
+<table cellpadding="5" cellspacing="0" border="1">
 
 <tr><th colspan="2">주문정보</th><th colspan="2">결제정보</th></tr>
 <tr>
@@ -62,8 +76,8 @@ case "d": 	out.print("무통장입금");	break;
 </tr>
 </table>
 </div>
-<div>
-<table>
+<div id="pdtInfo">
+<table cellspacing="0">
 <tr><th colspan="6">주문 상품 정보</th></tr>
 <tr><th>사진</th><th>상품정보</th><th>수량</th><th>가격</th><th>주문처리상태</th><th>취소/교환/반품</th></tr>
 <%
@@ -111,8 +125,8 @@ for (int i = 0; i < detailInfo.getOrdDetailList().size(); i++){
 <%} %>
 </table>
 </div>
-<div>
-<table>
+<div id="delivery">
+<table  cellspacing="0">
 <tr><th colspan="6">배송 정보</th></tr>
 <tr><th>받으시는 분</th><td><%=detailInfo.getOl_rname() %></td>
 <tr><th>우편번호</th><td><%=detailInfo.getOl_rzip() %></td>

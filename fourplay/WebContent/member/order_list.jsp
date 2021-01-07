@@ -24,8 +24,13 @@ int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
 <link href="css/base.css" type="text/css" rel="stylesheet" />
  -->
 <style>
-#wrapper {font-size:10px;}
-table td {border-top:1px solid lightgray;}
+#wrapper {font-size:12px;}
+#wrapper table td {border-bottom:1px solid lightgray; align:center;}
+a:link { color:#4f4f4f; text-decoration:none; }
+a:visited { color:#4f4f4f; text-decoration:none; }
+a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
+a:active { color:#f00; text-decoration:none; }	
+a:focus { color:#f00; text-decoration:underline; }
 </style>
 <script>
 function ordCancel(olid){
@@ -60,10 +65,10 @@ if(ordList != null && rcnt > 0){
 		
 		if (j == ordList.get(i).getOrdDetailList().size() -1)	{
 			out.print("<a href='/product/product_detail.jsp?id="+plid+"'>" 
-			+ plname + "[" + opt + "]</a><br />");
+			+ plname + "<br />[" + opt + "]</a><br />");
 		}else {
 			out.print("<a href='/product/product_detail.jsp?id=" + plid + "'>" 
-					+ plname + "[" + opt + "]</a>, <br />");
+					+ plname + "<br />[" + opt + "]</a>, <br />");
 		}
 	} %>
 	</td>
@@ -108,8 +113,7 @@ if(ordList != null && rcnt > 0){
 <%
 	}
 }else {	//검색 결과가 없으면
-	out.println("<tr align='center'><td colspan='5'>");
-	out.println("주문 내역이 없습니다.</td></tr>");	
+	out.println("<tr align='center'><td colspan='7'>주문 내역이 없습니다.</td></tr>");
 }
 %>
 </table>
