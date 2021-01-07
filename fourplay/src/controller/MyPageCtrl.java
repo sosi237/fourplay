@@ -13,6 +13,7 @@ public class MyPageCtrl extends HttpServlet {
     public MyPageCtrl() {
         super();
     }
+
     protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	request.setCharacterEncoding("utf-8");
 		String requestUri = request.getRequestURI();
@@ -20,25 +21,35 @@ public class MyPageCtrl extends HttpServlet {
 		String command = requestUri.substring(contextPath.length());
 		ActionForward forward = null;
 		Action action = null;
-		String bname = request.getParameter("bname"); 
-		String olid = request.getParameter("olid");
-		HttpSession session = request.getSession();	
+
+		HttpSession session = request.getSession();
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
-		if(command.equals("/order_list.mpg")) {
-			if(loginMember != null) { //로그인한 상태이면
-				action = new OrdListAction();
-			} else {	//로그인하지 않은 상태에서 주문조회 버튼을 눌렀으면
-				if(bname == null || olid == null)		response.sendRedirect("login_form.jsp");
-				if(bname != null && olid != null)		action = new OrdListAction();
-			}
-		} else if(command.equals("/order_detail.mpg")) {
-			action = new OrdDetailAction();	
+		
+		switch (command) {
+			case "/order_list.mpg" :		// 회원 주문내역 보기
+				if(loginMember != null) {	// 로그인한 상태이면
+					action = new OrdListAction();
+				}else {
+					response.sendRedirect("login_form.jsp");
+				}
+				break;
+			case "/non_order_list.mpg" :	// 비회원 주문조회
+				action = new NonOrdAction();
+				break;
+			case "/order_detail.mpg" :	// 회원 주문 상세내역 보기
+				action = new OrdDetailAction();
+				break;
+			case "/non_order_detail.mpg" :	// 비회원 주문 상세내역 보기
+				action = new NonDetailAction();
+				break;
 		}
+
 		try {
 			forward = action.execute(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		if (forward != null) {
 			if (forward.isRedirect()) {
 				response.sendRedirect(forward.getPath());
@@ -49,10 +60,12 @@ public class MyPageCtrl extends HttpServlet {
 			}
 		}
     }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
+
 }

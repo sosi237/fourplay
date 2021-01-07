@@ -6,14 +6,14 @@
 request.setCharacterEncoding("utf-8");
 MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 ArrayList<OrdListInfo> ordList = (ArrayList<OrdListInfo>)request.getAttribute("ordList");
-OrdPageInfo ordPageInfo = (OrdPageInfo)request.getAttribute("ordPageInfo");
-int cpage	= ordPageInfo.getCpage();	// 현재 페이지 번호
-int pcnt	= ordPageInfo.getPcnt();	// 전체 페이지 수
-int psize	= ordPageInfo.getPsize();	// 페이지 크기
-int bsize	= ordPageInfo.getBsize();	// 블록 페이지 개수
-int spage	= ordPageInfo.getSpage();	// 블록 시작 페이지 번호
-int epage	= ordPageInfo.getEpage();	// 블록 종료 페이지 번호
-int rcnt	= ordPageInfo.getRcnt();	// 검색된 게시물 개수
+OrdPageInfo pageInfo = (OrdPageInfo)request.getAttribute("pageInfo");
+int cpage	= pageInfo.getCpage();	// 현재 페이지 번호
+int pcnt	= pageInfo.getPcnt();	// 전체 페이지 수
+int psize	= pageInfo.getPsize();	// 페이지 크기
+int bsize	= pageInfo.getBsize();	// 블록 페이지 개수
+int spage	= pageInfo.getSpage();	// 블록 시작 페이지 번호
+int epage	= pageInfo.getEpage();	// 블록 종료 페이지 번호
+int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
 %>
 <html>
 <head>
@@ -23,6 +23,10 @@ int rcnt	= ordPageInfo.getRcnt();	// 검색된 게시물 개수
 <link href="css/reset.css" type="text/css" rel="stylesheet" />
 <link href="css/base.css" type="text/css" rel="stylesheet" />
  -->
+<style>
+#wrapper {font-size:10px;}
+table td {border-top:1px solid lightgray;}
+</style>
 <script>
 function ordCancel(olid){
 	if(confirm('주문을 취소하시겠습니까?\n취소 철회는 불가능합니다.')){
@@ -34,75 +38,73 @@ function ordCancel(olid){
 <body>
 <h2>ORDER LIST</h2>
 <div id="wrapper">
-<table width="900" cellpadding="5">
+<table width="900" cellpadding="5" cellspacing="0" border="0">
 	<div class="head">
-		<tr><th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
-		<th width="8%">가격</th><th width="10%">주문처리상태</th><th width="15%">취소/교환/반품</th></tr>
+	<tr style="background-color:#e1e1e1; "><th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
+	<th width="8%">가격</th><th width="10%">주문처리상태</th><th width="15%">취소/교환/반품</th></tr>
 	</div>
 <%
 if(ordList != null && rcnt > 0){
 	for(int i = 0; i < ordList.size(); i++){ %>
-	<div class="ordList">
-		<tr>
-		<td><a href="order_detail.mpg?olid=<%=ordList.get(i).getOl_id() %>">
-		<%=ordList.get(i).getOl_date().substring(0,11) %><br />[<%=ordList.get(i).getOl_id() %>]</a></td>
-		<td><img src='/fourplay/product/pdt_img/<%=ordList.get(i).getOrdDetailList().get(0).getPl_img1() %>' width='50' align="absmiddle"/></td>
-		<td>
-		<%
-		for (int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++) {
-			String plid = ordList.get(i).getOrdDetailList().get(j).getPl_id();
-			String plname = ordList.get(i).getOrdDetailList().get(j).getPl_name();
-			String opt = ordList.get(i).getOrdDetailList().get(j).getOd_opt();
-			if(opt == null)		opt = "옵션없음";
-			
-			if (j == ordList.get(i).getOrdDetailList().size() -1)	{
-				out.print("<a href='/product/product_detail.jsp?id="+plid+"'>" 
-				+ plname + "[" + opt + "]</a><br />");
-			}else {
-				out.print("<a href='/product/product_detail.jsp?id=" + plid + "'>" 
-						+ plname + "[" + opt + "]</a>, <br />");
-			}
-		} %>
-		</td>
-		<td>
-		<%
-		int cnt = 0;
-		for (int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++) {
-			cnt += ordList.get(i).getOrdDetailList().get(j).getOd_cnt();
-		} 
-		out.print(cnt);
-		%>
-		</td>
-		<td><%=ordList.get(i).getOl_pay() %></td>
-		<td>
-		<% switch(ordList.get(i).getOl_status()){
-			case "a": 	out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
-			case "b": 	out.print("입금 확인");	break;
-			case "c": 	out.print("상품준비중");	break;
-			case "d": 	out.print("배송중<br/>한진택배: 419079564046");		break;
-			case "e": case "k":	out.print("배송완료");	break;
-			case "f": 	out.print("교환요청");	break;
-			case "g": 	out.print("교환완료");	break;
-			case "h": 	out.print("환불요청");	break;
-			case "i": 	out.print("환불완료");	break;
-			case "j": 	out.print("취소");	break;
+	<tr>
+	<td><a href="order_detail.mpg?olid=<%=ordList.get(i).getOl_id() %>">
+	<%=ordList.get(i).getOl_date().substring(0,11) %><br />[<%=ordList.get(i).getOl_id() %>]</a></td>
+	<td><img src='/fourplay/product/pdt_img/<%=ordList.get(i).getOrdDetailList().get(0).getPl_img1() %>' width='50' align="absmiddle"/></td>
+	<td>
+	<%
+	for (int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++) {
+		String plid = ordList.get(i).getOrdDetailList().get(j).getPl_id();
+		String plname = ordList.get(i).getOrdDetailList().get(j).getPl_name();
+		String opt = ordList.get(i).getOrdDetailList().get(j).getOd_opt();
+		if(opt == null)		opt = "옵션없음";
+		
+		if (j == ordList.get(i).getOrdDetailList().size() -1)	{
+			out.print("<a href='/product/product_detail.jsp?id="+plid+"'>" 
+			+ plname + "[" + opt + "]</a><br />");
+		}else {
+			out.print("<a href='/product/product_detail.jsp?id=" + plid + "'>" 
+					+ plname + "[" + opt + "]</a>, <br />");
 		}
-		%></td>
-		<td>
-		<% switch(ordList.get(i).getOl_status()){
-			case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		break;
-			case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
-			case "e":	out.print("<input type='button' value='구매후기' onclick='location.href=\"product_detail.jsp\" '/>");							break;
-			case "f": 	out.print("교환요청");	break;
-			case "h": 	out.print("환불요청");	break;
-			case "i": 	out.print("환불완료");	break;
-			case "j": 	out.print("취소완료");	break;
-			case "k": 	out.print("배송완료");	break;
-		}
-		%>
-		</td>
-		</tr>
-	</div>
+	} %>
+	</td>
+	<td>
+	<%
+	int cnt = 0;
+	for (int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++) {
+		cnt += ordList.get(i).getOrdDetailList().get(j).getOd_cnt();
+	} 
+	out.print(cnt);
+	%>
+	</td>
+	<td><%=ordList.get(i).getOl_pay() %></td>
+	<td>
+	<% switch(ordList.get(i).getOl_status()){
+		case "a": 	out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
+		case "b": 	out.print("입금 확인");	break;
+		case "c": 	out.print("상품준비중");	break;
+		case "d": 	out.print("배송중<br/>한진택배: 419079564046");		break;
+		case "e": case "k":	out.print("배송완료");	break;
+		case "f": 	out.print("교환요청");	break;
+		case "g": 	out.print("교환완료");	break;
+		case "h": 	out.print("환불요청");	break;
+		case "i": 	out.print("환불완료");	break;
+		case "j": 	out.print("취소");	break;
+	}
+	%></td>
+	<td>
+	<% switch(ordList.get(i).getOl_status()){
+		case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		break;
+		case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
+		case "e":	out.print("<input type='button' value='구매후기' onclick='location.href=\"product_detail.jsp\" '/>");							break;
+		case "f": 	out.print("교환요청");	break;
+		case "h": 	out.print("환불요청");	break;
+		case "i": 	out.print("환불완료");	break;
+		case "j": 	out.print("취소완료");	break;
+		case "k": 	out.print("배송완료");	break;
+	}
+	%>
+	</td>
+	</tr>
 <%
 	}
 }else {	//검색 결과가 없으면

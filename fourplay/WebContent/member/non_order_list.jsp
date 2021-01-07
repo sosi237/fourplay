@@ -14,6 +14,10 @@ OrdListInfo ordInfo = (OrdListInfo)request.getAttribute("ordInfo");
 <link href="css/reset.css" type="text/css" rel="stylesheet" />
 <link href="css/base.css" type="text/css" rel="stylesheet" />
  -->
+ <style>
+#wrapper {font-size:10px;}
+table td {border-top:1px solid lightgray;}
+</style>
 <script>
 function ordCancel(olid){
 	if(confirm('주문을 취소하시겠습니까?\n취소 철회는 불가능합니다.')){
@@ -25,16 +29,16 @@ function ordCancel(olid){
 <body>
 <h2>비회원 ORDER LIST</h2>
 <div id="wrapper">
-<table width="900" cellpadding="5">
+<table width="900" cellpadding="5" cellspacing="0" border="0">
 	<div class="head">
-	<tr>
+	<tr style="background-color:#e1e1e1; ">
 	<th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
 	<th width="8%">가격</th><th width="10%">주문처리상태</th><th width="15%">취소/교환/반품</th>
 	</tr>
 	</div>
 	<div class="ordList">
 	<tr>
-	<td><a href="order_detail.mpg?olid=<%=ordInfo.getOl_id() %>">
+	<td><a href="non_order_detail.mpg?olid=<%=ordInfo.getOl_id() %>&bname=<%=ordInfo.getOl_bname()%>">
 	<%=ordInfo.getOl_date().substring(0,11) %>
 	<br />[<%=ordInfo.getOl_id() %>]</a></td>
 	<td><img src='/fourplay/product/pdt_img/<%=ordInfo.getOrdDetailList().get(0).getPl_img1() %>' width='50' align="absmiddle"/></td>
