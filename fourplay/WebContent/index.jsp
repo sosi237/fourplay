@@ -37,5 +37,7 @@ if (loginMember == null) {
 주문번호: <input type="text" name="olid" />
 <input type="submit" name="확인" />
 </form>
+<hr />
+<a href="pdt_list.pdt">상품내역- 프론트</a>
 </body>
 </html>
