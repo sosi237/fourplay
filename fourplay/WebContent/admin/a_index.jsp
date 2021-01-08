@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="vo.*" %>
+<%
+session.setMaxInactiveInterval(1800);
+AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,10 +19,13 @@
 <a href="">상품관리</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="">회원관리</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="">커뮤니티 관리</a><br />
-<a href="admin_pms.adm">admin - 관리자 권한 부여</a><br />
+<%
+if (adminMember.getAl_id().equals("sa")){
+%>
+<br /><a href="admin_pms.adm">admin - 관리자 권한 부여</a><br />
 <a href="admin_join.adm">admin - 관리자 계정 생성</a><br />
 <a href="admin_del.adm">admin - 관리자 계정 삭제</a><br />
 <a href="admin_form.adm">admin - 관리자 계정 정보 수정</a><br />
-
+<%} %>
 </body>
 </html>
