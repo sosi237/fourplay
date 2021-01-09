@@ -130,9 +130,8 @@ for (int i = 0; i < detailInfo.getOrdDetailList().size(); i++){
 <tr><th colspan="6">배송 정보</th></tr>
 <tr><th>받으시는 분</th><td><%=detailInfo.getOl_rname() %></td>
 <tr><th>우편번호</th><td><%=detailInfo.getOl_rzip() %></td>
-<tr><th>주소</th><td><%=detailInfo.getOl_raddr1() %></td>
-<tr><th>전화</th><td><%=detailInfo.getOl_raddr2() %></td>
-<tr><th>송장번호</th><td></td>
+<tr><th>주소</th><td><%=detailInfo.getOl_raddr1() + " " + detailInfo.getOl_raddr2() %></td>
+<tr><th>전화</th><td><%=detailInfo.getOl_rphone() %></td>
 </table>
 
 </div>
