@@ -20,7 +20,7 @@ public class AdmCtrl extends HttpServlet {
 		String requestUri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String command = requestUri.substring(contextPath.length());
-		System.out.println(command);
+//		System.out.println(command);
 		
 		ActionForward forward = null;
 		Action action = null;
@@ -37,7 +37,7 @@ public class AdmCtrl extends HttpServlet {
 			case "/admin/admin_form.adm" :	// 관리자 계정 생성 화면
 				action = new AdmFormAction();
 				break;
-			case "/admin/admin/admin_proc.adm" :	// 관리자 계정 생성 화면
+			case "/admin/admin_proc.adm" :	// 관리자 계정 생성 화면
 				action = new AdmProcAction();
 				break;
 		}
@@ -62,6 +62,5 @@ public class AdmCtrl extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
-
 }
 
