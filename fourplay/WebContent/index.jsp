@@ -2,6 +2,7 @@
 <%@ page import="vo.*" %>
 <%
 MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
+AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 session.setMaxInactiveInterval(1800);
 //out.println(session.getId());
 %>
@@ -17,10 +18,16 @@ session.setMaxInactiveInterval(1800);
 </head>
 <body>
 <%
-if (loginMember == null) {
+if (loginMember == null) {	//일반 회원 로그인이 되어있지 않으면
+	if(adminMember != null){	//관리자 계정 로그인이 되어있으면
+		out.println(adminMember.getAl_id() +"("+ adminMember.getAl_name() + ") 님 환영합니다.<br />");
+		out.println("<a href=\"logout\">로그아웃</a>");
+		out.println("<a href=\"admin/a_index.jsp\">어드민으로 이동</a>");
+	} else{		// 일반회원도, 관리자 계정도 로그인되어 있지 않으면 
 %>
 <a href="login_form.jsp">로그인</a>
 <%
+	}
 } else {
 %>
 <%=loginMember.getMlid() + "(" + loginMember.getMlname() + ")" %>
