@@ -20,6 +20,7 @@ public class AdmCtrl extends HttpServlet {
 		String requestUri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String command = requestUri.substring(contextPath.length());
+		System.out.println(command);
 		
 		ActionForward forward = null;
 		Action action = null;
@@ -28,11 +29,16 @@ public class AdmCtrl extends HttpServlet {
 		
 		switch (command) {
 			case "/admin/admin_list.adm" :	// 관리자 목록 화면
-				// 여기서 if문으로 검사해서 super admin이면 admin_list.jsp로, 아니면 계정 정보 수정 창으로 이동. 액션 달라야
 //				action = new AdmListAction();
 				break;
 			case "/admin/admin_join.adm" :	// 관리자 계정 생성 화면
 				action = new AdmJoinAction();
+				break;
+			case "/admin/admin_form.adm" :	// 관리자 계정 생성 화면
+				action = new AdmFormAction();
+				break;
+			case "/admin/admin/admin_proc.adm" :	// 관리자 계정 생성 화면
+				action = new AdmProcAction();
 				break;
 		}
 		try {
@@ -44,7 +50,8 @@ public class AdmCtrl extends HttpServlet {
 			if (forward.isRedirect()) {
 				response.sendRedirect(forward.getPath());
 			} else {
-				RequestDispatcher dispatcher = 	request.getRequestDispatcher(forward.getPath());
+				RequestDispatcher dispatcher = 
+					request.getRequestDispatcher(forward.getPath());
 				dispatcher.forward(request, response);
 			}
 		}

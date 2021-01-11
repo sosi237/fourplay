@@ -40,4 +40,32 @@ public class AdmDao {
 		}
 		return isSA;
 	}
+	
+	public boolean admUpdate(AdminInfo adminMember) {
+		System.out.println("dao admUpdate");
+		boolean isSuccess = false;
+		Statement stmt = null;
+		int result = 0;
+		
+		try {
+			String sql = "update t_admin_list set al_pwd = '" + adminMember.getAl_pwd() + "', al_phone = '"+ adminMember.getAl_phone()
+				+ "', al_email = '"+ adminMember.getAl_email() +"' where al_id = '"+ adminMember.getAl_id() +"' ";
+			System.out.println(sql);
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+			System.out.println(result);
+			
+			if(result != 0) {	// 정보 수정이 정상적으로 이뤄졌으면
+				isSuccess = true;
+				
+			}
+			System.out.println(isSuccess);
+		} catch(Exception e) {
+			System.out.println("admUpdate() 오류");			e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+		return isSuccess;
+	}
+	
 }
