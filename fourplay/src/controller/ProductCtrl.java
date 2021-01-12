@@ -15,37 +15,39 @@ public class ProductCtrl extends HttpServlet {
         super();
     }
     protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		String requestUri = request.getRequestURI();
-		String contextPath = request.getContextPath();
-		String command = requestUri.substring(contextPath.length());
+    	// 사용자의 요청이 get이든 post이든 모두 처리하는 메소드
+    		request.setCharacterEncoding("utf-8");
+    		String requestUri = request.getRequestURI();
+    		String contextPath = request.getContextPath();
+    		String command = requestUri.substring(contextPath.length());
 
-		ActionForward forward = null;
-		Action action = null;
+    		ActionForward forward = null;
+    		Action action = null;
 
-		switch (command) {
-			case "/pdt_list.pdt" :			// 상품 목록 폼
-				action = new PdtListAction();		break;
-			case "/pdt_view.pdt" :			// 상품 상세 화면
-				action = new PdtViewAction();		break;
-		}
+    		// 사용자의 요청 종류에 따라 각각 다른 action을 취함
+    		switch (command) {
+    			case "/pdt_list.pdt" :		// 상품 등록 폼
+    				action = new PdtListAction();		break;
+    			case "/pdt_view.pdt" :			// 상품 상세 화면
+    				action = new PdtViewAction();		break;
+    		}
 
-		try {
-			forward = action.execute(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    		try {
+    			forward = action.execute(request, response);
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
 
-		if (forward != null) {
-			if (forward.isRedirect()) {
-				response.sendRedirect(forward.getPath());
-			} else {
-				RequestDispatcher dispatcher = 
-					request.getRequestDispatcher(forward.getPath());
-				dispatcher.forward(request, response);
-			}
-		}
-	}
+    		if (forward != null) {
+    			if (forward.isRedirect()) {
+    				response.sendRedirect(forward.getPath());
+    			} else {
+    				RequestDispatcher dispatcher = 
+    					request.getRequestDispatcher(forward.getPath());
+    				dispatcher.forward(request, response);
+    			}
+    		}
+    	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}

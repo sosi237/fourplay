@@ -15,7 +15,7 @@ public class PdtViewAction implements Action {
 		request.setAttribute("pdtInfo", pdtInfo);
 
 		ActionForward forward = new ActionForward();
-		forward.setPath("/product/pdt_view.jsp");
+		forward.setPath("/product/product_detail.jsp");
 
 		return forward;
 	}
