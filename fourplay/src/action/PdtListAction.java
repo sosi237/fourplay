@@ -9,7 +9,7 @@ public class PdtListAction implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ArrayList<PdtInfo> pdtList = new ArrayList<PdtInfo>();
 		// 상품 목록을 저장할 ArrayList객체로 PdtInfo형 인스턴스만 저장함
-System.out.println("PdtListAction");
+
 		request.setCharacterEncoding("utf-8");
 		int cpage = 1, pcnt, spage, epage, rcnt, bsize = 10, psize = 12;
 		// 페이징에 필요한 값들을 저장할 변수 선언 및 초기화
@@ -78,7 +78,7 @@ System.out.println("PdtListAction");
 		// 상품목록 화면(pdt_list.jsp)으로 목록(pdtList)과 페이징 정보(pageInfo), 분류들을 request에 담아 가져감
 
 		ActionForward forward = new ActionForward();
-		forward.setPath("/product/pdt_list.jsp");
+		forward.setPath("/product/product_list.jsp");
 		return forward;
 	}
 }

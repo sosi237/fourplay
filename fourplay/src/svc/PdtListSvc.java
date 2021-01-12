@@ -22,7 +22,6 @@ public class PdtListSvc {
 	}
 
 	public ArrayList<PdtInfo> getPdtList(String where, String orderby, int cpage, int psize) {
-		System.out.println("svc getPdtList");
 		ArrayList<PdtInfo> pdtList = new ArrayList<PdtInfo>();
 		// 상품 목록을 저장할 ArrayList객체로 PdtInfo형 인스턴스만 저장함
 		Connection conn = getConnection();
