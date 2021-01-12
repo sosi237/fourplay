@@ -32,9 +32,11 @@ public class CartCtrl extends HttpServlet {
 			case "/cart_list.crt" :			// 장바구니 화면
 				action = new CartListAction();		break;
 			case "/wish_in.crt" :			// 위시리스트 등록기능
-				action = new CartListAction();		break;
+				action = new WishInAction();		break;
+			case "/wish_del.crt" :			// 위시리스트 삭제기능
+				action = new WishDelAction();		break;
 			case "/wish_list.crt" :			// 위시리스트 화면
-				action = new CartListAction();		break;
+				action = new WishListAction();		break;
     		}
 
     		try {
