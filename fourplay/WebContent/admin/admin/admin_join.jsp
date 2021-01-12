@@ -51,10 +51,10 @@ function chkDupId(){
 <input type="hidden" name="idChk" id="idChk" value="N" />
 <table cellpadding="5" align="center">
 <tr><td class="text">
-	<input type="text" name="uid" id="uid" onkeyup="chkDupId();" placeholder="아이디" />
+	<input type="text" name="aid" id="aid" onkeyup="chkDupId();" placeholder="아이디" />
 	<br /><span id="idMsg"> </span>
 </td></tr>
-<tr><td class="text" align="center"><input type="text" class="input" placeholder="이름" /></td></tr>
+<tr><td class="text" align="center"><input type="text" name="name" class="input" placeholder="이름" /></td></tr>
 <tr><td class="text"><input type="password" name="pwd" placeholder="비밀번호" /></td></tr>
 <tr><td class="text"><input type="password" name="pwd2" placeholder="비밀번호 확인" /></td></tr>
 <tr><td class="text"><input type="text" name="email" placeholder="이메일" /></td></tr>

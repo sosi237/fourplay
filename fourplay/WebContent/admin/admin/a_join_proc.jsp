@@ -17,7 +17,6 @@ String email 	= request.getParameter("email");
 
 String driver ="com.mysql.cj.jdbc.Driver";
 String url = "jdbc:mysql://localhost:3306/fourplay?useUnicode=true&characterEncoding=utf8&verifyServerCertificate=false&useSSL=false&serverTimezone=UTC";
-// sql += id+", "+ pwd+", "+ name+", "+ gender+", "+ birth+", "+phone+", "+email+")";
 
 try{
 	Class.forName(driver);
@@ -43,8 +42,7 @@ try{
 	out.println("오류가 발생했습니다.");
 }finally{
 	try {
-		stmt.close();
-		conn.close();
+		stmt.close();		conn.close();
 	} catch(Exception e){
 		e.printStackTrace();
 	}

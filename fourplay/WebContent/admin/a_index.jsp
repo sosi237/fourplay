@@ -20,6 +20,7 @@ if (adminMember == null) {
 <body>
 <h2>관리자 모드</h2>
 <%=adminMember.getAl_id() %>로 로그인 중입니다.<br />
+<a href="../logout">로그아웃</a>
 <a href="../index.jsp">프론트로 가기</a><br />
 <a href="admin_form.adm">admin - 관리자 계정 정보 수정</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="">사이트 관리</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
