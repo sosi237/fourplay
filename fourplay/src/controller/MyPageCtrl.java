@@ -30,7 +30,7 @@ public class MyPageCtrl extends HttpServlet {
 				if(loginMember != null) {	// 로그인한 상태이면
 					action = new OrdListAction();
 				}else {
-					response.sendRedirect("login_form.jsp");
+					response.sendRedirect("login_form.jsp?ismember=n");
 				}
 				break;
 			case "/non_order_list.mpg" :	// 비회원 주문조회

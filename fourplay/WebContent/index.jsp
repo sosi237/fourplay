@@ -39,11 +39,6 @@ if (loginMember == null) {	//일반 회원 로그인이 되어있지 않으면
 %>
 <hr />
 <a href="order_list.mpg">주문내역조회- 프론트</a>
-<form name="frm" action="non_order_list.mpg" method="post">
-주문자 : <input type="text" name="bname" />
-주문번호: <input type="text" name="olid" />
-<input type="submit" name="확인" />
-</form>
 <hr />
 <a href="pdt_list.pdt">상품내역- 프론트</a>
 <hr />
