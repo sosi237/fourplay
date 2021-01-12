@@ -46,5 +46,9 @@ if (loginMember == null) {	//일반 회원 로그인이 되어있지 않으면
 </form>
 <hr />
 <a href="pdt_list.pdt">상품내역- 프론트</a>
+<hr />
+<a href="cart_list.crt">장바구니- 프론트</a>
+<hr />
+<a href="wish_list.crt">위시리스트- 프론트</a>
 </body>
 </html>
