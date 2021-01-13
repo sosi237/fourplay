@@ -3,7 +3,7 @@
 <%@ page import="vo.*" %>
 <%
 AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
-if (!adminMember.getAl_id().equals("sa")) {
+if (adminMember == null || !adminMember.getAl_id().equals("sa")) {
 	out.println("<script>");
 	out.println("alert('접근 권한이 없는 계정입니다.');");
 	out.println("location.href='login_form.jsp';");
@@ -17,12 +17,12 @@ if (!adminMember.getAl_id().equals("sa")) {
 <title>Insert title here</title>
 <script src="jquery-3.5.1.js"></script>
 <script>
-function chkDupId(){
-	var uid = $("#aid").val();
-	if (uid.length >= 4) {
+function chkDupAId(){
+	var aid = $("#aid").val();
+	if (aid.length > 1) {
 		$.ajax({
 			type : "POST",	// 데이터 전송방법 
-			url : "dupID", 	// 중복체크를 위해 이동할 컨트롤러 URL
+			url : "/fourplay/dupAID", 	// 중복체크를 위해 이동할 컨트롤러 URL
 			data : {"aid":aid}, // url로 지정한 곳으로 보낼 데이터
 			success : function(chkRst) {
 			// 함수 실행시 url로 지정한 곳에서 작업한 결과를 chkRst로 받아 옴
@@ -31,7 +31,7 @@ function chkDupId(){
 					msg = "<span class='fontBlue'>사용하실 수 있는 ID입니다.</span>";
 					$("#idChk").val("Y");
 				} else {
-					msg = "<span class='fontRed'>이미 사용중 인 ID입니다.</span>";
+					msg = "<span class='fontRed'>이미 사용중인 ID입니다.</span>";
 					$("#idChk").val("N");
 				}
 				document.getElementById("idMsg").innerHTML = msg;
@@ -43,6 +43,8 @@ function chkDupId(){
 <style>
 .text input { width:300px; height:30px; }
 .text { text-align:center; }
+.fontRed { color:red; font-weight:bold; }
+.fontBlue { color:blue; font-weight:bold; }
 </style>
 </head>
 <body>
@@ -51,7 +53,7 @@ function chkDupId(){
 <input type="hidden" name="idChk" id="idChk" value="N" />
 <table cellpadding="5" align="center">
 <tr><td class="text">
-	<input type="text" name="aid" id="aid" onkeyup="chkDupId();" placeholder="아이디" />
+	<input type="text" name="aid" id="aid" onkeyup="chkDupAId();" placeholder="아이디" />
 	<br /><span id="idMsg"> </span>
 </td></tr>
 <tr><td class="text" align="center"><input type="text" name="name" class="input" placeholder="이름" /></td></tr>
