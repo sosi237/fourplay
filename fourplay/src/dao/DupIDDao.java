@@ -4,7 +4,6 @@ import static db.JdbcUtil.*;
 import java.sql.*;
 
 public class DupIDDao {
-// 로그인 관련 쿼리를 만들어 실행시키는 클래스
 	private static DupIDDao dupIDDao;
 	private Connection conn;
 
