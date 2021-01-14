@@ -21,16 +21,17 @@ public class CartCtrl extends HttpServlet {
     		String requestUri = request.getRequestURI();
     		String contextPath = request.getContextPath();
     		String command = requestUri.substring(contextPath.length());
-
+    		
     		ActionForward forward = null;
     		Action action = null;
-
     		// 사용자의 요청 종류에 따라 각각 다른 action을 취함
     		switch (command) {
 			case "/cart_in.crt" :			// 장바구니 등록 기능
 				action = new CartInAction();		break;
 			case "/cart_list.crt" :			// 장바구니 화면
 				action = new CartListAction();		break;
+			case "/cart_up_cnt.crt" :		// 장바구니 수량 수정 옵션 기능
+				action = new CartUpCntAction();		break;
 			case "/wish_in.crt" :			// 위시리스트 등록기능
 				action = new WishInAction();		break;
 			case "/wish_del.crt" :			// 위시리스트 삭제기능

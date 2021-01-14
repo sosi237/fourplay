@@ -42,6 +42,7 @@ public class CartDao {
 					" values ('" + cart.getCl_buyer() + "', '" + cart.getCl_ismember() + "', '" + 
 					cart.getPl_id() + "', '" + cart.getCl_opt() + "', '" + cart.getCl_cnt() + "')";
 				}
+
 				result = stmt.executeUpdate(sql);
 
 			} catch(Exception e) {
@@ -91,7 +92,25 @@ public class CartDao {
 
 		return cartList;		
 	}
-	
+	public int cartCntUpdate( String idx, String cnt, String buyer, String isMember) {
+		// 사용자가 선택한 상품의 수량을 변경하는 메소드
+			int result = 0;
+			Statement stmt = null;
+
+			try {
+				stmt = conn.createStatement();
+				String sql = "update t_cart_list set cl_cnt = '" + cnt + "' where cl_buyer = '" + 
+					buyer + "' and cl_ismember = '" + isMember + "' and cl_idx = " + idx;
+
+				result = stmt.executeUpdate(sql);
+			} catch(Exception e) {
+				System.out.println("cartCntUpdate() 오류");		e.printStackTrace();
+			} finally {
+				close(stmt);
+			}
+
+			return result;
+		}
 
    public int wishInsert(CartInfo cart) {
 		// 사용자가 선택한 상품을 장바구니에 담는 메소드
@@ -120,20 +139,15 @@ public class CartDao {
 			return result;
 		} 
    
-   public int wishDelete(String idx, String buyer) {
+   public int wishDelete(String id, String buyer) {
 		// 사용자가 선택한 상품(들)을 장바구니에서 삭제하는 메소드
 			int result = 0;
 			Statement stmt = null;
 
 			try {
-				String[] arrIdx = idx.split(",");
-				String where = "";
-				for (int i = 0 ; i < arrIdx.length ; i++) {
-					where += " or cl_idx = " + arrIdx[i];
-				}
-				where = " and (" + where.substring(4) + ")";
 				String sql = "delete from t_wish_list where ml_id = '" + buyer + 
-					"' " + where;
+					"' and wl_id = '" + id + "'";
+
 				stmt = conn.createStatement();
 				result = stmt.executeUpdate(sql);
 			} catch(Exception e) {
@@ -154,7 +168,6 @@ public class CartDao {
 			String sql = "select w.wl_id, p.pl_id, p.pl_name, p.pl_img1, p.pl_price, p.pl_discount" + 
 					" from t_wish_list w ,t_member_list m, t_product_list p " + 
 					" where w.ml_id = m.ml_id and w.pl_id = p.pl_id and p.pl_view = 'y' " + where + "'";
-			System.out.println(sql);
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while(rs.next()) {
