@@ -6,8 +6,9 @@ MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 //로그인 되어 있을 경우 로그인 정보(현재 로그인 한 회원의 정보)를 받아옴
 
 request.setCharacterEncoding("utf-8");
-int cpage = Integer.parseInt(request.getParameter("cpage"));
-int psize = Integer.parseInt(request.getParameter("psize"));
+int cpage = 1, psize = 12;
+if(request.getParameter("cpage") != null)  cpage = Integer.parseInt(request.getParameter("cpage"));
+if(request.getParameter("psize") != null)  psize = Integer.parseInt(request.getParameter("psize"));
 
 // 검색조건 및 정렬조건 쿼리스트링을 받음
 String id, keyword, bcata, scata, brand, sprice, eprice, ord;
