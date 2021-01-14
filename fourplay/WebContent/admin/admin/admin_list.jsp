@@ -14,11 +14,21 @@ if(keyword == null)					keyword = "";
 if(schtype == null)					schtype = "";
 
 String args = "", schArgs = "";
-if (status != null)		schArgs += "&status=" + status;		else	status = "";
-if (!keyword.equals(""))					schArgs += "&schtype=" + schtype + "&keyword=" + keyword;
-else 														schtype = "";	keyword = "";
+if (status != null) {
+	schArgs += "&status=" + status;		
+} else {
+	status = "";
+}
 
-if (ord != null)		schArgs += "&ord=" + ord;			else	ord = "";
+if (!keyword.equals("")) {
+	schArgs += "&schtype=" + schtype + "&keyword=" + keyword;
+}
+else {
+	schtype = "";	keyword = "";
+}
+
+if (ord != null)		schArgs += "&ord=" + ord;			
+else					ord = "";
 
 int cpage	= pageInfo.getCpage();	// 현재 페이지 번호
 int pcnt	= pageInfo.getPcnt();	// 전체 페이지 수
@@ -39,12 +49,31 @@ args = "&cpage=" + cpage + schArgs;
 #sch {text-align:right;}
 #admList {margin-top:10px;}
 #admList table {width:900px;}
-#admList th, #admList td {text-align:left; border-bottom:1px solid black;}
+#admList th {text-align:left; }
+#admList td {text-align:left; border-top:1px solid black;}
 #paging {text-align:center; margin-top:10px;}
+#admMenu {float:right;}
 </style>
+<script>
+function svStatus(){
+	var frm = document.schFrm;
+	var status = document.getElementById("status");
+	var val;
+	for(var i = 0; i < status.options.length; i++){
+		if(status.options[i].selected == true){
+			val = status.options[i].value;
+			break;
+		}
+	}
+	location.href="admin_proc.adm?wtype=status&";
+}
+</script>
 </head>
 <body>
 <h2>관리자 목록</h2>
+<table name="admMenu">
+<tr><td><%@ include file="../admin_menu.jsp" %></td></tr>
+</table>
 <form name="schFrm" action="" method="get">
 <div id="sch">
 <table cellspacing="0">
@@ -62,6 +91,7 @@ args = "&cpage=" + cpage + schArgs;
 </div>
 </form>
 <form name="listFrm" action="admin_proc.adm" method="post">
+<input type="hidden" name="wtype" value="status" />
 <div id="admList">
 	<table cellspacing="0">
 	<tr>
@@ -79,16 +109,16 @@ for(int i = 0; i < admList.size(); i++){
 	<td><%=admList.get(i).getAl_date().substring(0, 11).replace('-', '.')%></td>
 	<!--<td></td><td></td> -->
 	<td>
-		<select name="status">
+		<select name="status" id="status">
 			<option value="a" <%if (admList.get(i).getAl_status().equals("b")) { %> selected="selected" <%} %>>사용중</option>
 			<option value="b" <%if (admList.get(i).getAl_status().equals("a")) { %> selected="selected" <%} %>>미사용</option>
 		</select>
 	</td>
 	</tr>
 <%} %>
+	<tr><td colspan="4" style="text-align:right; padding-top:20px;"><input type="button" value="상태변경 저장" onclick="svStatus();"/></td></tr>
 	</table>
 </div>
-<div id="saveStatus"><input type="submit" value="상태변경 저장" /></div>
 </form>
 <div id="paging">
 <table width="800" cellpadding="5">

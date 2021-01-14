@@ -49,6 +49,9 @@ function chkDupAId(){
 </head>
 <body>
 <h2>관리자 계정 생성 화면</h2>
+<table name="admMenu">
+<tr><td><%@ include file="../admin_menu.jsp" %></td></tr>
+</table>
 <form name="frmJoin" action="admin/a_join_proc.jsp" method="post">
 <input type="hidden" name="idChk" id="idChk" value="N" />
 <table cellpadding="5" align="center">
