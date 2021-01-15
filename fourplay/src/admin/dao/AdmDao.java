@@ -85,7 +85,7 @@ public class AdmDao {
 		int snum = (cpage - 1) * psize;
 		
 		try {
-			sql = "select * from t_admin_list " + where + orderby+ " limit " + snum + ", " + psize;
+			sql = "select * from t_admin_list " + where + orderby + " limit " + snum + ", " + psize;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			
@@ -115,7 +115,6 @@ public class AdmDao {
 	public ArrayList<HistoryInfo> getHistory(int alidx) {
 		ArrayList<HistoryInfo> htryList = new ArrayList<HistoryInfo>();
 		HistoryInfo historyInfo = new HistoryInfo();
-		
 		Statement stmt = null;
 		ResultSet rs = null;
 		String sql = null;
@@ -143,6 +142,32 @@ public class AdmDao {
 			close(stmt);
 		}
 		return htryList;
+	}
+	
+	public int chStatus(String idxs, String st){
+		System.out.println("dao chStatus");
+//		ArrayList<AdminInfo> admList = new ArrayList<AdminInfo>();
+//		AdminInfo adminInfo = new AdminInfo();
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int result = 0;
+		
+		try {
+			String[] arrIdx = idxs.split(",");
+			String[] arrSt = st.split(",");
+			System.out.println(arrIdx.length);
+			for(int i = 0; i < arrIdx.length; i++ ) {
+				sql = "update t_admin_list set al_status = '" + arrSt[i] + "' where al_idx = " + arrIdx[i];
+				stmt = conn.createStatement();
+				result = stmt.executeUpdate(sql);
+			}
+		} catch(Exception e) {
+			System.out.println("chStatus() ¿À·ù");			e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+		return result;
 	}
 	
 }

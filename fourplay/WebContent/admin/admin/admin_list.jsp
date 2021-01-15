@@ -56,7 +56,6 @@ args = "&cpage=" + cpage + schArgs;
 </style>
 <script>
 function getStatus(){
-	alert("::::getStatus");
 	var arrVal = document.listFrm.status;
 	var status = "";
 	for(var i = 0; i < arrVal.length; i++){
@@ -67,10 +66,13 @@ function getStatus(){
 }
 
 function chVal(){
-	var status = getStatus();	//b,a
+	var frm = document.listFrm;
 	var st = document.getElementById("st");
-	st.value = status;	
-	alert(status + "::::");
+	if(confirm("관리자 계정 상태값을 변경하시겠습니까?")){
+		var status = getStatus();	//b,a
+		st.value = status;	
+		frm.submit();
+	}
 }
 </script>
 </head>

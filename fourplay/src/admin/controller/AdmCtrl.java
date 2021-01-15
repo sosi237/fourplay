@@ -20,7 +20,7 @@ public class AdmCtrl extends HttpServlet {
 		String requestUri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String command = requestUri.substring(contextPath.length());
-//		System.out.println(command);
+		System.out.println(command);
 		
 		ActionForward forward = null;
 		Action action = null;
@@ -29,15 +29,15 @@ public class AdmCtrl extends HttpServlet {
 		
 		switch (command) {
 			case "/admin/admin_list.adm" :	// 관리자 목록 화면
-//				action = new AdmListAction();
+				action = new AdmListAction();
 				break;
 			case "/admin/admin_join.adm" :	// 관리자 계정 생성 화면
 				action = new AdmJoinAction();
 				break;
-			case "/admin/admin_form.adm" :	// 관리자 계정 생성 화면
+			case "/admin/admin_form.adm" :	// 관리자 계정 수정 화면
 				action = new AdmFormAction();
 				break;
-			case "/admin/admin_proc.adm" :	// 관리자 계정 생성 화면
+			case "/admin/admin_proc.adm" :	// 관리자 계정 수정/삭제, 상태변경 처리 기능 
 				action = new AdmProcAction();
 				break;
 		}

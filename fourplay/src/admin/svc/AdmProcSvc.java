@@ -23,4 +23,24 @@ public class AdmProcSvc {
 		close(conn);
 		return isSuccess;
 	}
+	
+	public boolean chStatus(String idxs, String st){
+		System.out.println("AdmProcSvc chStatus");
+		boolean isSuccess = false; 
+		int result = 0;
+		Connection conn = getConnection();
+		AdmDao admDao = AdmDao.getInstance();
+		admDao.setConnection(conn);
+		result = admDao.chStatus(idxs, st);
+		if (result > 0) {
+			isSuccess = true;
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return isSuccess;
+	}
+	
 }
