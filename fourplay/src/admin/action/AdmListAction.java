@@ -23,10 +23,9 @@ public class AdmListAction implements action.Action {
 		keyword = request.getParameter("keyword");	// 검색어
 		String ord = request.getParameter("ord");	// 정렬조건으로 관리자 아이디(오a내d), 관리자이름name(오a), 등록일date(오a내d), 계정사용여부status(오a내d)
 		
-		String where = "", orderby = "";
+		String where = " where al_id != 'sa' ", orderby = "";
 		if (keyword != null && !keyword.equals(""))	{
-			if(where.equals(""))	where = " where al_" + schtype + " like '%" + keyword + "%' ";
-			else 					where += " and al_" + schtype + " like '%" + keyword + "%' ";
+			where += " and al_" + schtype + " like '%" + keyword + "%' ";
 		}
 		if(status != null && !status.equals(""))	{
 			if(where.equals(""))	where = " where al_status ='" + status + "' ";

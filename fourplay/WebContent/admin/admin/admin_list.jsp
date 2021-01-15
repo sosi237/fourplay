@@ -52,31 +52,37 @@ args = "&cpage=" + cpage + schArgs;
 #admList th {text-align:left; }
 #admList td {text-align:left; border-top:1px solid black;}
 #paging {text-align:center; margin-top:10px;}
-#admMenu {float:right;}
+#admMenu {float:left; margin-right:30px;}
 </style>
 <script>
-function svStatus(){
-	var frm = document.schFrm;
-	var status = document.getElementById("status");
-	var val;
-	for(var i = 0; i < status.options.length; i++){
-		if(status.options[i].selected == true){
-			val = status.options[i].value;
-			break;
-		}
+function getStatus(){
+	alert("::::getStatus");
+	var arrVal = document.listFrm.status;
+	var status = "";
+	for(var i = 0; i < arrVal.length; i++){
+		status += "," + arrVal[i].options[arrVal[i].selectedIndex].value;
 	}
-	location.href="admin_proc.adm?wtype=status&";
+	status = status.substring(1);
+	return status;
+}
+
+function chVal(){
+	var status = getStatus();	//b,a
+	var st = document.getElementById("st");
+	st.value = status;	
+	alert(status + "::::");
 }
 </script>
 </head>
 <body>
 <h2>관리자 목록</h2>
-<table name="admMenu">
+<table id="admMenu">
 <tr><td><%@ include file="../admin_menu.jsp" %></td></tr>
 </table>
 <form name="schFrm" action="" method="get">
 <div id="sch">
 <table cellspacing="0">
+<tr>
 <th>검색어</th>
 <td>
 	<select name="schtype">
@@ -87,11 +93,13 @@ function svStatus(){
 	<input type="text" name="keyword" />
 </td>
 <td><input type="submit" value="검색" /></td>
+</tr>
 </table>
 </div>
 </form>
 <form name="listFrm" action="admin_proc.adm" method="post">
-<input type="hidden" name="wtype" value="status" />
+<input type="hidden" name="wtype" value="chStatus" />
+<input type="hidden" name="st" id="st" value="" />
 <div id="admList">
 	<table cellspacing="0">
 	<tr>
@@ -102,7 +110,11 @@ function svStatus(){
 	<th>상태<a href="admin_list.adm?ord=statusa">▲</a> <a href="admin_list.adm?ord=statusd">▼</a></th>
 	</tr>
 <%
+String idx = "", idxs = "";
 for(int i = 0; i < admList.size(); i++){
+	idx = admList.get(i).getAl_idx() + "";
+	idxs += "," + idx;
+//	System.out.println(idxs);
 %>
 	<tr>
 	<td><%=admList.get(i).getAl_id() %></td><td><%=admList.get(i).getAl_name() %></td>
@@ -110,13 +122,18 @@ for(int i = 0; i < admList.size(); i++){
 	<!--<td></td><td></td> -->
 	<td>
 		<select name="status" id="status">
-			<option value="a" <%if (admList.get(i).getAl_status().equals("b")) { %> selected="selected" <%} %>>사용중</option>
-			<option value="b" <%if (admList.get(i).getAl_status().equals("a")) { %> selected="selected" <%} %>>미사용</option>
+			<option value="a" <%if (admList.get(i).getAl_status().equals("a")) { %> selected="selected" <%} %>>미사용</option>
+			<option value="b" <%if (admList.get(i).getAl_status().equals("b")) { %> selected="selected" <%} %>>사용중</option>
 		</select>
 	</td>
 	</tr>
-<%} %>
-	<tr><td colspan="4" style="text-align:right; padding-top:20px;"><input type="button" value="상태변경 저장" onclick="svStatus();"/></td></tr>
+<%
+} 
+idxs = idxs.substring(1);
+%>
+	<input type="hidden" name="idxs" value="<%=idxs %>" />
+	<tr><td colspan="4" style="text-align:right; padding-top:20px;">
+	<input type="button" value="상태변경 저장" onclick="chVal();"/></td></tr>
 	</table>
 </div>
 </form>
