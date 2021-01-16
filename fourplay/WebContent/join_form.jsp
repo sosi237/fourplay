@@ -14,6 +14,7 @@ if (user_id != null) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
+#wrapper {width:100%; position:absolute; top:300px;}
 .fontRed { color:red; font-weight:bold; }
 .fontBlue { color:blue; font-weight:bold; }
 hr { border:2px sloid gray;}
@@ -49,6 +50,8 @@ function chkDupId(){
 </style>
 </head>
 <body>
+<%@ include file="../menu.jsp" %>
+<div id="wrapper">
 <h2 align="center">Join Us</h2>
 <hr />
 <form name="frmJoin" action="joinProc.jsp" method="post">
@@ -71,5 +74,6 @@ function chkDupId(){
 </td></tr>
 </table>
 </form>
+</div>
 </body>
 </html>

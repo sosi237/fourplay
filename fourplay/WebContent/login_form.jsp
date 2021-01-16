@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
+<%@ include file="../menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 
 String ismember = request.getParameter("ismember");
 if(ismember == null)	ismember = "";
@@ -29,6 +29,8 @@ if (request.getParameter("optCnt") != null) {	// 옵션이 있으면
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
+#wrapper {width:100%; position:absolute; top:300px;}
+
 .btn { 
 	width:100px; height:80px; background-color:black;  
 	border:solid 1px black; color:white; font-size:20px; 
@@ -66,6 +68,7 @@ function goDirect() {
 </script>
 </head>
 <body>
+<div id="wrapper">
 <h2 align="center">LOGIN</h2>
 <form name="frmLogin" action="login" method="post">
 <table cellpadding="3" align="center"> 
@@ -108,6 +111,7 @@ function goDirect() {
 </table>
 </form>
 <%} %>
+</div>
 </body>
 </html>
 

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
 ArrayList<CartInfo> wishList = (ArrayList<CartInfo>)request.getAttribute("wishList");
@@ -30,6 +31,9 @@ if (ord != null && !ord.equals(""))			args += "&ord=" + ord;
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style>
+#wrapper {width:100%; position:absolute; top:300px;}
+</style>
 <script src="jquery-3.5.1.js"></script>
 <script>
 function wishDel(id) {

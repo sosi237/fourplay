@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="vo.*" %>
 <%@ page import="java.util.*" %>
+<%@ include file="../menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 OrdListInfo detailInfo = (OrdListInfo)request.getAttribute("detailInfo");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,6 +13,7 @@ OrdListInfo detailInfo = (OrdListInfo)request.getAttribute("detailInfo");
 <title>Insert title here</title>
 <style>
 #wrapper {font-size:13px;}
+#wrapper {width:100%; position:absolute; top:300px;}
 #wrapper table {width:800px;  border:0px; }
 #wrapper table td {border-bottom:1px solid lightgray; align:center;}
 #ordInfo th { background-color:lightgray; }
@@ -31,8 +32,8 @@ a:focus { color:#f00; text-decoration:underline; }
  -->
 </head>
 <body>
-<h2>ORDER DETAIL</h2>
 <div id="wrapper">
+<h2>ORDER DETAIL</h2>
 <div id="ordInfo">
 <%if (detailInfo != null){ %>
 <table cellpadding="5" cellspacing="0" border="1">

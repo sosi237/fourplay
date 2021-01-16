@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
+<%@ include file="../menu.jsp" %>
 <%
-MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
-//로그인 되어 있을 경우 로그인 정보(현재 로그인 한 회원의 정보)를 받아옴
-
 request.setCharacterEncoding("utf-8");
 int cpage = 1, psize = 12;
 if(request.getParameter("cpage") != null)  cpage = Integer.parseInt(request.getParameter("cpage"));
@@ -40,6 +38,7 @@ if (psstock.equals("-1"))	psstock = "무제한";
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
+#wrapper {width:100%; position:absolute; top:300px;}
 .detail td { border-bottom:2px solid #efefef;}
 td .borderwide {border-bottom:4px solid #eee;}
 .detail s { color:red;}
@@ -85,6 +84,8 @@ function goWish() {	// 위시리스트 담기 버튼 클릭시
 
 function goDirect() {	// 바로 구매하기 버튼 클릭시
 	var frm = document.frmPdt;
+	var kind = document.getElementById("kind");
+	kind.value = "direct";	
 <%
 if (loginMember == null) {	// 로그인을 하지 않은 상태일 경우
 	session.setAttribute("url", "ord_form.ord");
@@ -98,6 +99,7 @@ if (loginMember == null) {	// 로그인을 하지 않은 상태일 경우
 </script>
 </head>
 <body>
+<div id="wrapper">
 <h2>상품 상세보기 화면</h2>
 <table width="800" cellpadding="5" cellspacing="0">
 <tr>
@@ -130,6 +132,7 @@ if (loginMember == null) {	// 로그인을 하지 않은 상태일 경우
 	<tr><td>소비자가</td><td><%=price %></td></tr>
 	<tr><td>적립금</td><td><%=point %> (1%)</td></tr>
 	<form name="frmPdt" action="" method="post">
+	<input type="hidden" name="kind" id="kind" value="" />
 	<input type="hidden" name="id" value="<%=id %>" />
 	<input type="hidden" name="args" value="<%=args %>" />
 	<input type="hidden" name="price" value="<%=price %>" />
@@ -226,5 +229,6 @@ Q&A 게시판 구역<br/>
 </td></tr>
 </table>
 <br /><br />
+</div>
 </body>
 </html>

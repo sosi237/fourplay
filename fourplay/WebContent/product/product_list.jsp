@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
-<%@ page import="java.util.*" %>
 <%
 ArrayList<PdtInfo> pdtList = (ArrayList<PdtInfo>)request.getAttribute("pdtList");
 ArrayList<PdtInfo> bestPdtList = (ArrayList<PdtInfo>)request.getAttribute("bestPdtList");
@@ -17,7 +16,6 @@ scata =		pageInfo.getScata();	// 소분류
 sprice =	pageInfo.getSprice();	// 가격대 시작 가격
 eprice =	pageInfo.getEprice();	// 가격대 종료 가격
 ord =		pageInfo.getOrd();		// 정렬조건
-
 
 String args = "", schArgs = "";
 if (bcata != null)		schArgs += "&bcata=" + bcata;		else	bcata = "";
@@ -43,6 +41,8 @@ args = "&cpage=" + cpage + schArgs;
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
+#wrapper {width:100%; position:absolute; top:300px;}
+
 a {color:black; text-decoration:none; }
 a:hover, a:focus { color:#000; }
 del{color:#a1a1a1; font-size:15px;}
@@ -62,6 +62,7 @@ td { font-size:11; }
 .sort li:first-child { background:none; }
 #thImg img { margin:10px; }
 span {font-size:15px;}
+
 </style>
 <script>
 <%
@@ -102,6 +103,8 @@ function setCategory(obj, target) {
 </script>
 </head>
 <body>
+<%@ include file="../menu.jsp" %>
+<div id="wrapper">
 <h2>상품 목록 화면</h2>
 <form name="frmSch" action="" method="get">
 <table width="800" cellpadding="5">
@@ -301,5 +304,6 @@ if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 �
 </td>
 </tr>
 </table>
+</div>
 </body>
 </html>

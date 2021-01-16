@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../menu.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 request.setCharacterEncoding("utf-8");
-MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 ArrayList<OrdListInfo> ordList = (ArrayList<OrdListInfo>)request.getAttribute("ordList");
 OrdPageInfo pageInfo = (OrdPageInfo)request.getAttribute("pageInfo");
 int cpage	= pageInfo.getCpage();	// 현재 페이지 번호
@@ -25,6 +25,7 @@ int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
  -->
 <style>
 #wrapper {font-size:12px;}
+#wrapper {width:100%; position:absolute; top:300px;}
 #wrapper table td {border-bottom:1px solid lightgray; align:center;}
 a:link { color:#4f4f4f; text-decoration:none; }
 a:visited { color:#4f4f4f; text-decoration:none; }
@@ -41,8 +42,8 @@ function ordCancel(olid){
 </script>
 </head>
 <body>
-<h2>ORDER LIST</h2>
 <div id="wrapper">
+<h2>ORDER LIST</h2>
 <table width="900" cellpadding="5" cellspacing="0" border="0">
 	<div class="head">
 	<tr style="background-color:#e1e1e1; "><th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
