@@ -25,7 +25,7 @@ public class DupAIDDao {
 
 		try {
 			stmt = conn.createStatement();
-			String sql = "select count(*) from t_admin_list where al_status = 'b' and al_id = '" + aid + "' ";
+			String sql = "select count(*) from t_admin_list where al_id = '" + aid + "' ";
 			rs = stmt.executeQuery(sql);
 			if (rs.next())	chkPoint = rs.getInt(1);
 			System.out.println(chkPoint);
