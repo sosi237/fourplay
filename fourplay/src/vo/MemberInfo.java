@@ -1,7 +1,8 @@
 package vo;
 
 public class MemberInfo {
-	private String mlid, mlpwd, mlname, mlgender, mlbirth, mlphone, mlemail, mldate, mllast, mlstatus, mazip, maaddr1 ,maaddr2 ,mabasic;
+	private String mlid, mlpwd, mlname, mlgender, mlbirth, mlphone, mlemail, mldate, mllast, mlstatus, 
+		mazip, maaddr1 ,maaddr2 ,mabasic;
 	private int mlpoint;
 	public String getMlid() {
 		return mlid;
