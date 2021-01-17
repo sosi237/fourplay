@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../a_menu.jsp" %>
+<%@ include file="../admin_menu.jsp" %>
 <%
 ArrayList<AdminInfo> admList = (ArrayList<AdminInfo>)request.getAttribute("admList");
 AdmPageInfo pageInfo = (AdmPageInfo)request.getAttribute("pageInfo");
@@ -46,13 +48,15 @@ args = "&cpage=" + cpage + schArgs;
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-#sch {text-align:right;}
-#admList {margin-top:10px;}
-#admList table {width:900px;}
-#admList th {text-align:left; }
-#admList td {text-align:left; border-top:1px solid black;}
-#paging {text-align:center; margin-top:10px;}
-#admMenu {float:left; margin-right:30px;}
+#sch {margin:15px 0; display:block; text-align:right;}
+#sch table {width:1200px;}
+#sch td {padding:2px;}
+#admList {margin-top:50px; }
+#admList table {width:1200px;}
+#admList th {text-align:left; padding:5px 5px 10px 5px;}
+#admList td {text-align:left; border-top:1px solid black; padding:5px;}
+#paging {width:1200px; text-align:center; margin-top:20px; }
+#statusBtn {background-color:black; color:white; width:80px; height:40px; }
 </style>
 <script>
 function getStatus(){
@@ -77,105 +81,103 @@ function chVal(){
 </script>
 </head>
 <body>
-<h2>관리자 목록</h2>
-<table id="admMenu">
-<tr><td><%@ include file="../admin_menu.jsp" %></td></tr>
-</table>
-<form name="schFrm" action="" method="get">
-<div id="sch">
-<table cellspacing="0">
-<tr>
-<th>검색어</th>
-<td>
-	<select name="schtype">
-		<option value="" <% if (schtype.equals("")) { %>selected="selected"<% } %>>검색조건</option>
-		<option value="id" <% if (schtype.equals("id")) { %>selected="selected"<% } %>>아이디</option>
-		<option value="name" <% if (schtype.equals("name")) { %>selected="selected"<% } %>>이름</option>
-	</select>
-	<input type="text" name="keyword" />
-</td>
-<td><input type="submit" value="검색" /></td>
-</tr>
-</table>
-</div>
-</form>
-<form name="listFrm" action="admin_proc.adm" method="post">
-<input type="hidden" name="wtype" value="chStatus" />
-<input type="hidden" name="st" id="st" value="" />
-<div id="admList">
+<div id="wrapper">
+	<h2>관리자 목록</h2>
+	<form name="schFrm" action="" method="get">
+	<div id="sch">
 	<table cellspacing="0">
 	<tr>
-	<th>아이디<a href="admin_list.adm?ord=ida">▲</a> <a href="admin_list.adm?ord=idd">▼</a></th>
-	<th>이름<a href="admin_list.adm?ord=namea">▲</a> <a href="admin_list.adm?ord=named">▼</a></th>
-	<th>등록일<a href="admin_list.adm?ord=datea">▲</a> <a href="admin_list.adm?ord=dated">▼</a></th>
-	<!-- <th>최근활동일</th><th>최근활동</th> -->
-	<th>상태<a href="admin_list.adm?ord=statusa">▲</a> <a href="admin_list.adm?ord=statusd">▼</a></th>
-	</tr>
-<%
-String idx = "", idxs = "";
-for(int i = 0; i < admList.size(); i++){
-	idx = admList.get(i).getAl_idx() + "";
-	idxs += "," + idx;
-//	System.out.println(idxs);
-%>
-	<tr>
-	<td><%=admList.get(i).getAl_id() %></td><td><%=admList.get(i).getAl_name() %></td>
-	<td><%=admList.get(i).getAl_date().substring(0, 11).replace('-', '.')%></td>
-	<!--<td></td><td></td> -->
 	<td>
-		<select name="status" id="status">
-			<option value="a" <%if (admList.get(i).getAl_status().equals("a")) { %> selected="selected" <%} %>>미사용</option>
-			<option value="b" <%if (admList.get(i).getAl_status().equals("b")) { %> selected="selected" <%} %>>사용중</option>
+		<select name="schtype">
+			<option value="id" <% if (schtype.equals("id")) { %>selected="selected"<% } %>>아이디</option>
+			<option value="name" <% if (schtype.equals("") || schtype.equals("name")) { %>selected="selected"<% } %>>이름</option>
 		</select>
+		<input type="text" name="keyword" />
+		<input type="submit" value="검색" />
 	</td>
 	</tr>
-<%
-} 
-idxs = idxs.substring(1);
-%>
-	<input type="hidden" name="idxs" value="<%=idxs %>" />
-	<tr><td colspan="4" style="text-align:right; padding-top:20px;">
-	<input type="button" value="상태변경 저장" onclick="chVal();"/></td></tr>
 	</table>
-</div>
-</form>
-<div id="paging">
-<table width="800" cellpadding="5">
-<tr>
-<td width="*">
-<%
-if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
-	if (cpage == 1) {
-		out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
-	} else {
-		out.print("<a href='pdt_list.pdta?cpage=1" + schArgs + "'>");
-		out.println("<<</a>&nbsp;&nbsp;");
-		out.print("<a href='pdt_list.pdta?cpage=" + (cpage - 1) + schArgs + "'>");
-		out.println("<</a>&nbsp;&nbsp;");
-	}
-
-	for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
-		if (cpage == j) {
-			out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
+	</div>
+	</form>
+	<form name="listFrm" action="admin_proc.adm" method="post">
+	<input type="hidden" name="wtype" value="chStatus" />
+	<input type="hidden" name="st" id="st" value="" />
+	<div id="admList">
+		<table cellspacing="0" cellpadding="10">
+		<tr>
+		<th>아이디<a href="admin_list.adm?ord=ida">▲</a> <a href="admin_list.adm?ord=idd">▼</a></th>
+		<th>이름<a href="admin_list.adm?ord=namea">▲</a> <a href="admin_list.adm?ord=named">▼</a></th>
+		<th>등록일<a href="admin_list.adm?ord=datea">▲</a> <a href="admin_list.adm?ord=dated">▼</a></th>
+		<!-- <th>최근활동일</th><th>최근활동</th> -->
+		<th>상태<a href="admin_list.adm?ord=statusa">▲</a> <a href="admin_list.adm?ord=statusd">▼</a></th>
+		</tr>
+	<%
+	String idx = "", idxs = "";
+	for(int i = 0; i < admList.size(); i++){
+		idx = admList.get(i).getAl_idx() + "";
+		idxs += "," + idx;
+	//	System.out.println(idxs);
+	%>
+		<tr>
+		<td><%=admList.get(i).getAl_id() %></td><td><%=admList.get(i).getAl_name() %></td>
+		<td><%=admList.get(i).getAl_date().substring(0, 11).replace('-', '.')%></td>
+		<!--<td></td><td></td> -->
+		<td>
+			<select name="status" id="status">
+				<option value="a" <%if (admList.get(i).getAl_status().equals("a")) { %> selected="selected" <%} %>>미사용</option>
+				<option value="b" <%if (admList.get(i).getAl_status().equals("b")) { %> selected="selected" <%} %>>사용중</option>
+			</select>
+		</td>
+		</tr>
+	<%
+	} 
+	idxs = idxs.substring(1);
+	%>
+		<input type="hidden" name="idxs" value="<%=idxs %>" />
+		<tr><td colspan="4" style="text-align:right; padding-top:20px;">
+		<input type="button" id="statusBtn" value="상태 변경" onclick="chVal();"/></td></tr>
+		</table>
+	</div>
+	</form>
+	
+	<div id="paging">
+	<table width="100%" cellpadding="5">
+	<tr>
+	<td width="*">
+	<%
+	if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
+		if (cpage == 1) {
+			out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
 		} else {
-			out.print("&nbsp;<a href='pdt_list.pdta?cpage=" + j + schArgs + "'>");
-			out.println(j + "</a>&nbsp;");
+			out.print("<a href='pdt_list.pdta?cpage=1" + schArgs + "'>");
+			out.println("<<</a>&nbsp;&nbsp;");
+			out.print("<a href='pdt_list.pdta?cpage=" + (cpage - 1) + schArgs + "'>");
+			out.println("<</a>&nbsp;&nbsp;");
+		}
+	
+		for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
+			if (cpage == j) {
+				out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
+			} else {
+				out.print("&nbsp;<a href='pdt_list.pdta?cpage=" + j + schArgs + "'>");
+				out.println(j + "</a>&nbsp;");
+			}
+		}
+	
+		if (cpage == pcnt) {
+			out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
+		} else {
+			out.print("&nbsp;&nbsp;<a href='pdt_list.pdta?cpage=" + (cpage + 1) + schArgs + "'>");
+			out.println("></a>");
+			out.print("&nbsp;&nbsp;<a href='pdt_list.pdta?cpage=" + pcnt + schArgs + "'>");
+			out.println(">></a>");
 		}
 	}
-
-	if (cpage == pcnt) {
-		out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
-	} else {
-		out.print("&nbsp;&nbsp;<a href='pdt_list.pdta?cpage=" + (cpage + 1) + schArgs + "'>");
-		out.println("></a>");
-		out.print("&nbsp;&nbsp;<a href='pdt_list.pdta?cpage=" + pcnt + schArgs + "'>");
-		out.println(">></a>");
-	}
-}
-%>
-</td>
-</tr>
-</table>
+	%>
+	</td>
+	</tr>
+	</table>
+	</div>
 </div>
 </body>
 </html>

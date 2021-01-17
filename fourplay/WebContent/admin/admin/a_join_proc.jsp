@@ -29,7 +29,7 @@ try{
 	int result = stmt.executeUpdate(sql);
 	if (result != 0){	//관리자 계정 생성에 성공하면
 		out.println("<script>");
-		out.println("location.href='admin_list.adm';");
+		out.println("location.replace('admin_list.adm');");
 		out.println("</script>");
 	}else {		
 		out.println("<script>");

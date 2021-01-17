@@ -1,15 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
-<%
-AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
-if (adminMember == null || !adminMember.getAl_id().equals("sa")) {
-	out.println("<script>");
-	out.println("alert('접근 권한이 없는 계정입니다.');");
-	out.println("location.href='login_form.jsp';");
-	out.println("</script>");
-}
-%>
+<%@ include file="../a_menu.jsp" %>
+<%@ include file="../admin_menu.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -41,33 +33,42 @@ function chkDupAId(){
 }
 </script>
 <style>
-.text input { width:300px; height:30px; }
-.text { text-align:center; }
+.join {
+	width:800px; display:block; margin-left:380px; margin-top:50px;
+}
+.join .text input { width:400px; height:40px; margin-bottom:15px;}
+.join .text { display:block; text-align:center; }
+.join #btn { 
+	width:110px; height:50px; background-color:black; color:white; font-weight:bold;
+}
 .fontRed { color:red; font-weight:bold; }
 .fontBlue { color:blue; font-weight:bold; }
+
+h2 {display:block; margin-left:480px;}
 </style>
 </head>
 <body>
-<h2>관리자 계정 생성 화면</h2>
-<table name="admMenu">
-<tr><td><%@ include file="../admin_menu.jsp" %></td></tr>
-</table>
-<form name="frmJoin" action="admin/a_join_proc.jsp" method="post">
-<input type="hidden" name="idChk" id="idChk" value="N" />
-<table cellpadding="5" align="center">
-<tr><td class="text">
-	<input type="text" name="aid" id="aid" onkeyup="chkDupAId();" placeholder="아이디" />
-	<br /><span id="idMsg"> </span>
-</td></tr>
-<tr><td class="text" align="center"><input type="text" name="name" class="input" placeholder="이름" /></td></tr>
-<tr><td class="text"><input type="password" name="pwd" placeholder="비밀번호" /></td></tr>
-<tr><td class="text"><input type="password" name="pwd2" placeholder="비밀번호 확인" /></td></tr>
-<tr><td class="text"><input type="text" name="email" placeholder="이메일" /></td></tr>
-<tr><td class="text"><input type="text" name="phone" placeholder="휴대폰 번호" /></td></tr>
-<tr><td align="center">
-	<input type="submit" value="관리자 계정 생성" />
-</td></tr>
-</table>
-</form>
+<div id="wrapper">
+	<h2>관리자 계정 생성</h2>
+	<form name="frmJoin" action="admin/a_join_proc.jsp" method="post">
+	<input type="hidden" name="idChk" id="idChk" value="N" />
+	<div class="join">
+	<table cellpadding="5" align="center">
+	<tr><td class="text">
+		<input type="text" name="aid" id="aid" onkeyup="chkDupAId();" placeholder="아이디" />
+		<br /><span id="idMsg"> </span>
+	</td></tr>
+	<tr><td class="text" align="center"><input type="text" name="name" class="input" placeholder="이름" /></td></tr>
+	<tr><td class="text"><input type="password" name="pwd" placeholder="비밀번호" /></td></tr>
+	<tr><td class="text"><input type="password" name="pwd2" placeholder="비밀번호 확인" /></td></tr>
+	<tr><td class="text"><input type="text" name="email" placeholder="이메일" /></td></tr>
+	<tr><td class="text"><input type="text" name="phone" placeholder="휴대폰 번호" /></td></tr>
+	<tr><td align="center">
+		<input id="btn" type="submit" value="계정 생성" />
+	</td></tr>
+	</table>
+	</div>
+	</form>
+</div>
 </body>
 </html>
