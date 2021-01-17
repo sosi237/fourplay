@@ -4,7 +4,6 @@
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <%
-request.setCharacterEncoding("utf-8");
 ArrayList<CartInfo> wishList = (ArrayList<CartInfo>)request.getAttribute("wishList");
 int cpage = 0, psize = 0;
 if(request.getParameter("cpage") != null)
