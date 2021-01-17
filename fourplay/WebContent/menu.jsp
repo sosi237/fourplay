@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
 <%
+request.setCharacterEncoding("utf-8");
 MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 %>
@@ -22,6 +23,9 @@ a:focus { color:pink; text-decoration:none; }
 
 /* common - 페이지 공통으로 쓰이는 css */
 .sticky { background:#fff; z-index:9999; position:fixed; top:0; opacity:1; }
+#wrapper {
+	width:80%; min-width:800px; position:absolute; top:350px; left:10%;
+}
 
 /* header */
 .page-header { background:#fff; position:relative; z-index:9999; width: 100%; min-width: 960px;   }
