@@ -24,9 +24,10 @@ int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
 <link href="css/base.css" type="text/css" rel="stylesheet" />
  -->
 <style>
-#wrapper {font-size:12px;}
-#wrapper {width:100%; position:absolute; top:300px;}
 #wrapper table td {border-bottom:1px solid lightgray; align:center;}
+.paging {
+	width:100%; position:relative; top:30%;
+}
 a:link { color:#4f4f4f; text-decoration:none; }
 a:visited { color:#4f4f4f; text-decoration:none; }
 a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
@@ -44,7 +45,7 @@ function ordCancel(olid){
 <body>
 <div id="wrapper">
 <h2>ORDER LIST</h2>
-<table width="900" cellpadding="5" cellspacing="0" border="0">
+<table width="100%" cellpadding="5" cellspacing="0" border="0">
 	<div class="head">
 	<tr style="background-color:#e1e1e1; "><th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
 	<th width="8%">가격</th><th width="10%">주문처리상태</th><th width="15%">취소/교환/반품</th></tr>
@@ -117,40 +118,45 @@ if(ordList != null && rcnt > 0){
 	out.println("<tr align='center'><td colspan='7'>주문 내역이 없습니다.</td></tr>");
 }
 %>
+	<tr><td colspan="7">
+	<div class="paging">
+	<table width="100%" cellpadding="5">
+	<tr><td align="center">
+	<%
+	if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
+		if (cpage == 1) {
+			out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
+		} else {
+			out.print("<a href='order_list.mpg?cpage=1'>");
+			out.println("<<</a>&nbsp;&nbsp;");
+			out.print("<a href='order_list.mpg?cpage=" + (cpage - 1) +  "'>");
+			out.println("<</a>&nbsp;&nbsp;");
+		}
+		for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
+			if (cpage == j) {
+				out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
+			} else {
+				out.print("&nbsp;<a href='order_list.mpg?cpage=" + j +  "'>");
+				out.println(j + "</a>&nbsp;");
+			}
+		}
+		if (cpage == pcnt) {
+			out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
+		} else {
+			out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + (cpage + 1)  + "'>");
+			out.println("></a>");
+			out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + pcnt  + "'>");
+			out.println(">></a>");
+		}
+	}
+	%>
+	</td></tr>
+	</table>
+	</div>
+	</td></tr>
 </table>
 </div>
 <br />
-<table width="800" cellpadding="5">
-<tr><td align="center">
-<%
-if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
-	if (cpage == 1) {
-		out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
-	} else {
-		out.print("<a href='order_list.mpg?cpage=1'>");
-		out.println("<<</a>&nbsp;&nbsp;");
-		out.print("<a href='order_list.mpg?cpage=" + (cpage - 1) +  "'>");
-		out.println("<</a>&nbsp;&nbsp;");
-	}
-	for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
-		if (cpage == j) {
-			out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
-		} else {
-			out.print("&nbsp;<a href='order_list.mpg?cpage=" + j +  "'>");
-			out.println(j + "</a>&nbsp;");
-		}
-	}
-	if (cpage == pcnt) {
-		out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
-	} else {
-		out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + (cpage + 1)  + "'>");
-		out.println("></a>");
-		out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + pcnt  + "'>");
-		out.println(">></a>");
-	}
-}
-%>
-</td></tr>
-</table>
+
 </body>
 </html>
