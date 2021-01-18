@@ -81,7 +81,7 @@ if(loginMember == null && adminMember == null){
 		 <li> <a href="logout" >로그아웃</a> </li> | 
 <%} %>
          <li> <a href="cart_list.crt" >장바구니</a> </li> | 
-         <li> <a href="" >마이페이지</a> </li> | 
+         <li> <a href="mypage.mpg" >마이페이지</a> </li> | 
          <li> <a href="order_list.mpg" >주문조회</a> </li> | 
          <li> <a href="" >Q&A</a> </li>
       </ul>

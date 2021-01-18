@@ -42,6 +42,21 @@ public class MyPageCtrl extends HttpServlet {
 			case "/non_order_detail.mpg" :	// 비회원 주문 상세내역 보기
 				action = new NonDetailAction();
 				break;
+			case "/mypage.mpg" :	// 마이페이지 화면
+	 			action = new MyPageAction();
+			 	break;
+	     	case "/member_info.mpg" :	// 회원 정보 수정 화면
+				action = new MembeViewAction();
+				break;
+			case "/member_proc.mpg" :	// 회원 정보 수정 기능(미완성)
+				action = new MemberProcAction();
+				break;
+			case "/mypage_pwd.mpg" :	// 회원 정보 삭제 화면
+				action = new MyPagePwdAction();
+				break;
+			case "/member_del_proc.mpg" :	// 회원 정보 삭제 처리 기능
+				action = new MemDelProcAction();
+				break;
 		}
 
 		try {
