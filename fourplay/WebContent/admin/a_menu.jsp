@@ -7,8 +7,9 @@ AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 if(adminMember == null){
 	out.println("<script>");
 	out.println("alert('접근 권한이 없습니다.');");
-	out.println("location.replace('../login_form.jsp');");
+	out.println("location.replace('../index.jsp');");
 	out.println("</script>");
+	out.close();
 } 
 String aid = adminMember.getAl_id();
 String name = adminMember.getAl_name();
@@ -63,7 +64,7 @@ a:focus { color:pink; text-decoration:none; }
 <header class="page-header">
    <div class="primary-nav" >
    	  <ul class="top" width="900">
-   	  	 <li><span class="mode">관리자 모드 </span><a href="logout" >로그아웃</a> </li>
+   	  	 <li><span class="mode">관리자 모드 </span><a href="../logout" >로그아웃</a> </li>
 <%
 if(adminMember != null){
 %>
