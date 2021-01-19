@@ -37,7 +37,7 @@ public class AdmCtrl extends HttpServlet {
 			case "/admin/admin_form.adm" :	case "/admin/admin/admin_form.adm" :	// 관리자 계정 수정 화면
 				action = new AdmFormAction();
 				break;
-			case "/admin/admin_del.adm" :	case "/admin/admin/admin_del.adm" :	// 관리자 계정 수정 화면
+			case "/admin_del.adm" : 	case "/admin/admin_del.adm" :	case "/admin/admin/admin_del.adm" :		// 관리자 계정 수정 화면
 				action = new AdmDelAction();
 				break;
 			case "/admin/admin_proc.adm" :	case "/admin/admin/admin_proc.adm" :	// 관리자 계정 수정/삭제, 상태변경 처리 기능 

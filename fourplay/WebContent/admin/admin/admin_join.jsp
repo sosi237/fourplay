@@ -9,6 +9,74 @@
 <title>Insert title here</title>
 <script src="jquery-3.5.1.js"></script>
 <script>
+function chkData(frm){	
+	var name = frm.name.value;			var aid = frm.aid.value;			var pwd = frm.pwd.value;			
+	var pwd2 = frm.pwd2.value;			var email = frm.email.value;		var phone = frm.phone.value;				
+
+	if (name == "")	{ 
+		alert("이름을 입력하세요.");				frm.name.focus();	
+		return false; 
+	}else if (name.length < 2)	{			//이름을 2자 미만으로 입력했으면
+		alert("이름은 2~20자 이내로 입력하세요."); 	frm.name.select();	
+		return false; 
+	}
+	if (aid == "")	{ 						//유무부터 검사하고 밑에서 else if로 구체적인 개수 검사
+		alert("아이디를 입력하세요.");				frm.aid.focus();	
+		return false; 
+	}else if (aid.length < 4)	{			//아이디를 4자 미만으로 입력했으면
+		alert("아이디는 4~20자 이내로 입력하세요."); 	frm.aid.select();	
+		return false; 
+	} else if (aid.charAt(0).toLowerCase() < 'a' || aid.charAt(0).toLowerCase() > 'z'){		//아이디의 첫글자가 영문이 아니면
+		alert("아이디의 첫글자는 반드시 영문자로 입력해야 합니다.");
+		frm.aid.value="";	
+		return false; 
+	} else { 
+		for (var i = 0; i < aid.length ; i++ )	{	
+			var c = aid.charAt(i).toLowerCase();
+			if (!(c >= 'a' && c<= 'z' || c >= '0' && c <= '9'))	{
+				alert("아이디는 영문과 숫자로만 입력해야 합니다.");			
+				frm.aid.value="";	
+				return false; 
+			}
+		}
+	}
+
+	if (pwd == "")	{ 
+		alert("비밀번호를 입력하세요.");			frm.pwd.focus();	
+		return false; 
+	} else if (pwd.length < 4)	{ //비밀번호를 4자 미만으로 입력했으면
+		alert("비밀번호는 4~20자 이내로 입력하세요."); frm.pwd.select();	
+		return false; 
+	} else { 
+		for (var i = 0; i < pwd.length ; i++ )	{	//pwd의 글자개수만큼 루프를 돌면서 작업
+			var c = pwd.charAt(i).toLowerCase();
+			if (!(c >= 'a' && c<= 'z' || c >= '0' && c <= '9'))	{
+				alert("비밀번호는 영문과 숫자로만 입력해야 합니다.");	frm.pwd.value="";	
+				return false; 
+			}
+		}
+	}
+	if (pwd2 == "")	{ 
+		alert("비밀번호 확인을 입력하세요.");		frm.pwd2.focus();	return false; 
+	} else if (pwd2 != pwd)	{
+		alert("비밀번호와 비밀번호 확인이 다릅니다.");	
+		frm.pwd2.value="";					frm.pwd2.focus();	
+		return false; 
+	}
+	if (email == "")	{ 
+		alert("이메일을 입력하세요.");				frm.email.focus();	
+		return false; 
+	}
+	if (phone == "")	{ 
+		alert("전화번호를 입력하세요.");			frm.phone.focus();	
+		return false; 
+	} else if (phone.length <3){
+		alert("'-'를 구분자로 하여 12자리 이상 입력하세요.");		frm.phone.value="";	
+		return false; 
+	}
+	return true;
+}
+
 function chkDupAId(){
 	var aid = $("#aid").val();
 	if (aid.length > 1) {
@@ -50,8 +118,9 @@ h2 {display:block; margin-left:480px;}
 <body>
 <div id="wrapper">
 	<h2>관리자 계정 생성</h2>
-	<form name="frmJoin" action="admin/a_join_proc.jsp" method="post">
+	<form name="frmJoin" action="admin_proc.adm" method="post" onsubmit="return chkData(this);">
 	<input type="hidden" name="idChk" id="idChk" value="N" />
+	<input type="hidden" name="wtype" value="join" />
 	<div class="join">
 	<table cellpadding="5" align="center">
 	<tr><td class="text">

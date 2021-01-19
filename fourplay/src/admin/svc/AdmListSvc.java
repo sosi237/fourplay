@@ -13,6 +13,7 @@ public class AdmListSvc {
 		AdmDao admDao = AdmDao.getInstance();
 		admDao.setConnection(conn);
 		admList = admDao.getAdmList(where, orderby, cpage, psize);
+		System.out.println("dao getAdmList finished");
 		close(conn);
 		return admList;
 	}
@@ -22,6 +23,7 @@ public class AdmListSvc {
 		AdmDao admDao = AdmDao.getInstance();
 		admDao.setConnection(conn);
 		rcnt = admDao.getAdmCount(where);
+		System.out.println("dao getAdmCount finished");
 		close(conn);
 		return rcnt;
 	}

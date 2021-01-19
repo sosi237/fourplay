@@ -20,7 +20,6 @@ public class AdmDao {
 	public void setConnection(Connection conn) {
 		this.conn = conn;
 	}
-	
 	public boolean isSA(AdminInfo adminMember) {
 		boolean isSA = false;
 		Statement stmt = null;
@@ -40,6 +39,24 @@ public class AdmDao {
 		return isSA;
 	}
 	
+	public int admInsert(AdminInfo adminMember) {
+		int result = 0;
+		Statement stmt = null;
+		String sql = null;
+		try {
+			sql = "insert into t_admin_list (al_id, al_pwd, al_name, al_phone, al_email) values " +
+					"('" + adminMember.getAl_id() + "', '" + adminMember.getAl_pwd() + "', '" + adminMember.getAl_name()
+					+ "', '" + adminMember.getAl_phone()+ "', '" + adminMember.getAl_email()+ "' ) ";
+			System.out.println(sql);	
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+		} catch(Exception e) {
+			System.out.println("admInsert() 오류");			e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+		return result;
+	}
 	public int admUpdate(AdminInfo adminMember) {
 		int result = 0;
 		Statement stmt = null;
@@ -57,7 +74,25 @@ public class AdmDao {
 		return result;
 	}
 	
+	public int admDelete(String aid) {	// 관리자 계정을 db에서 삭제하는 메소드
+		System.out.println("dao admDelete");
+		int result = 0;
+        Statement stmt = null;
+        try {
+           String sql = "delete from t_admin_list where al_id ='" + aid + "' ";
+           System.out.println(sql);
+           stmt = conn.createStatement();
+           result = stmt.executeUpdate(sql);
+        } catch(Exception e) {
+           System.out.println("admDelete() 오류");      e.printStackTrace();
+        } finally {
+           close(stmt);
+        }
+        return result;
+	}
+	
 	public int getAdmCount(String where) {	
+		System.out.println("dao getAdmCount");
 		int rcnt = 0;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -74,7 +109,6 @@ public class AdmDao {
 		}
 		return rcnt;
 	}
-	
 	public ArrayList<AdminInfo> getAdmList(String where, String orderby, int cpage, int psize) {
 		System.out.println("dao getAdmList");
 		ArrayList<AdminInfo> admList = new ArrayList<AdminInfo>();

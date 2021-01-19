@@ -38,7 +38,7 @@ int psize	= pageInfo.getPsize();	// 페이지 크기
 int bsize	= pageInfo.getBsize();	// 블록 페이지 개수
 int spage	= pageInfo.getSpage();	// 블록 시작 페이지 번호
 int epage	= pageInfo.getEpage();	// 블록 종료 페이지 번호
-int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
+int rcnt	= pageInfo.getRcnt();	// 검색된 계정 개수
 schArgs = "&psize=" + psize + schArgs;
 args = "&cpage=" + cpage + schArgs;
 %>
@@ -65,11 +65,15 @@ function del(aid){
 	if(confirm(aid+" 계정을 삭제하시겠습니까?\n삭제하면 복구할 수 없습니다.")){
 		$.ajax({
 			type : "POST", 
-			url : "/fourplay/admin_del.adm", 
-			data : { "aid" : aid }, 
+			url : "/fourplay/admin/admin_proc.adm", 
+			data : { "aid" : aid, "wtype" : "del" }, 
 			success : function(chkRst) {
-				if(chkRst == 0)		alert("계정 삭제에 실패했습니다.\n다시 시도해 주십시오.");
-				else				location.reload();
+				if(chkRst == 0)	{
+					alert("계정 삭제에 실패했습니다.\n다시 시도해 주십시오.");
+				} else{
+					alert("계정을 삭제했습니다.");
+					location.reload();
+				}
 			}
 		});
 	}
@@ -108,9 +112,10 @@ function del(aid){
 		<th>상태<a href="admin_del.adm?ord=statusa">▲</a> <a href="admin_del.adm?ord=statusd">▼</a></th>
 		<th class="btn"></th>
 		</tr>
-	<%
+<%
+if(admList.size() > 0 && rcnt > 0)	{
 	for(int i = 0; i < admList.size(); i++){
-	%>
+%>
 		<tr>
 		<td><%=admList.get(i).getAl_id() %></td><td><%=admList.get(i).getAl_name() %></td>
 		<td><%=admList.get(i).getAl_date().substring(0, 11).replace('-', '.')%></td>
@@ -118,9 +123,12 @@ function del(aid){
 		<td><%=(admList.get(i).getAl_status().equals("a")) ? "미사용" : "사용중" %></td>
 		<td class="btn"><input type="button" id="btn" value="삭제" onclick="del('<%=admList.get(i).getAl_id() %>');"/></td>
 		</tr>
-	<%
-	} 
-	%>
+<%
+	}
+} else {
+%>
+		<tr><td colspan="4">검색 결과가 없습니다.</td></tr>
+<%} %>
 		</table>
 	</div>
 	</form>
@@ -129,8 +137,8 @@ function del(aid){
 	<table width="100%" cellpadding="5">
 	<tr>
 	<td width="*">
-	<%
-	if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
+<%
+	if (rcnt > 0) {	// 검색결과 관리자 계정들이 있을 경우에만 페이징을 함
 		if (cpage == 1) {
 			out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
 		} else {

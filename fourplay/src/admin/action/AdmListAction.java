@@ -15,6 +15,9 @@ public class AdmListAction implements action.Action {
 		HttpSession session = request.getSession();
 		AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 		
+		String kind = "";
+		if(request.getParameter("kind") != null) 	kind = request.getParameter("kind");
+		
 		if(adminMember != null && adminMember.getAl_id().equals("sa")) {
 			int cpage = 1, pcnt, spage, epage, rcnt, bsize = 10, psize = 10;
 			// 페이징에 필요한 값들을 저장할 변수 선언 및 초기화
@@ -43,7 +46,9 @@ public class AdmListAction implements action.Action {
 			AdmListSvc admListSvc = new AdmListSvc();
 			admList = admListSvc.getAdmList(where, orderby, cpage, psize);
 			rcnt = admListSvc.getAdmCount(where);	// 검색된 관리자 계정의 총 개수(페이지 개수를 구하기 위해 필요)
-	
+
+			System.out.println("admListAction finished");
+			
 			pcnt = rcnt / psize;
 			if (rcnt % psize > 0)	pcnt++;				// 전체 페이지수 구함
 			spage = (cpage - 1) / psize * psize + 1;	// 블록 시작페이지 번호
@@ -66,12 +71,15 @@ public class AdmListAction implements action.Action {
 			request.setAttribute("pageInfo", pageInfo);
 			request.setAttribute("admList", admList);
 			forward.setPath("admin/admin_list.jsp");
+			if(kind.equals("join"))	{
+				forward.setPath("/admin/admin_list.jsp");
+			}
 		} else {
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
 			out.println("alert('접근 권한이 없습니다.');");
-			out.println("location.replace('login_form.jsp');");
+			out.println("location.replace('../index.jsp');");
 			out.println("</script>");
 			out.close();
 		}

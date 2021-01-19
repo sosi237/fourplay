@@ -45,11 +45,17 @@ a:focus { color:pink; text-decoration:none; }
 .mode {color:red;}
 #logo a {
 	font-size:30px; font-weight:bold; display:block; width:200px; text-align:left; margin-left:20px; 
-	position:absolute; top:15px;
+	margin-right:30px; position:absolute; top:15px;
 }
 .primary-nav { background:#fff; z-index:9999; width: 100%; border-bottom: 1px solid #ddd; }
 .primary-nav .main_menu{ overflow: hidden; width:100%; margin: auto; }
-.primary-nav .main_menu>li { float: left; position:relative; width: 10%; padding: 30px 0; text-align: center;}
+.primary-nav .main_menu>li { 
+	float: left; position:relative; width: 10%; padding: 30px 0; text-align: center;
+}
+.primary-nav .main_menu>li:first-child { 
+	margin-left:200px;
+}
+
 .primary-nav .main_menu>li>a{ font-size:15px; }
 .primary-nav .sub_menu{ 
 	background:#fff; z-index:9999; overflow: hidden; width: 100%; height: 0; padding-top: 20px; 
@@ -71,10 +77,11 @@ if(adminMember != null){
 		 <li><%=aid %> (<%=name %>)님</li>
 <%} %>
    	  </ul>
-      <ul class="main_menu" width="900">
+      <ul>
       	 <li>
    	  	 	<h1 id="logo"> <a href="../index.jsp" >fourplay</a> </h1>
    	  	 </li>
+   	  <div  class="main_menu">
          <li> 
 <%
 if (aid.equals("sa")){
@@ -99,12 +106,11 @@ if (aid.equals("sa")){
          <li> 
             <a href="bbs_list.anotice">커뮤니티 관리</a> 
          </li>
-         <li> 
-            <a href="#">스케줄</a> 
-         </li>
+ <!-- <li> <a href="#">스케줄</a> </li> -->        
          <li> 
             <a href="#">통계</a> 
          </li>
+      </div>
       </ul>
    </div>
 </header>
