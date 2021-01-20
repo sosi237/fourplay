@@ -19,15 +19,14 @@ public class AOrdListAction implements action.Action {
 		if (request.getParameter("psize") != null)			psize = Integer.parseInt(request.getParameter("psize"));
 
 		HttpSession session = request.getSession();
-		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
+		AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 		String buyer = "";
 		
-		if(loginMember != null) {	// 로그인한 회원이면
-			buyer = loginMember.getMlid();
-			OrdListSvc ordListSvc = new OrdListSvc();
+		if(adminMember != null) {	// 로그인한 회원이면
+			AOrdListSvc aOrdListSvc = new AOrdListSvc();
 			
-			rcnt = ordListSvc.getOrdCount(buyer);	// 페이징을 위해 해당 회원의 전체 주문내역 수를 받아옴
-			ordList = ordListSvc.getOrdList(buyer, cpage, psize);	// 해당 회원의 전체 주문목록을 받아옴
+			rcnt = aOrdListSvc.getOrdCount();	// 페이징을 위해 전체 주문내역 수를 받아옴
+			ordList = aOrdListSvc.getOrdList(cpage, psize);	// 전체 주문목록을 받아옴
 			
 			pcnt = rcnt / psize;
 			if (rcnt % psize > 0)	pcnt++;				// 전체 페이지수
@@ -46,7 +45,7 @@ public class AOrdListAction implements action.Action {
 			
 			request.setAttribute("ordList", ordList);
 			request.setAttribute("pageInfo", pageInfo);
-			forward.setPath("/member/order_list.jsp");
+			forward.setPath("order/a_order_list.jsp");
 		} else {	// 로그인해야만 들어올 수 있으므로
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();

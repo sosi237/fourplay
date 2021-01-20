@@ -91,9 +91,11 @@ if (aid.equals("sa")){
             <a href="admin_form.adm">ADMIN</a>
 <%} %> 
          </li>
+<!-- 
          <li> 
             <a href="#">사이트 관리</a> 
          </li>
+ -->
          <li> 
             <a href="ord_list.orda">주문 관리</a> 
          </li>

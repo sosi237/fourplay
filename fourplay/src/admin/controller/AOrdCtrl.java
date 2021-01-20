@@ -27,9 +27,13 @@ public class AOrdCtrl extends HttpServlet {
 //		AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 		
 		switch (command) {
-			case "/order/ord_list.orda" :		// 주문 목록 화면
+			case "/admin/ord_list.orda" :		// 주문 목록 화면
 				action = new AOrdListAction();
 				break;
+			case "/admin/ord_detail.orda" :		// 주문 상세내역 팝업창
+				action = new AOrdDetailAction();
+				break;
+			
 		}
 		
 		try {
