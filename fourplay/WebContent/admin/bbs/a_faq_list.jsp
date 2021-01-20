@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../a_menu.jsp" %>
 <%
 ArrayList<FaqInfo> articleList = (ArrayList<FaqInfo>)request.getAttribute("articleList");
 PageInfo pageInfo = (PageInfo)request.getAttribute("pageInfo");
@@ -40,6 +41,7 @@ args = "&cpage=" + cpage + schargs;
 </style>
 </head>
 <body>
+<div id="wrapper">
 <table class="bfaq" width="700" cellpadding="5" cellspacing="0">
 <tr id="aname"><td colspan="4">
 FAQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -135,5 +137,6 @@ if (rcnt > 0) {
 </td></tr>
 </table>
 </form>
+</div>
 </body>
 </html>

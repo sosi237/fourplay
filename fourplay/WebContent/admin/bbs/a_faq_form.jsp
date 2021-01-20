@@ -2,9 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
 <%@ page import="java.net.*" %>
+<%@ include file="../a_menu.jsp" %>
 <%
-AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
-
 request.setCharacterEncoding("utf-8");
 String wtype = request.getParameter("wtype");
 String args = "";
@@ -45,6 +44,7 @@ if (wtype.equals("in")) {
 </style>
 </head>
 <body>
+<div id="wrapper">
 <form name="bbsfaqform" action="bbs_proc.afaq<%=args %>" method="post">
 <input type="hidden" name="idx" value="<%=idx %>" />
 <input type="hidden" name="wtype" value="<%=wtype %>" />
@@ -78,5 +78,6 @@ if (wtype.equals("in")) {
 </td></tr>
 </table>
 </form>
+</div>
 </body>
 </html>

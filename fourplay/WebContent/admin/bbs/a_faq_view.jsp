@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
+<%@ include file="../a_menu.jsp" %>
 <%
 FaqInfo article = (FaqInfo)request.getAttribute("article");
 if (article == null) {
@@ -12,7 +13,6 @@ if (article == null) {
 }
 
 String uid = null;
-AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 if (adminMember != null)	uid = adminMember.getAl_id();
 
 int idx = Integer.parseInt(request.getParameter("idx"));
@@ -39,6 +39,7 @@ if (schtype != null && keyword != null && !keyword.equals("")) {
 </style>
 </head>
 <body>
+<div id="wrapper">
 <table class="bnview" width="700" cellpadding="5" cellspacing="0">
 <tr id="aname"><td colspan="6">
 FAQ
@@ -82,5 +83,6 @@ function notCool(idx) {
 <td align="right" colspan="4"><input class="button" type="button" value="목록으로" onclick="location.href='bbs_list.afaq<%=args %>';" /></td>
 </tr>
 </table>
+</div>
 </body>
 </html>

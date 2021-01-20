@@ -8,7 +8,6 @@ ArrayList<FaqInfo> articleList =
 (ArrayList<FaqInfo>)request.getAttribute("articleList");
 PageInfo pageInfo = (PageInfo)request.getAttribute("pageInfo");
 
-
 String schtype = null, keyword = null, schargs = "", args = "";
 if (pageInfo.getSchtype() == null || pageInfo.getKeyword() == null) {	// 검색을 하지 않은 경우
 	schtype = "";	keyword = "";
@@ -33,7 +32,6 @@ args = "&cpage=" + cpage + schargs;
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-
 .bfaq { font-size:13px; }
 #aname td { border-bottom:2px #BDBDBD solid; }
 #bqsub { background-color:#EAEAEA; font-family:'Nanum Gothic'; }
@@ -123,14 +121,9 @@ if (rcnt > 0) {
 <form name="frmSch" method="get">
 <table class="bfaq" width="700" cellpadding="5">
 <tr><td align="center">
-	<input type="radio" name="schtype" value="writer" checked="checked" <% if (schtype.equals("writer")) { %>
-		<% } %>>작성자
-	<input type="radio" name="schtype" value="title"  <% if (schtype.equals("title")) { %>
-		<% } %> />제목
-	<input type="radio" name="schtype" value="tc" <% if (schtype.equals("tc")) { %>
-		<% } %>>제목+내용
-
-	<input type="text" name="keyword" value="<%=keyword %>" />
+	<input type="radio" name="schtype" value="title"  <% if (schtype.equals("title")) { %>checked="checked"<% } %> />제목
+	<input type="radio" name="schtype" value="tc" <% if (schtype.equals("tc")) { %>	checked="checked" <% } %>>제목+내용
+	<input type="text" name="keyword" <%if(!keyword.equals("")){ %>value="<%=keyword %>" <%} %>/>
 	<input type="submit" value="검색" />
 </td></tr>
 </table>

@@ -10,6 +10,7 @@ if (article == null) {
 	out.println("alert('잘못된 경로로 들어오셨습니다.');");
 	out.println("history.back();");
 	out.println("</script>");
+	out.close();
 }
 
 String uid = null;
