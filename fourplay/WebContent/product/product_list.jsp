@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../menu.jsp" %>
 <%
 ArrayList<PdtInfo> pdtList = (ArrayList<PdtInfo>)request.getAttribute("pdtList");
 ArrayList<PdtInfo> bestPdtList = (ArrayList<PdtInfo>)request.getAttribute("bestPdtList");
@@ -103,7 +104,6 @@ function setCategory(obj, target) {
 </script>
 </head>
 <body>
-<%@ include file="../menu.jsp" %>
 <div id="wrapper">
 <h2>상품 목록 화면</h2>
 <form name="frmSch" action="" method="get">
