@@ -35,9 +35,10 @@ public class OrdFormAction implements Action {
 		}
 
 		OrdFormSvc ordFormSvc = new OrdFormSvc();
+		
 		if(loginMember != null) {
-			MemberInfo addrInfo = new MemberInfo();
-			addrInfo = ordFormSvc.getaddr(loginMember.getMlid());
+			MembeViewSvc membeViewSvc = new MembeViewSvc();
+			AddrInfo addrInfo = membeViewSvc.getBasicAddr(loginMember.getMlid());
 
 			request.setAttribute("addrInfo", addrInfo);
 			

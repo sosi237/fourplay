@@ -7,7 +7,7 @@ String ismember = request.getParameter("ismember");
 if(ismember == null)	ismember = "";	// 비회원 구매하기로 페이지에 들어왔는지 여부를 담는 변수 
 
 String kind = request.getParameter("kind");	// 장바구니(cart), 바로구매(direct) 중 어디를 통해 들어왔는지 여부
-MemberInfo addrInfo = (MemberInfo)request.getAttribute("addrInfo");
+AddrInfo addrInfo = (AddrInfo)request.getAttribute("addrInfo");
 ArrayList<CartInfo> pdtList = (ArrayList<CartInfo>)request.getAttribute("pdtList");
 
 String name = "", p1 = "", p2 = "", p3 = "", e1 = "", e2 = "", zip = "", addr1 = "", addr2 = "";
@@ -18,9 +18,9 @@ if (loginMember != null) {	// 로그인 한 회원일 경우
 	String[] arrEmail = loginMember.getMlemail().split("@");
 	e1 = arrEmail[0];	e2 = arrEmail[1];
 	if(addrInfo != null){	//기본 배송지가 설정되어 있는 회원이면
-		zip = addrInfo.getMazip();
-		addr1 = addrInfo.getMaaddr1();
-		addr2 = addrInfo.getMaaddr2();
+		zip = addrInfo.getMa_zip();
+		addr1 = addrInfo.getMa_addr1();
+		addr2 = addrInfo.getMa_addr2();
 	}
 }
 %>
@@ -55,14 +55,19 @@ li {list-style-type:none; }
 #ordList .ordContent .point {margin-right:70px;}
 #ordList .ordContent .pdtImg {margin:10px; vertical-align:center;}
 
+#payment {height:110px; }
+#payment li {height:110px; float:left;}
 #wrapper table {width:100%;}
 .title { 
 	width:150px; background-color:#d1d1d1; 
 	border-left:2px solid darkgray; border-bottom:1px solid darkgray; 
 	text-align:left;
-	}
+}
+.payTitle {width:150px; background-color:#d1d1d1; 
+	border-left:2px solid darkgray; border-bottom:1px solid darkgray; text-align:center;}
 .tPrice {display:block; height:30px; text-align:right; margin-right:10px; font-weight:bold; }
 
+.zip {width:80px;}
 #btn {display:block; width:100%; margin-top:30px; text-align:center;}
 .sBtn, .rBtn {display:inline;width:100px; height:35px; color:white; margin: 30px auto; }
 .sBtn {width:100px; height:35px; background-color:black; margin-right:30px; }
@@ -95,6 +100,13 @@ $(document).ready(function (){
 		}
 	});
 	
+	if($("input[name=payment]:checked").val() != "d"){
+		$("#account").attr("disabled", true);
+	} else {
+		$("#account").attr("disabled", false);
+	}
+	
+	
 });
 /* 우편번호 찾기 기능 - 다음 API 활용 */
 function getZip(type) {
@@ -124,6 +136,95 @@ function getZip(type) {
 	});
 }
 
+
+function chkData(frm){	
+	var bname = frm.bname.value;	var be1 = frm.be1.value;			var be2 = frm.be2.value;			
+	var bp1 = frm.bp1.value;		var bp2 = frm.bp2.value;			var bp3 = frm.bp3.value;			
+	var bzip = frm.bzip.value;		var baddr1 = frm.baddr1.value;		var baddr2 = frm.baddr2.value;
+	var rname = frm.rname.value;   	var delMemo = frm.delMemo.value;
+	var rp1 = frm.rp1.value;		var rp2 = frm.rp2.value; 			var rp3 = frm.rp3.value;
+	var rzip = frm.rzip.value;   	var raddr1 = frm.raddr1.value;		var raddr2 = frm.raddr2.value;
+	
+	if (bname == "")	{ 
+		alert("이름을 입력하세요.");				frm.bname.focus();	
+		return false; 
+	}else if (bname.length < 2)	{			//이름을 2자 미만으로 입력했으면
+		alert("이름은 2~20자 이내로 입력하세요."); 	frm.bname.select();	
+		return false; 
+	}
+	if (be1 == "")	{ 
+		alert("이메일을 입력하세요.");				frm.be1.focus();	
+		return false; 
+	}
+	if (be2 == "")	{ 
+		alert("도메인을 입력하세요.");				frm.be2.focus();	
+		return false; 
+	}
+
+	if (bp2 == "")	{ 
+		alert("전화번호를 입력하세요.");				frm.bp2.focus();	
+		return false; 
+	} else if (bp2.length <3){
+		alert("3자리 이상 입력하세요.");				frm.bp2.value="";	
+		return false; 
+	}
+	if (bp3 == "")	{ 
+		alert("전화번호를 입력하세요.");				frm.bp3.focus();	
+		return false; 
+	}else if (bp3.length < 4 ){
+		alert("4자리로 입력하세요.");					frm.bp3.value="";	
+		return false; 
+	}
+	if (bzip == "")	{ 
+		alert("우편번호를 입력하세요.");				frm.bzip.focus();	
+		return false; 
+	}
+	if (baddr1 == "")	{ 
+		alert("주소를 입력하세요.");					frm.baddr1.focus();	
+		return false; 
+	}
+	if (baddr2 == "")	{ 
+		alert("상세주소를 입력하세요.");				frm.baddr2.focus();	
+		return false; 
+	}
+	
+	if (rname == "")	{ 
+		alert("이름을 입력하세요.");					frm.rname.focus();	
+		return false; 
+	}else if (rname.length < 2)	{				//이름을 2자 미만으로 입력했으면
+		alert("이름은 2~20자 이내로 입력하세요."); 		frm.rname.select();	
+		return false; 
+	}
+	if (rp2 == "")	{ 
+		alert("전화번호를 입력하세요.");				frm.rp2.focus();	
+		return false; 
+	} else if (rp2.length <3){
+		alert("3자리 이상 입력하세요.");				frm.rp2.value="";	
+		return false; 
+	}
+	if (rp3 == "")	{ 
+		alert("전화번호를 입력하세요.");				frm.rp3.focus();	
+		return false; 
+	}else if (rp3.length < 4 ){
+		alert("4자리로 입력하세요.");					frm.rp3.value="";	
+		return false; 
+	}
+	if (rzip == "")	{ 
+		alert("우편번호를 입력하세요.");				frm.rzip.focus();	
+		return false; 
+	}
+	if (raddr1 == "")	{ 
+		alert("주소를 입력하세요.");					frm.raddr1.focus();	
+		return false; 
+	}
+	if (raddr2 == "")	{ 
+		alert("상세주소를 입력하세요.");				frm.raddr2.focus();	
+		return false; 
+	}
+	
+	return true;
+}
+
 </script>
 </head>
 <body>
@@ -137,7 +238,7 @@ function getZip(type) {
 		<img src="images/delivery_complete.png" name="ordDoneImg" class="hImg" width="128"/><br />
 	</div>
 	<br />
-	<form name="frmOrd" action="ord_proc.ord" method="post">
+	<form name="frmOrd" action="ord_proc.ord" method="post" onsubmit="return chkData(this);">
 	<input type="hidden" name="ismember" value="<%=ismember %>" />
 	<input type="hidden" name="pdtList" value="<%=pdtList %>" />
 	<div id="ordList">
@@ -234,7 +335,7 @@ function getZip(type) {
 	</tr>
 	<tr><th class="title">주소</th>
 	<td>
-	<input type="text" id="bzip" name="bzip"  value="<%=zip%>" placeholder="우편번호" />
+	<input type="text" id="bzip" name="bzip" class="zip" value="<%=zip%>" placeholder="우편번호" />
 	<input type="button" onclick="getZip('b')" value="우편번호 찾기" /><br>
 	<input type="text" id="baddr1" name="baddr1" value="<%=addr1%>" placeholder="주소" /><br />
 	<input type="text" id="baddr2" name="baddr2" value="<%=addr2%>" placeholder="상세주소" />
@@ -267,7 +368,7 @@ function getZip(type) {
 	</tr>
 	<tr><th class="title">주소</th>
 	<td>
-	<input type="text" name="rzip" id="rzip" placeholder="우편번호" />
+	<input type="text" name="rzip" id="rzip" class="zip" placeholder="우편번호" />
 	<input type="button" onclick="getZip('r')" value="우편번호 찾기" /><br>
 	<input type="text" name="raddr1" id="raddr1" placeholder="주소" /><br />
 	<input type="text" name="raddr2" id="raddr2" placeholder="상세주소" />
@@ -280,7 +381,7 @@ function getZip(type) {
 	<h3>03 결제 예정 금액</h3>
 	<div id="payList">
 	<table id="t_payList" cellspacing="0" cellpadding="5">
-	<tr class="title"><th>총 주문금액</th><th></th><th>배송비</th><th></th><th>할인금액</th><th></th><th>결제 예정 금액</th></tr>
+	<tr class="payTitle" align="center"><th>총 주문금액</th><th></th><th>배송비</th><th></th><th>할인금액</th><th></th><th>결제 예정 금액</th></tr>
 	<tr align="center">
 		<td><%=beforeDC %></td>
 		<td><img src="images/plus.png" width="45" alt="plus"/></td>
@@ -290,6 +391,7 @@ function getZip(type) {
 		<td><img src="images/equals.png"  width="35" alt="equals"/></td>
 		<td><%=tPrice %></td>
 	</tr>
+<!-- 
 	<tr>
 	<th>마일리지</th>
 	<td colspan="3"><input type="text" name="pnt" />
@@ -297,21 +399,24 @@ function getZip(type) {
 	<br /><input type="button" value="적용" id="usePnt" /><span id="pntMsg"></span>
 	</td>
 	</tr>
+ -->
 	</table>
 	</div>
 	
 	<h3>04 결제정보</h3>
 	<div id="payment">
 		<ul>
-			<li>결제 방법</li> 
+			<li class="title">결제 방법</li> 
 			<li>
 				<input type="radio" name="payment" value="a" checked="checked" />카드 결제<br />
 				<input type="radio" name="payment" value="b" />휴대폰 결제<br />
 				<input type="radio" name="payment" value="c" />계좌이체<br />
-				<input type="radio" name="payment" value="d" />무통장 입금
-				<select name="account">
+				<input type="radio" name="payment" value="d"/>무통장 입금
+				<select name="account" id="account">
 					<option value="">입금 계좌번호 선택</option>
+					<option value="woori">우리은행</option>
 				</select>
+				<span class="accountMsg"> </span>
 			</li>
 		</ul>
 	</div>

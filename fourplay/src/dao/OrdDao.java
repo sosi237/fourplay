@@ -52,6 +52,7 @@ public class OrdDao {
 				cart.setPl_name(rs.getString("pl_name"));
 				cart.setPl_img1(rs.getString("pl_img1"));
 				cart.setPl_opt(rs.getString("pl_opt"));
+				cart.setPl_price(rs.getInt("pl_price"));
 				int price = rs.getInt("pl_price");
 				if (rs.getInt("pl_discount") > 0) {
 					float rate = (float)rs.getInt("pl_discount") / 100;
@@ -68,29 +69,29 @@ public class OrdDao {
 		return pdtList;
 	}
 	
-	public MemberInfo getaddr(String uid) {	//로그인한 회원의 기본 배송지가 있으면 가져오는 메소드
-		MemberInfo addrInfo = new MemberInfo();
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try {
-			String sql = "select * from t_member_addr where ml_id = '" + uid + "' and ma_basic = 'y' ";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
-			
-			if(rs.next()) {
-				addrInfo.setMaaddr1(rs.getString("ma_addr1"));
-				addrInfo.setMaaddr2(rs.getString("ma_addr2"));
-				addrInfo.setMazip(rs.getString("ma_zip"));
-				addrInfo.setMlid(rs.getString("ml_id"));
-			}
-		} catch(Exception e) {
-			System.out.println("getaddr() 오류");		e.printStackTrace();
-		} finally {
-			close(rs);	close(stmt);
-		}
-		return addrInfo;
-	}
+//	public MemberInfo getaddr(String uid) {	//로그인한 회원의 기본 배송지가 있으면 가져오는 메소드
+//		MemberInfo addrInfo = new MemberInfo();
+//		Statement stmt = null;
+//		ResultSet rs = null;
+//		
+//		try {
+//			String sql = "select * from t_member_addr where ml_id = '" + uid + "' and ma_basic = 'y' ";
+//			stmt = conn.createStatement();
+//			rs = stmt.executeQuery(sql);
+//			
+//			if(rs.next()) {
+//				addrInfo.setMaaddr1(rs.getString("ma_addr1"));
+//				addrInfo.setMaaddr2(rs.getString("ma_addr2"));
+//				addrInfo.setMazip(rs.getString("ma_zip"));
+//				addrInfo.setMlid(rs.getString("ml_id"));
+//			}
+//		} catch(Exception e) {
+//			System.out.println("getaddr() 오류");		e.printStackTrace();
+//		} finally {
+//			close(rs);	close(stmt);
+//		}
+//		return addrInfo;
+//	}
 	
 	public int getOrdCount(String buyer) {	// 한 회원의 총 주문개수를 가져오는 메소드
 		int rcnt = 0;
@@ -163,7 +164,7 @@ public class OrdDao {
 		OrdDetailInfo ordDetailInfo = null;
 		
 		try {
-			String sql = "select * from t_order_detail a, t_product_list b where a.pl_id = b.pl_id and ol_id = '" + olid + "'";
+			String sql = "select * from t_order_detail a, t_product_list b where a.pl_id = b.pl_id and ol_id = '" + olid + "' ";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
@@ -176,6 +177,7 @@ public class OrdDao {
 				ordDetailInfo.setOd_idx(rs.getInt("od_idx"));
 				ordDetailInfo.setOd_cnt(rs.getInt("od_cnt"));
 				ordDetailInfo.setOd_price(rs.getInt("od_price"));
+				ordDetailInfo.setOd_status(rs.getString("od_status"));
 				ordDetailList.add(ordDetailInfo);
 			}
 		} catch(Exception e) {
