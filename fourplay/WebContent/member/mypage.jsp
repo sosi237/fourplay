@@ -53,25 +53,25 @@ a { text-decoration:none;}
 	
 	<div class="mypage-list">
 		<a href="order_list.mpg">
-			<div class="img"><img src="./images/ORDER.png"></div>
+			<div class="img"><img src="./img/ORDER.png"></div>
 			<h4>ORDER</h4>
 			<p>주문상태 현황</p>
 			<span>고객님께서 주문하신 상품의<br>주문내역을 확인하실 수 있습니다.</span>
 		</a>
 		<a href="member_info.mpg">
-			<div class="img"><img src="./images/PROFILE.png"></div>
+			<div class="img"><img src="./img/PROFILE.png"></div>
 			<h4>PROFILE</h4>
 			<p>회원정보</p>
 			<span>회원이신 고객님의 개인정보를<br>관리하는 공간입니다.</span>
 		</a>
 		<a href="#">
-			<div class="img"><img src="./images/WISHLIST.png"></div>
+			<div class="img"><img src="./img/WISHLIST.png"></div>
 			<h4>WISHLIST</h4>
 			<p>관심상품</p>
 			<span>관심상품으로 등록하신<br>상품의 목록을 보여드립니다.</span>
 		</a>
 		<a href="#">
-			<div class="img"><img src="./images/CARTLIST.png"></div>
+			<div class="img"><img src="./img/CARTLIST.png"></div>
 			<h4>CARTLIST</h4>
 			<p>장바구니</p>
 			<span>장바구니에 등록하신<br>상품의 목록을 보여드립니다.</span>

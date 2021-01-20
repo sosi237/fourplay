@@ -13,7 +13,6 @@ public class MyPageCtrl extends HttpServlet {
     public MyPageCtrl() {
         super();
     }
-
     protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	request.setCharacterEncoding("utf-8");
 		String requestUri = request.getRequestURI();
@@ -24,7 +23,7 @@ public class MyPageCtrl extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
-		
+		System.out.println(command);
 		switch (command) {
 			case "/order_list.mpg" :		// 회원 주문내역 보기
 				if(loginMember != null) {	// 로그인한 상태이면
@@ -56,6 +55,15 @@ public class MyPageCtrl extends HttpServlet {
 				break;
 			case "/member_del_proc.mpg" :	// 회원 정보 삭제 처리 기능
 				action = new MemDelProcAction();
+				break;
+			case "/addr_view.mpg" :	// 주소록 화면
+//				action = new AddrViewAction();
+				break;
+			case "/addr_del.mpg" :	// 주소록 삭제 기능
+//				action = new AddrDelAction();
+				break;
+			case "/point_list.mpg" :	// 포인트 내역 화면
+				action = new PointListAction();
 				break;
 		}
 

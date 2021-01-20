@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../menu.jsp" %>
 <%
-MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
+MemberInfo loginMember = (MemberInfo)request.getAttribute("loginMember");
+AddrInfo addr = (AddrInfo)request.getAttribute("addr");
 String b1 = null; String b2 = null; String b3 = null;
 String p1 = null, p2 = null, p3 = null, e1 = null, e2 = null;
 
@@ -23,11 +25,23 @@ e1 = email[0];	e2 = email[1];
 .msg { font-size:12px; }
 th { background:#eee; }
 </style>
+<script>
+function openPop2() {
+// 팝업창 뛰우는 메소드
+	var w = (screen.width - 500) / 2;	// 수평 중심점
+	var h = (screen.height - 400) / 2;	// 수직 중심점
+	var win = window.open("/fourplay/addr_view.mpg", "", "width=500,height=400,left=" + w + ",top=" + h);
+}
+function selectEmail(obj) {
+// 이메일 선택시 변경되는 메소드
+	document.frm.e2.value = document.frm.e3.value;
+}
+</script>
 </head>
 <body>
 <h2 align=center>MEMBER INFORMATION</h2>
 <h3 class="msg">HOME > MYPAGE > 회원정보 수정</h3>
-<form name="" action="member_proc.mpg">
+<form name="frm" action="member_proc.mpg">
 <input type="hidden" name="id"  value="<%=loginMember.getMlname() %>" />
 <input type="hidden" name="name" value="<%=loginMember.getMlid() %>" />
 <table cellpadding="5" cellspacing="0" align="center" border="1px solid #eee">
@@ -49,11 +63,11 @@ th { background:#eee; }
 <td>
 	<input type="text" name="e1" size="20" value="<%=e1%>" /> @
 	<input type="text" name="e2" size="20" value="<%=e2%>" />
-	<select name="e3">
+	<select name="e3"  onchange="selectEmail(this);">
 		<option value="">도메인 선택</option>
 		<option value="naver.com" <% if (e2.equals("naver.com")) { %>selected="selected"<% } %>>naver.com</option>
 		<option value="gmail.com" <% if (e2.equals("gmail.com")) { %>selected="selected"<% } %>>gmail.com</option>
-		<option value="nate.com"  <% if (e2.equals("gmail.com")) { %>selected="selected"<% } %>>gmail.com</option>
+		<option value="nate.com"  <% if (e2.equals("nate.com")) { %>selected="selected"<% } %>>gmail.com</option>
 		<option value="direct"></option>
 	</select>
 	<br /><span class="msg">* ID, 비밀번호 찾기 시 입력된 이메일로 전달되므로 정확한 메일 주소를 입력해 주세요.</span>
@@ -77,11 +91,11 @@ th { background:#eee; }
 <tr><th>sms 수신여부</th><td><input type="radio" checked="checked" /> 동의합니다. <input type="radio" name="" /> 동의하지 않습니다.</td></tr>
 <tr>
 <th>주소</th>
-<td><input type="text" name="mazip" value="<%=loginMember.getMazip() %>" />
+<td><input type="text" name="mazip" value="<%=addr.getMa_zip() %>" />
 	<input type="button" value="우편번호 검색" /> 
-	<input type="button" value="배송지 목록" /><br />
-	<input type="text" size="48" name="maaddr1" value="<%=loginMember.getMaaddr1() %>" /><br />
-	<input type="text" size="48"name="maaddr2" value="<%=loginMember.getMaaddr2() %>" />
+	<input type="button" value="배송지 목록" onclick="openPop2();" /><br />
+	<input type="text" size="48" name="maaddr1" value="<%=addr.getMa_addr1() %>" /><br />
+	<input type="text" size="48"name="maaddr2" value="<%=addr.getMa_addr2() %>" />
 </td>
 </tr>
 <tr>

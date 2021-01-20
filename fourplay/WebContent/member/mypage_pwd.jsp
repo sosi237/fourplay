@@ -11,7 +11,7 @@ MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 <script>
 function notColl () {
 	if (confirm("정말 삭제하시겠습니까?")) {
-		document.form.submit();
+		document.chkPwd.submit();
 	} 
 }
 </script>
@@ -21,7 +21,7 @@ function notColl () {
 <form name = "chkPwd" action="member_del_proc.mpg" method="post" >
 <input type="hidden" name="uid" value="<%=loginMember.getMlid() %>" />
 <input type="password" name="pwd" /><br />
-<input type="submit" value="확인" onclick="notColl();"  />
+<input type="button" value="확인" onclick="notColl();"  />
 <input type="button" value="취소" onclick="location.href='mypage.mpg'"/>
 </form>
 </body>
