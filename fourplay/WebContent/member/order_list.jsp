@@ -4,7 +4,6 @@
 <%@ include file="../menu.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
-request.setCharacterEncoding("utf-8");
 ArrayList<OrdListInfo> ordList = (ArrayList<OrdListInfo>)request.getAttribute("ordList");
 OrdPageInfo pageInfo = (OrdPageInfo)request.getAttribute("pageInfo");
 int cpage	= pageInfo.getCpage();	// 현재 페이지 번호
@@ -26,13 +25,8 @@ int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
 <style>
 #wrapper table td {border-bottom:1px solid lightgray; align:center;}
 .paging {
-	width:100%; position:relative; top:30%;
+	width:100%; position:relative; top:30%; border:0;
 }
-a:link { color:#4f4f4f; text-decoration:none; }
-a:visited { color:#4f4f4f; text-decoration:none; }
-a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
-a:active { color:#f00; text-decoration:none; }	
-a:focus { color:#f00; text-decoration:underline; }
 </style>
 <script>
 function ordCancel(olid){
@@ -122,34 +116,34 @@ if(ordList != null && rcnt > 0){
 	<div class="paging">
 	<table width="100%" cellpadding="5">
 	<tr><td align="center">
-	<%
-	if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
-		if (cpage == 1) {
-			out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
+<%
+if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
+	if (cpage == 1) {
+		out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
+	} else {
+		out.print("<a href='order_list.mpg?cpage=1'>");
+		out.println("<<</a>&nbsp;&nbsp;");
+		out.print("<a href='order_list.mpg?cpage=" + (cpage - 1) +  "'>");
+		out.println("<</a>&nbsp;&nbsp;");
+	}
+	for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
+		if (cpage == j) {
+			out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
 		} else {
-			out.print("<a href='order_list.mpg?cpage=1'>");
-			out.println("<<</a>&nbsp;&nbsp;");
-			out.print("<a href='order_list.mpg?cpage=" + (cpage - 1) +  "'>");
-			out.println("<</a>&nbsp;&nbsp;");
-		}
-		for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
-			if (cpage == j) {
-				out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
-			} else {
-				out.print("&nbsp;<a href='order_list.mpg?cpage=" + j +  "'>");
-				out.println(j + "</a>&nbsp;");
-			}
-		}
-		if (cpage == pcnt) {
-			out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
-		} else {
-			out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + (cpage + 1)  + "'>");
-			out.println("></a>");
-			out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + pcnt  + "'>");
-			out.println(">></a>");
+			out.print("&nbsp;<a href='order_list.mpg?cpage=" + j +  "'>");
+			out.println(j + "</a>&nbsp;");
 		}
 	}
-	%>
+	if (cpage == pcnt) {
+		out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
+	} else {
+		out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + (cpage + 1)  + "'>");
+		out.println("></a>");
+		out.print("&nbsp;&nbsp;<a href='order_list.mpg?cpage=" + pcnt  + "'>");
+		out.println(">></a>");
+	}
+}
+%>
 	</td></tr>
 	</table>
 	</div>
