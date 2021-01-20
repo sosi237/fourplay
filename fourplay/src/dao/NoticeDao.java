@@ -30,7 +30,8 @@ public class NoticeDao {
 		int result = 0;
 		
 		try {
-			sql = "select count(*) from t_notice_list " + where;
+			sql = "select count(*) from t_notice_list " +
+				" where nl_status = 'a' " + where;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if (rs.next())	result = rs.getInt(1);
@@ -55,7 +56,7 @@ public class NoticeDao {
 		int snum = (cpage - 1) * limit;
 
 		try {
-			sql ="select * from t_notice_list  " + 
+			sql = "select * from t_notice_list where nl_status = 'a' " + 
 			where + " order by nl_idx desc limit " + snum + ", " + limit;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);

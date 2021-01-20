@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
+<%@ include file="../a_menu.jsp" %>
 <%
 NoticeInfo article = (NoticeInfo)request.getAttribute("article");
 if (article == null) {
@@ -9,10 +10,10 @@ if (article == null) {
 	out.println("alert('잘못된 경로로 들어오셨습니다.');");
 	out.println("history.back();");
 	out.println("</script>");
+	out.close();
 }
 
 String uid = null;
-AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 if (adminMember != null)	uid = adminMember.getAl_id();
 
 int idx = Integer.parseInt(request.getParameter("idx"));
@@ -39,6 +40,7 @@ if (schtype != null && keyword != null && !keyword.equals("")) {
 </style>
 </head>
 <body>
+<div id="wrapper">
 <table class="bnview" width="700" cellpadding="5" cellspacing="0">
 <tr id="aname"><td colspan="6">
 Notice
@@ -61,8 +63,8 @@ Notice
 </tr>
 <tr>
 <td colspan="6">
-<textarea id="content" name="content" rows="10" cols="60">
-<%=article.getNl_content().replace("\r\n", "<br />") %></textarea>
+<textarea id="content" name="content" rows="10" cols="60" readonly="readonly">
+<%=article.getNl_content() %></textarea>
 </td></tr>
 <%
 boolean isPms = false;	// 수정 및 삭제 권한이 있는지 여부를 저장할 변수
@@ -83,11 +85,14 @@ function notCool(idx) {
 }
 </script>
 <tr>
-<td align='left'><input class="button" type="button" value="수정" onclick="<%=link1 %>" /></td>
+<td align="left" colspan="4">
+<input class="button" type="button" value="목록으로" onclick="location.href='bbs_list.anotice<%=args %>';" />
+</td>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<td><input class="button" type="button" value="삭제" onclick="<%=link2 %>" /></td>
-<td align="right" colspan="4"><input class="button" type="button" value="목록으로" onclick="location.href='bbs_list.anotice<%=args %>';" /></td>
+<td align="right"><input class="button" type="button" value="삭제" onclick="<%=link2 %>" /></td>
+<td align='right'><input class="button" type="button" value="수정" onclick="<%=link1 %>" /></td>
 </tr>
 </table>
+</div>
 </body>
 </html>

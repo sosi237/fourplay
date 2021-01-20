@@ -2,9 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
 <%@ page import="java.net.*" %>
+<%@ include file="../a_menu.jsp" %>
 <%
-AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
-
 request.setCharacterEncoding("utf-8");
 String wtype = request.getParameter("wtype");
 String args = "";
@@ -20,8 +19,9 @@ if (wtype.equals("in")) {
 	writer = article.getNl_writer();
 	title = article.getNl_title();
 	content = article.getNl_content();
-
-	int cpage = Integer.parseInt(request.getParameter("cpage"));
+	
+	int cpage = 1;
+	if(request.getParameter("cpage") != null) 	cpage = Integer.parseInt(request.getParameter("cpage"));
 	args = "?cpage=" + cpage;
 	String schtype = request.getParameter("schtype");
 	String keyword = request.getParameter("keyword");
@@ -45,6 +45,7 @@ if (wtype.equals("in")) {
 </style>
 </head>
 <body>
+<div id="wrapper">
 <form name="bbsnoticeform" action="bbs_proc.anotice<%=args %>" method="post">
 <input type="hidden" name="idx" value="<%=idx %>" />
 <input type="hidden" name="wtype" value="<%=wtype %>" />
@@ -78,5 +79,6 @@ if (wtype.equals("in")) {
 </td></tr>
 </table>
 </form>
+</div>
 </body>
 </html>
