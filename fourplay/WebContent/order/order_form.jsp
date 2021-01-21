@@ -3,8 +3,8 @@
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <%
-String ismember = request.getParameter("ismember");
-if(ismember == null)	ismember = "";	// 비회원 구매하기로 페이지에 들어왔는지 여부를 담는 변수 
+String ismember = "y";
+if(ismember == null)	ismember = "n";	// 비회원 구매하기로 페이지에 들어왔는지 여부를 담는 변수 
 
 String kind = request.getParameter("kind");	// 장바구니(cart), 바로구매(direct) 중 어디를 통해 들어왔는지 여부
 AddrInfo addrInfo = (AddrInfo)request.getAttribute("addrInfo");
@@ -225,6 +225,9 @@ function chkData(frm){
 	return true;
 }
 
+function onlyNumber(obj) {
+	if (isNaN(obj.value))	obj.value = "";
+}
 </script>
 </head>
 <body>
@@ -239,8 +242,6 @@ function chkData(frm){
 	</div>
 	<br />
 	<form name="frmOrd" action="ord_proc.ord" method="post" onsubmit="return chkData(this);">
-	<input type="hidden" name="ismember" value="<%=ismember %>" />
-	<input type="hidden" name="pdtList" value="<%=pdtList %>" />
 	<div id="ordList">
 		<ul id="ordTitle">
 			<li>상품명</li>
@@ -249,34 +250,38 @@ function chkData(frm){
 			<li class="point">적립 마일리지</li>
 			<li class="deli">배송비</li>
 		</ul>
-	<%
-	int tPrice = 0, beforeDC = 0;	
-	// tPrice: 총 구매가격(할인 후), beforeDC: 할인전 총가격
-	if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
-		int seq = 0;
-		for (int i = 0 ; i < pdtList.size() ; i++) {
-			seq++;
-			CartInfo crt = pdtList.get(i);
-			
-			String pnt = Math.floor(crt.getPrice() * 0.0001) * 100 +"";
-			pnt = pnt.substring(0, pnt.length() -2);
-			int point = Integer.valueOf(pnt);
-			
-			String option = "옵션 없음";
-			String opts = crt.getPl_opt();				// 상품이 가지는 옵션
-			String opt = crt.getCl_opt();				// 사용자가 선택한 옵션
-			if (opts != null && !opts.equals("")) {		// 해당 상품에 옵션이 있으면
-				String[] arrOpt = opts.split(":");		// 옵션의 종류를 배열로 생성
-				String[] arrChoose = opt.split(",");	// 선택한 옵션값을 배열로 생성
-				option = "";
-				for (int j = 0 ; j < arrOpt.length ; j++) {
-					String[] arrTmp = arrOpt[j].split(",");
-					option += " / " + arrTmp[0] + " : " + arrChoose[j];
-				}
-				option = option.substring(3).replace(" /", ", ").replace(" :", ":");
-				option = option.replace("Size", "사이즈").replace("Width", "발볼").replace("Heel", "속굽");
+<%
+String clIdxs = "";
+
+int tPrice = 0, beforeDC = 0;	
+// tPrice: 총 구매가격(할인 후), beforeDC: 할인전 총가격
+if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
+	int seq = 0;
+	for (int i = 0 ; i < pdtList.size() ; i++) {
+		seq++;
+		CartInfo crt = pdtList.get(i);
+		
+		clIdxs += "," + crt.getCl_idx();
+		
+		String pnt = Math.floor(crt.getPrice() * 0.0001) * 100 +"";
+		pnt = pnt.substring(0, pnt.length() -2);
+		int point = Integer.valueOf(pnt);
+		
+		String option = "옵션 없음";
+		String opts = crt.getPl_opt();				// 상품이 가지는 옵션
+		String opt = crt.getCl_opt();				// 사용자가 선택한 옵션
+		if (opts != null && !opts.equals("")) {		// 해당 상품에 옵션이 있으면
+			String[] arrOpt = opts.split(":");		// 옵션의 종류를 배열로 생성
+			String[] arrChoose = opt.split(",");	// 선택한 옵션값을 배열로 생성
+			option = "";
+			for (int j = 0 ; j < arrOpt.length ; j++) {
+				String[] arrTmp = arrOpt[j].split(",");
+				option += " / " + arrTmp[0] + " : " + arrChoose[j];
 			}
-	%>
+			option = option.substring(3).replace(" /", ", ").replace(" :", ":");
+			option = option.replace("Size", "사이즈").replace("Width", "발볼").replace("Heel", "속굽");
+		}
+%>
 	
 		<ol class="ordContent">
 			<li><%=seq %></li>
@@ -289,20 +294,21 @@ function chkData(frm){
 			<li class="point"><%=point %></li>
 			<li>0</li>
 		</ol>
-	<%
-			beforeDC += crt.getPl_price();
-			tPrice += crt.getPrice();
-			System.out.println("beforeDC: "+beforeDC +" / tPrice: " + tPrice);
-		}
-	} else {	// 구매할 상품이 없으면
-	%>
+<%
+		beforeDC += crt.getPl_price();
+		tPrice += crt.getPrice();
+		System.out.println("beforeDC: "+beforeDC +" / tPrice: " + tPrice);
+	}
+	if (clIdxs.indexOf(',') > -1)	clIdxs = clIdxs.substring(1);
+} else {	// 구매할 상품이 없으면
+%>
 	<script>
 	alert("잘못된 경로로 들어오셨습니다.");
-	history.back();
+	location.replace('login_form.jsp');
 	</script>
-	<%
-	}
-	%>
+<%
+}
+%>
 			<span class="tPrice">총 <%=tPrice %> 원</span>
 	</div>
 	<h3>01 주문하시는 분</h3>
@@ -387,19 +393,17 @@ function chkData(frm){
 		<td><img src="images/plus.png" width="45" alt="plus"/></td>
 		<td>0</td>
 		<td><img src="images/minus.png"  width="45" alt="minus"/></td>
-		<td><%=beforeDC - tPrice %></td>
+		<td><span id="tatal"><%=beforeDC - tPrice %></span></td>
 		<td><img src="images/equals.png"  width="35" alt="equals"/></td>
 		<td><%=tPrice %></td>
 	</tr>
-<!-- 
 	<tr>
 	<th>마일리지</th>
-	<td colspan="3"><input type="text" name="pnt" />
-	<input type="checkbox" name="useAll" /> 전액사용(사용가능 적립금: )
-	<br /><input type="button" value="적용" id="usePnt" /><span id="pntMsg"></span>
+	<td colspan="3"><input type="text" name="usePnt" id="usePnt" value="0" onkeyup="onlyNumber(this);"/>
+	<input type="checkbox" name="useAll" onclick="" /> 전액사용
+<!-- <br /><input type="button" value="적용" id="pntBtn" />  -->	
 	</td>
 	</tr>
- -->
 	</table>
 	</div>
 	
@@ -424,6 +428,10 @@ function chkData(frm){
 		<input type="submit" class="sBtn" value="결제하기">&nbsp;&nbsp;
 		<input type="button" class="rBtn" value="취소" onclick="location.href='cart_list.crt';"/>
 	</div>
+	<input type="hidden" name="tPrice" value="<%=tPrice %>" />
+	<input type="hidden" name="clIdxs" value="<%=clIdxs %>" />
+	<input type="hidden" name="ismember" value="<%=ismember %>" />
+	<input type="hidden" name="pdtList" value="<%=pdtList %>" />
 	</form>
 </div>
 <br /><br /><br /><br /><br /><br />

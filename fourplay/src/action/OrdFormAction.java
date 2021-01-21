@@ -33,7 +33,6 @@ public class OrdFormAction implements Action {
 		} else {	// 바로 구매일 경우
 			
 		}
-
 		OrdFormSvc ordFormSvc = new OrdFormSvc();
 		
 		if(loginMember != null) {
@@ -43,7 +42,6 @@ public class OrdFormAction implements Action {
 			request.setAttribute("addrInfo", addrInfo);
 			
 		}
-		
 		pdtList = ordFormSvc.getOrdFrmPdtList(kind, where);
 		request.setAttribute("pdtList", pdtList);
 		ActionForward forward = new ActionForward();

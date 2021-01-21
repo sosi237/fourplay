@@ -26,6 +26,9 @@ public class OrdCtrl extends HttpServlet {
 			case "/ord_form.ord" :
 				action = new OrdFormAction();
 				break;
+			case "/ord_proc.ord" :
+				action = new OrdProcAction();
+				break;
 		}
 
 		try {

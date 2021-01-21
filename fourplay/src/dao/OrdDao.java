@@ -249,5 +249,134 @@ public class OrdDao {
 		}
 		return ordInfo;
 	}
-	
+
+	public String orderProc(String kind, String[] clIdxs, OrdListInfo ord) {
+		String result = "0:";
+		Statement stmt = null, stmt2 = null, stmt3 = null, stmt4 = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null, rs2 = null, rs3 = null;
+
+		try {
+			stmt = conn.createStatement();
+			String where = "";
+			for (int i = 0 ; i < clIdxs.length ; i++)	where += " or c.cl_idx = " + clIdxs[i];
+			where = " (" + where.substring(4) + ")";
+			String sql = "select c.*, if(p.pl_discount > 0, p.pl_price - (p.pl_discount / 100) * p.pl_price, p.pl_price) price " + 
+				" from t_cart_list c, t_product_list p where c.pl_id = p.pl_id and " + where + " group by c.cl_idx ";
+			System.out.println(sql);
+			rs = stmt.executeQuery(sql);	// 쇼핑카트에서 구매하려는 상품의 아이디와 옵션, 수량 등을 추출함
+			int tmp = 0;
+			
+			//주문ID(ex. yymmdd100001)
+			
+			if (rs.next()) {	//구매하려는 상품이 있으면
+				Calendar today = Calendar.getInstance();
+				String date = (today.get(Calendar.YEAR) + "").substring(2);
+				int m = today.get(Calendar.MONTH) + 1;
+				int d = today.get(Calendar.DATE);
+				date += (m < 10) ? "0" + m : "" + m;
+				sql = "select max(ol_id) from t_order_list where ol_id like '" + date + "%'";
+				// 주문번호 생성을 위해 이번달 주문 아이디들 중 가장 나중에 주문한 주문 아이디를 가져옴
+				System.out.println(sql);
+				date += (d < 10) ? "0" + d : "" + d;
+				stmt2 = conn.createStatement();
+				rs2 = stmt2.executeQuery(sql);
+				String olId = date + "100001";
+				if (rs2.next() && rs2.getString(1) != null) {	// 이번달 주문이 한 건이라도 있으면
+					int id = Integer.parseInt(rs2.getString(1).substring(6)) + 1;
+					olId = date + id;	// 새로운 주문번호를 만들어 냄
+					System.out.println(olId);
+				}
+				System.out.println("1");
+				sql = "insert into t_order_list (ol_id, ol_ismember, ol_buyer, ol_bname, ol_bphone, ol_bmail, ol_rname, ol_rphone, ol_rzip, ol_raddr1, " + 
+					"ol_raddr2, ol_usepnt, ol_savepnt, ol_payment, ol_pay, ol_status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+				System.out.println(sql);
+				String payment = ord.getOl_payment();
+				String status = "c";
+				if(payment.equals("d"))						status = "a";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, olId);					pstmt.setString(2, ord.getOl_ismember());
+				pstmt.setString(3, ord.getOl_buyer());		pstmt.setString(4, ord.getOl_bname());		
+				pstmt.setString(5, ord.getOl_bphone());		pstmt.setString(6, ord.getOl_bmail());		
+				pstmt.setString(7, ord.getOl_rname());		pstmt.setString(8, ord.getOl_rphone());		
+				pstmt.setString(9, ord.getOl_rzip());		pstmt.setString(10, ord.getOl_raddr1());	
+				pstmt.setString(11, ord.getOl_raddr2());	pstmt.setInt(12, ord.getOl_usepnt());		
+				pstmt.setInt(13, ord.getOl_savepnt());		pstmt.setString(14, payment);	
+				pstmt.setInt(15, ord.getOl_pay());			pstmt.setString(16, status);
+				tmp = pstmt.executeUpdate();
+				if (tmp == 0)	return result;
+				// t_order_list에 insert가 정상적으로 동작하지 않았을 경우 롤백을 시키기 위해 강제로 메소드를 종료시킴
+				
+				stmt3 = conn.createStatement();
+				do {	// 장바구니의 구매상품정보를 이용하여 t_product_list(up), t_order_detail(in)
+					
+					sql = "insert into t_order_detail (ol_id, pl_id, od_cnt, od_opt, od_price, od_status)" + 
+							"values ('" + olId + "', '" + rs.getString("pl_id") + "', " + rs.getInt("cl_cnt") + 
+							", '" + rs.getString("cl_opt") + "', " + rs.getInt("price") + ", '" + status + "') ";
+					System.out.println(sql);
+					tmp = stmt3.executeUpdate(sql);
+					if (tmp == 0)	return result;
+					// 주문 상세정보(상품관련) 추가 쿼리
+					
+					String size = "";	//옵션이 없으면
+					if(!rs.getString("cl_opt").equals("")) {	//옵션이 있는 상품이면
+						String[] opt = rs.getString("c.cl_opt").split(",");
+						size = " and ps_size = '" + opt[0] + "' ";
+					}
+					
+					sql = "select ps_stock from t_product_size where pl_id ='" + rs.getString("pl_id") + "' " + size;
+					stmt4 = conn.createStatement();
+					System.out.println(sql);
+					rs3 = stmt4.executeQuery(sql);
+					
+					if(rs3.next()) {
+						String stock = ", ps_stock = ps_stock - " + rs.getInt("cl_cnt");
+						if (rs3.getInt("ps_stock") == -1)	stock = "";
+						sql = "update t_product_size set ps_salecnt = ps_salecnt + " + rs.getInt("cl_cnt") + stock
+								+ " where pl_id = '" + rs.getString("pl_id") + "' " + size;
+						System.out.println(sql);
+						tmp = stmt3.executeUpdate(sql);
+						if (tmp == 0)	return result;
+						// 주문 수량에 맞춰 판매량과 재고량을 변경하는 쿼리
+					}
+					
+				} while(rs.next());
+
+				if ((ord.getOl_usepnt() > 0 || ord.getOl_savepnt() > 0) && ord.getOl_ismember().equals("y")) {
+				// 회원이면서 주문시 사용한 포인트가 있거나 주문에 의해 적립된 포인트가 있는 경우
+					int pnt = 0;
+					if (ord.getOl_usepnt() > 0) {	// 주문시 사용한 포인트가 있으면
+						sql = "insert into t_member_point (ml_id, mp_use, mp_point, mp_detail, mp_order) " + 
+						"values ('" + ord.getOl_buyer() + "', 'b', " + ord.getOl_usepnt() + ", '주문시 사용', '" + olId + "')";
+						tmp = stmt3.executeUpdate(sql);
+						pnt = ord.getOl_usepnt();
+					}
+					if (ord.getOl_savepnt() > 0) {	// 주문시 포인트가 적립되었다면
+						sql = "insert into t_member_point (ml_id, mp_use, mp_point, mp_detail, mp_order) " + 
+						"values ('" + ord.getOl_buyer() + "', 'a', " + ord.getOl_savepnt() + ", '주문시 적립', '" + olId + "')";
+						tmp = stmt3.executeUpdate(sql);
+						pnt = ord.getOl_savepnt();
+					}
+					System.out.println(sql);
+					sql = "update t_member_list set ml_point = ml_point + " + pnt +	" where ml_id = '" + ord.getOl_buyer() + "' ";
+					System.out.println(sql);
+					tmp = stmt3.executeUpdate(sql);
+				}
+
+				sql = "delete from t_cart_list c where " + where;
+				System.out.println(sql);
+				tmp = stmt3.executeUpdate(sql);
+				// 장바구니 내의 목록에서 구매하는 상품들을 삭제
+				result = "1:" + olId;
+			} else {	// 장바구니에 구매하려는 상품이 없을 경우
+				return result;	// 구매를 멈춤
+			}
+		} catch(Exception e) {
+			System.out.println("orderProc() 오류" + e);
+		} finally {
+			close(rs2);	close(rs);	close(pstmt);	close(stmt);
+		}
+
+		return result;
+	}	
 }

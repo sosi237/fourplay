@@ -18,12 +18,14 @@ public class OrdFormSvc {
 		return pdtList;
 	}
 	
-	public MemberInfo getaddr(String uid) {
-		MemberInfo addrInfo = new MemberInfo();
+	public AddrInfo getaddr(String uid) {
+		
+		AddrInfo addrInfo = new AddrInfo();
+		
 		Connection conn = getConnection();
-		OrdDao ordDao = OrdDao.getInstance();
-		ordDao.setConnection(conn);
-		addrInfo = ordDao.getaddr(uid);
+		MpgDao mpgDao = MpgDao.getInstance();
+		mpgDao.setConnection(conn);
+		addrInfo = mpgDao.getBasicAddr(uid);
 		close(conn);
 
 		return addrInfo;

@@ -1,6 +1,5 @@
 package vo;
 
-import vo.*;
 import java.util.*;
 
 public class OrdListInfo {
