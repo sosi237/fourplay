@@ -16,7 +16,13 @@ public class MembeViewAction implements Action {
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 		
 		if(loginMember != null) {	// 로그인된 상태면
+			String uid = loginMember.getMlid();
+			MembeViewSvc membeViewSvc = new MembeViewSvc();
+			AddrInfo addr = membeViewSvc.getBasicAddr(uid);
+			System.out.println("MembeViewAction finished");
+			
 			request.setAttribute("loginMember", loginMember);
+			request.setAttribute("addr", addr);
 			forward.setPath("member/member_info.jsp");
 		} else {	// 로그인이 풀렸으면
 			response.setContentType("text/html; charset=utf-8");

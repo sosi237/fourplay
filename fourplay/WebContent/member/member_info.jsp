@@ -3,7 +3,6 @@
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <%
-MemberInfo loginMember = (MemberInfo)request.getAttribute("loginMember");
 AddrInfo addr = (AddrInfo)request.getAttribute("addr");
 String b1 = null; String b2 = null; String b3 = null;
 String p1 = null, p2 = null, p3 = null, e1 = null, e2 = null;
@@ -39,6 +38,7 @@ function selectEmail(obj) {
 </script>
 </head>
 <body>
+<div id="wrapper">
 <h2 align=center>MEMBER INFORMATION</h2>
 <h3 class="msg">HOME > MYPAGE > 회원정보 수정</h3>
 <form name="frm" action="member_proc.mpg">
@@ -106,5 +106,6 @@ function selectEmail(obj) {
 </tr>
 </table>
 </form>
+</div>
 </body>
 </html>
