@@ -6,22 +6,18 @@ import dao.*;
 import vo.*;
 
 public class QAProcSvc {
-	public boolean qaInsert(QAInfo qaInfo) throws Exception {
-		boolean isSuccess = false;
+	public int qaInsert(QAInfo qaInfo) throws Exception {
 		Connection conn = getConnection();
 		QADao qaDao = QADao.getInstance();
 		qaDao.setConnection(conn);
-
-		int result = qaDao.qaInsert(qaInfo);
-		if (result > 0) {
-			commit(conn);	// 쿼리를 실제로 적용시킴
-			isSuccess = true;
+		int idx = qaDao.qaInsert(qaInfo);
+		if (idx > 0) {
+			commit(conn);	
 		} else {
-			rollback(conn);	// 실행했던 모든 쿼리를 무효화 시킴
+			rollback(conn);	
 		}
-
 		close(conn);
-		return isSuccess;
+		return idx;
 	}
 	public boolean qaUpdate(QAInfo qaInfo) throws Exception {
 		boolean isSuccess = false;

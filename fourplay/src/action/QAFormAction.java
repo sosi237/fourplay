@@ -11,25 +11,22 @@ public class QAFormAction implements Action {
 		String wtype = request.getParameter("wtype");	// 등록(in) / 수정(up) 여부
 		ActionForward forward = new ActionForward();
 
-		if (wtype.equals("up")) {
+		if (wtype.equals("up")) {//수정이면
 			HttpSession session = request.getSession();
 			MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
-			AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
-			
-			String uid = null, admId=null;
+			String uid = null;
 			if (loginMember != null)	uid = loginMember.getMlid();
-			if (adminMember != null)	admId = adminMember.getAl_id();
-
 			int idx = Integer.parseInt(request.getParameter("idx"));
 
-			QAFormSvc qcFormSvc = new QAFormSvc();
-			QAInfo article = qcFormSvc.getArticleUp(idx, uid);
-			if (article != null) {
-				request.setAttribute("article", article);
-			} 
+			QAViewSvc qaViewSvc = new QAViewSvc();
+			QAInfo article = qaViewSvc.getArticle(idx);
+			request.setAttribute("article", article);
+			forward.setPath("/customer/qna_form.jsp?idx="+idx);
+			
+		} else {	//등록이면
+			forward.setPath("/customer/qna_form.jsp");	
 		}
-
-		forward.setPath("/customer/qna_form.jsp");	// 이동할 URL 지정
+		
 		return forward;
 	}
 }

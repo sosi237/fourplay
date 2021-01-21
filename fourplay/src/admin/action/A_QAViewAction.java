@@ -17,7 +17,6 @@ public class A_QAViewAction implements A_Action {
 		
 		A_QAViewSvc aqaViewSvc = new A_QAViewSvc();
 		QAInfo article = aqaViewSvc.getArticle(idx);
-		// 지정한 게시글을 FreeInfo형 인스턴스로 받아옴
 		
 		ActionForward forward = new ActionForward();
 		request.setAttribute("article", article);

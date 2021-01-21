@@ -55,19 +55,19 @@ System.out.println("dao getArticleList");
 		QAInfo qaInfo = null;
 
 		int snum = (cpage - 1) * limit;
-
 		try {
-			sql ="select * from t_qna_list  " + 
-			where + " order by ql_idx desc limit " + snum + ", " + limit;
+			sql ="select * from t_qna_list  " + where + " order by ql_idx desc limit " + snum + ", " + limit;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				qaInfo = new QAInfo();
 				qaInfo.setQl_idx(rs.getInt("ql_idx"));
-				qaInfo.setQl_writer(rs.getString("ql_writer"));
+				qaInfo.setQl_writer(rs.getString("ml_id"));
 				qaInfo.setQl_title(rs.getString("ql_title"));
 				qaInfo.setQl_content(rs.getString("ql_content"));
 				qaInfo.setQl_qdate(rs.getString("ql_qdate"));
+				qaInfo.setQl_answer(rs.getString("ql_answer"));
+				qaInfo.setQl_status(rs.getString("ql_status"));
 
 				articleList.add(qaInfo);
 			}
@@ -81,9 +81,7 @@ System.out.println("dao getArticleList");
 		return articleList;
 	}
 	
-	
 	public QAInfo getArticle(int idx) {
-	// 지정된 게시물의 데이터를 형 인스턴스로 리턴하는 메소드
 		QAInfo article = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -96,14 +94,18 @@ System.out.println("dao getArticleList");
 			if (rs.next()) {
 				article = new QAInfo();
 				article.setQl_idx(rs.getInt("ql_idx"));
-				article.setQl_writer(rs.getString("ql_writer"));
+				article.setQl_writer(rs.getString("ml_id"));
 				article.setQl_title(rs.getString("ql_title"));
 				article.setQl_content(rs.getString("ql_content"));
 				article.setQl_qdate(rs.getString("ql_qdate"));
-
+				article.setQl_adate(rs.getString("ql_adate"));
+				article.setQl_answer(rs.getString("ql_answer"));
+				article.setQl_status(rs.getString("ql_status"));
+				article.setAl_idx(rs.getInt("al_idx"));
+				
 			}
 		} catch(Exception e) {
-System.out.println("getArticle() 오류");
+			System.out.println("getArticle() 오류");
 			e.printStackTrace();
 		} finally {
 			close(rs);	close(stmt);

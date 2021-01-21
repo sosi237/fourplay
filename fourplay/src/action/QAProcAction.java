@@ -19,8 +19,6 @@ public class QAProcAction implements Action {
 		String wtype = request.getParameter("wtype");
 		
 		QAInfo qaInfo = new QAInfo();
-		int idx = Integer.parseInt(request.getParameter("idx"));
-		
 		
 		if (wtype.equals("in") || wtype.equals("up")) {
 			qaInfo.setQl_writer(request.getParameter("writer"));
@@ -29,6 +27,7 @@ public class QAProcAction implements Action {
 		}
 
 		if (wtype.equals("del") || wtype.equals("up")) {
+			int idx = Integer.parseInt(request.getParameter("idx"));	//없으면 0
 			qaInfo.setQl_idx(idx);
 		}
 
@@ -39,12 +38,18 @@ public class QAProcAction implements Action {
 		if (wtype.equals("in")) {
 			if (loginMember != null) {	// 회원 글등록일 경우
 				qaInfo.setQl_writer(loginMember.getMlid());	// 로그인한 아이디를 작성자로 지정
-			} else if (adminMember != null) {	// 관리자 글등록일 경우
-				qaInfo.setQl_writer(adminMember.getAl_id());	// 로그인한 아이디를 작성자로 지정
+			} else {
+				response.setContentType("text/html;charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('회원 전용 기능입니다.');");
+				out.println("location.href='../login_form.jsp';");
+				out.println("</script>");
+				out.close();
 			}
 			qaInfo.setQl_ip(request.getRemoteAddr());	// 등록자 IP주소 지정
-			isSuccess = qaProcSvc.qaInsert(qaInfo);
-			link = "brd_list.qna";
+			int idx = qaProcSvc.qaInsert(qaInfo);
+			link = "brd_view.qna?idx=" + idx;
 
 		} else if (wtype.equals("up")) {
 			isSuccess = qaProcSvc.qaUpdate(qaInfo);

@@ -19,8 +19,7 @@ public class QAListAction implements Action {
 		String where = "";	// 쿼리 작업시 사용할 조건을 저장할 변수
 		if (keyword != null && !keyword.equals("")) {
 			if (schtype.equals("tc")) {	// 검색 조건이 '제목+내용' 이면
-				where = " and (ql_title like '%" + keyword + "%' " + 
-					" or ql_content like '%" + keyword + "%') ";
+				where = " and (ql_title like '%" + keyword + "%' " + " or ql_content like '%" + keyword + "%') ";
 			} else {	// 검색조건이 제목 또는 내용 또는 작성자 이면
 				where = " and ql_" + schtype + " like '%" + keyword + "%' ";
 			}
@@ -29,7 +28,6 @@ public class QAListAction implements Action {
 		QAListSvc qaListSvc = new QAListSvc();
 
 		int rcnt = qaListSvc.getArticleCount(where);
-
 		articleList = qaListSvc.getArticleList(where, cpage, limit);
 
 		int pcnt = rcnt / limit;

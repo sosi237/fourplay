@@ -63,7 +63,7 @@ public class QADao {
 				// 하나의 레코드(게시글)를 저장할 인스턴스 생성
 
 				qaInfo.setQl_idx(rs.getInt("ql_idx"));
-				qaInfo.setQl_writer(rs.getString("ql_writer"));
+				qaInfo.setQl_writer(rs.getString("ml_id"));
 				qaInfo.setQl_title(rs.getString("ql_title"));
 				qaInfo.setQl_content(rs.getString("ql_content"));
 				qaInfo.setQl_qdate(rs.getString("ql_qdate"));
@@ -97,7 +97,7 @@ public class QADao {
 			if (rs.next()) {
 				article = new QAInfo();
 				article.setQl_idx(rs.getInt("ql_idx"));
-				article.setQl_writer(rs.getString("ql_writer"));
+				article.setQl_writer(rs.getString("ml_id"));
 				article.setQl_title(rs.getString("ql_title"));
 				article.setQl_content(rs.getString("ql_content"));
 				article.setQl_qdate(rs.getString("ql_qdate"));
@@ -117,21 +117,17 @@ public class QADao {
 
 	public int qaInsert(QAInfo qaInfo) {
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;		// 등록할 게시글의 번호를 얻기 위한 ResultSet
-		int idx = 1, result = 0;	// 새로운 글번호와 쿼리 실행 결과 개수를 저장할 변수
+		ResultSet rs = null;		
+		int idx = 1;	
 		String sql = null;
-
 		
 		try {
-			sql = "select max(ql_idx) + 1 from t_qna_list";
+			sql = "select max(ql_idx) from t_qna_list";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			if (rs.next())	idx = rs.getInt(1);
-			// 등록할 게시글의 새로운 글번호 생성
+			if (rs.next())	idx = rs.getInt(1) + 1;			// 등록할 게시글의 새로운 글번호 생성(새 글이면 1번)
 
-			sql = "insert into t_qna_list (ql_idx, ql_writer, ql_title, "
-					+ "ql_content, ql_ip, ql_answer, al_idx)"
-					+ " values (?, ?, ?, ?, ?, ?, ?)";
+			sql = "insert into t_qna_list (ql_idx, ml_id, ql_title, ql_content, ql_ip, ql_answer, al_idx) values (?, ?, ?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, idx);
 			pstmt.setString(2, qaInfo.getQl_writer());
@@ -141,17 +137,17 @@ public class QADao {
 			pstmt.setString(6, qaInfo.getQl_answer());
 			pstmt.setInt(7, 1);
 
-			result = pstmt.executeUpdate();
-	
-
+			int result = pstmt.executeUpdate();
+			
+			if(result == 0)		idx = 0;
+			
 		} catch(Exception e) {
 			System.out.println("qaInsert() 오류");
 			e.printStackTrace();
 		} finally {
 			close(rs);	close(pstmt);
 		}
-
-		return result;
+		return idx;
 	}
 
 	public int qaUpdate(QAInfo qaInfo) {

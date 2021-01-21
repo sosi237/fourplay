@@ -8,16 +8,12 @@ import javax.servlet.http.*;
 import action.*;
 import vo.*;
 
-
 @WebServlet("*.qna")
 public class QACtrl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-  
     public QACtrl() {
         super();
     }
-
-	
     protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
        		request.setCharacterEncoding("utf-8");
     		String requestUri = request.getRequestURI();

@@ -19,8 +19,4 @@ public class QAFormSvc {
 		return article;
 	}
 
-	public QAInfo getArticleUp(int idx, String uid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

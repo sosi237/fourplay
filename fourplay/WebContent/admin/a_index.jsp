@@ -19,7 +19,11 @@
 <body>
 <div id="wrapper">
 	<h2>관리자 모드</h2>
-	<a href="brd_list.afree">자유게시판</a>
+	<a href="brd_list.afree">자유게시판</a><br/>
+	<a href="brd_list.aqna">qna</a><br/>
+	<a href="pdt_in_form.pdta">상품등록</a><br/>
+	<a href="pdt_list.pdta">상품목록</a><br/>
+	
 	<div class="status">
 	</div>
 	<div class="sales_stat">

@@ -1,15 +1,8 @@
 package vo;
 
 public class QAInfo {
-// 자유게시판 게시글 하나를 저장할 클래스
-	
 	private int ql_idx, al_idx;
-	private String ql_title ,ql_content ,ql_ip ,ql_qdate ,ql_answer,ql_adate ,ql_status;
-	
-	private String ql_ismember, ql_writer, ql_pwd;
-	
-	
-	
+	private String ql_title ,ql_content ,ql_ip ,ql_qdate ,ql_answer,ql_adate ,ql_status, ql_writer;
 
 	public int getQl_idx() {
 		return ql_idx;
@@ -83,14 +76,6 @@ public class QAInfo {
 		this.ql_status = ql_status;
 	}
 
-	public String getQl_ismember() {
-		return ql_ismember;
-	}
-
-	public void setQl_ismember(String ql_ismember) {
-		this.ql_ismember = ql_ismember;
-	}
-
 	public String getQl_writer() {
 		return ql_writer;
 	}
@@ -98,21 +83,4 @@ public class QAInfo {
 	public void setQl_writer(String ql_writer) {
 		this.ql_writer = ql_writer;
 	}
-
-	public String getQl_pwd() {
-		return ql_pwd;
-	}
-
-	public void setQl_pwd(String ql_pwd) {
-		this.ql_pwd = ql_pwd;
-	}
-
-
-	
-	
-
-	
-	
-
-	
 }
