@@ -51,6 +51,7 @@ function wishDel(id) {
 </script>
 </head>
 <body>
+<div id="wrapper">
 <form name="frmWish" action="" method="post">
 <table width="700" cellpadding="5">      
 <tr>
@@ -83,5 +84,6 @@ if (wishList != null && wishList.size() > 0) {	// 위시리스트에 데이터�
 	<input type="button" value="계속 쇼핑하기" onclick="location.href='pdt_list.pdt<%=args%>'" /></th></tr>
 </table>
 </form>
+</div>
 </body>
 </html>
