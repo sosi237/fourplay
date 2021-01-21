@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 ArrayList<MemberInfo> pointList = (ArrayList<MemberInfo>)request.getAttribute("pointList");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -15,6 +15,7 @@ ArrayList<MemberInfo> pointList = (ArrayList<MemberInfo>)request.getAttribute("p
 <script src="jquery-3.5.1.js"></script>
 </head>
 <body>
+<div id="wrapper">
 <form name= "frmPoint" action="" method="post">
 <table border="1px solid balck" width="100%" >
 <tr><th width="20%">날짜</th><th width="*">적립내용</th><th width="15%">적립/사용내역</th></tr>
@@ -46,6 +47,7 @@ if (loginMember != null) {
 %>
 <div align="right">
 <input type="button" value="뒤로가기" onclick="history.back();"  />
+</div>
 </div>
 </form>
 </body>
