@@ -20,7 +20,7 @@ public class ReviewListSvc {
 	}
 	
 	public ArrayList<ReviewInfo> getArticleList(String plid, int rCpage, int rPsize) {
-System.out.println("svc getArticleList");
+		System.out.println("svc getArticleList");
 		ArrayList<ReviewInfo> articleList = null;
 		Connection conn = getConnection();
 		ReviewDao reviewDao = ReviewDao.getInstance();

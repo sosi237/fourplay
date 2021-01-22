@@ -2,7 +2,7 @@ package vo;
 
 public class ReviewInfo {
 	private String ml_id, pl_id, rl_title, rl_content, rl_img, rl_date, rl_status;
-	private int rl_idx, rl_rate;
+	private int rl_idx, rl_rate, odidx;
 	
 	public String getMl_id() {
 		return ml_id;
@@ -57,6 +57,12 @@ public class ReviewInfo {
 	}
 	public void setRl_rate(int rl_rate) {
 		this.rl_rate = rl_rate;
+	}
+	public int getOdidx() {
+		return odidx;
+	}
+	public void setOdidx(int odidx) {
+		this.odidx = odidx;
 	}
 	
 }

@@ -5,16 +5,17 @@
 ArrayList<ReviewInfo> articleList = (ArrayList<ReviewInfo>)request.getAttribute("articleList");
 ReviewPageInfo reviewPageInfo = (ReviewPageInfo)request.getAttribute("reviewPageInfo");
 
+String plid = request.getParameter("id");
 MemberInfo login = (MemberInfo)session.getAttribute("loginMember");
 int rPsize = 5;
 if(request.getParameter("rPsize") != null)  rPsize = Integer.parseInt(request.getParameter("rPsize"));
-int rCpage	= reviewPageInfo.getrCpage();	// 현재 페이지 번호
+int rCpage	= reviewPageInfo.getrCpage();	// 리뷰 현재 페이지 번호
 if(request.getParameter("rCpage") != null)  rCpage = Integer.parseInt(request.getParameter("rCpage"));
-int rPcnt	= reviewPageInfo.getrPcnt();	// 전체 페이지 수
-int rBsize	= reviewPageInfo.getrBsize();	// 블록 페이지 개수
-int rSpage	= reviewPageInfo.getrSpage();	// 블록 시작 페이지 번호
-int rEpage	= reviewPageInfo.getrEpage();	// 블록 종료 페이지 번호
-int rCnt	= reviewPageInfo.getrCnt();	// 검색된 게시물 개수
+int rPcnt	= reviewPageInfo.getrPcnt();	// 리뷰 전체 페이지 수
+int rBsize	= reviewPageInfo.getrBsize();	// 리뷰 블록 페이지 개수
+int rSpage	= reviewPageInfo.getrSpage();	// 리뷰 블록 시작 페이지 번호
+int rEpage	= reviewPageInfo.getrEpage();	// 리뷰 블록 종료 페이지 번호
+int rCnt	= reviewPageInfo.getrCnt();		// 검색된 리뷰글 개수
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -23,22 +24,34 @@ int rCnt	= reviewPageInfo.getrCnt();	// 검색된 게시물 개수
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
+/* reset - 태그들 스타일 기본값 초기화 */
+*{ padding: 0; margin: 0; }
+ul li, ol li{ list-style: none; text-decoration: none; }
+a{ text-decoration: none; color: #222; }
+a:link { color:#4f4f4f; text-decoration:none; }
+a:visited { color:#4f4f4f; text-decoration:none; }
+a:hover { color:pink; text-decoration:none;  font-weight:bold;}
+a:active { color:#f00; text-decoration:none; }   
+a:focus { color:pink; text-decoration:none; }
+
 .wrapper {width:100%; margin:40px 0;}
-.rTitle {width:100%; height:30px;width:42%;}
-.rTitle li, .rContent li {float:left; }
+.rTitle {width:100%; height:30px; border:1px solid white;}
+.rTitle li, .rContent li {float:left; border:1px solid white;}
+.liTitle {width:39%; }
 .rTitle .liTitle { text-align:center;}
 .rContent .liTitle { text-align:left;}
-.rContent {width:100%; height:50px;}
+.rContent {width:100%; height:50px; border:1px solid white;}
 .nContent {
 	width:100%; height:70px; 
 	display:block; text-align:center; font-size:13px; margin:15px 0 40px 0;
 }
 
 .seq { width:10%; text-align:center;}
-.writer { width:12%; text-align:center;}
+.writer { width:15%; text-align:center;}
 .date { width:16%; text-align:center;}
 .rate { width:18%; text-align:center;}
 
+.review {width:80%; margin:5px auto;border:1px solid white; }
 .liBtn {float:left; width:50px; height:50px; }
 .rBtn {width:45px; height:30px; background-color:lightgray; }
 .rBtn:first-child {margin-right:15px;}
@@ -48,8 +61,9 @@ int rCnt	= reviewPageInfo.getrCnt();	// 검색된 게시물 개수
 .pointer {cursor:pointer;}
 
 </style>
+<script src="pager.js"></script>
 <script>
-var flag = false;
+var flag = true;
 function showContent(idx){
 	flag = !flag;
 	var idx = document.getElementById(idx);
@@ -64,6 +78,7 @@ function notCool(idx) {
 		location.href="review_proc.review?wtype=del&idx=" + idx;
 	}
 }
+
 </script>
 </head>
 <body>
@@ -84,25 +99,34 @@ if(articleList.size() > 0 && rCnt > 0){
 %>
 	<ul class="rContent">
 		<li class="seq"><%=seq-- %></li>
-		<li class="liTitle"><span class="pointer" onclick="showContent(<%=idx%>);"><%=articleList.get(i).getRl_title() %></span></li>
+		<li class="liTitle">
+<%
+			if(!articleList.get(i).getRl_img().equals("")){
+%>
+		<img src="/fourplay/images/review_pic.png"  width="30" align="absmiddle"/>&nbsp;&nbsp;&nbsp;
+<%} %>
+		<span class="pointer" onclick="showContent(<%=idx%>);"><%=articleList.get(i).getRl_title() %></span></li>
 		<li class="writer"><%=articleList.get(i).getMl_id() %></li>
 		<li class="date"><%=articleList.get(i).getRl_date().substring(0, 10) %></li>
 		<li class="rate">
 <%
 		for(int j = 0; j < articleList.get(i).getRl_rate(); j++){
 %>
-			<img src="images/star.png" width="12px"/>
+			<img src="../images/star.png" width="12px"/>
 <%
 		} 
 %>
 		</li>
 	</ul>
-	<ul class="review" id="<%=idx %>">
+	<ul class="review" id="<%=idx %>" style="display:none;">
 		<li><%=articleList.get(i).getRl_content() %></li>
+		<li><img src="/fourplay/product/r_img/<%=articleList.get(i).getRl_img() %>"  width="150"/></li>
 <%
 		if(login != null && login.getMlid().equals(articleList.get(i).getMl_id())){
 %>
-		<li class="liBtn"><input type="button" value="수정"  class="rBtn" onclick="location.href='review_form.review?idx=<%=idx %>';"/></li>
+		<li class="liBtn">
+			<input type="button" value="수정"  class="rBtn" onclick="location.href='review_form.review?wtype=up&idx=<%=idx %>&plid=<%=plid%>';"/>
+			</li>
 		<li class="liBtn"><input type="button" value="삭제"  class="rBtn" onclick="notCool(<%=idx %>);"/></li>
 	</ul>
 <%
@@ -123,9 +147,9 @@ if (rCnt > 0) {
 	if (rCpage == 1) {
 		out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
 	} else {
-		out.print("<a href='bbs_list.notice?cpage=1"  + "'>");
+		out.print("<a href='pdt_list.pdt?rCpage=1"  + "'>");
 		out.println("<<</a>&nbsp;&nbsp;");
-		out.print("<a href='bbs_list.notice?cpage=" + (rCpage - 1)  + "'>");
+		out.print("<a href='pdt_list.pdt?rCpage=" + (rCpage - 1)  + "'>");
 		out.println("<</a>&nbsp;&nbsp;");
 	}
 
@@ -133,7 +157,7 @@ if (rCnt > 0) {
 		if (rCpage == j) {
 			out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
 		} else {
-			out.print("&nbsp;<a href='bbs_list.notice?cpage=" + j  + "'>");
+			out.print("&nbsp;<a href='pdt_list.pdt?rCpage=" + j  + "'>");
 			out.println(j + "</a>&nbsp;");
 		}
 	}
@@ -141,9 +165,9 @@ if (rCnt > 0) {
 	if (rCpage == rPcnt) {
 		out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
 	} else {
-		out.print("&nbsp;&nbsp;<a href='bbs_list.notice?cpage=" + (rCpage + 1)  + "'>");
+		out.print("&nbsp;&nbsp;<a href='pdt_list.pdt?rCpage=" + (rCpage + 1)  + "'>");
 		out.println("></a>");
-		out.print("&nbsp;&nbsp;<a href='bbs_list.notice?cpage=" + rPcnt  + "'>");
+		out.print("&nbsp;&nbsp;<a href='pdt_list.pdt?rCpage=" + rPcnt  + "'>");
 		out.println(">></a>");
 	}
 }
