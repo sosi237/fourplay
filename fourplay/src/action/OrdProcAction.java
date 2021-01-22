@@ -53,13 +53,13 @@ public class OrdProcAction implements Action {
 
 		OrdProcSvc ordProcSvc = new OrdProcSvc();
 		String result = ordProcSvc.orderProc(kind, clIdxs, ord);
-		String[] arrResult = result.split(":");
+		String[] arrResult = result.split(":");	//0:1:olid
 
 		ActionForward forward = null;
 		if (arrResult[0].equals("1")) {	// 성공시
 			forward = new ActionForward();
 			forward.setRedirect(true);	// 이동방식을 redirect로 하겠다는 의미
-			forward.setPath("order_success.ord?olid=" + arrResult[1]);
+			forward.setPath("order_success.jsp?ismember=" + ismember + "&olid=" + arrResult[1]);
 		}
 
 		return forward;

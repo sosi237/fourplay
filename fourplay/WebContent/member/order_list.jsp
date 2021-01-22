@@ -96,7 +96,8 @@ if(ordList != null && rcnt > 0){
 	<% switch(ordList.get(i).getOl_status()){
 		case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		break;
 		case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
-		case "e":	out.print("<input type='button' value='구매후기' onclick='location.href=\"product_detail.jsp\" '/>");							break;
+		case "e":	out.print("<input type='button' value='구매후기' onclick='location.href=\"order_detail.mpg?olid="+ordList.get(i).getOl_id()+"\" '/>");		
+		break;
 		case "f": 	out.print("교환요청");	break;
 		case "h": 	out.print("환불요청");	break;
 		case "i": 	out.print("환불완료");	break;
