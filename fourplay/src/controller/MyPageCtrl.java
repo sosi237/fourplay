@@ -25,7 +25,7 @@ public class MyPageCtrl extends HttpServlet {
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 		System.out.println(command);
 		switch (command) {
-			case "/order_list.mpg" :		// 회원 주문내역 보기
+			case "/order_list.mpg" : case "/order/order_list.mpg" :		// 회원 주문내역 보기
 				if(loginMember != null) {	// 로그인한 상태이면
 					action = new OrdListAction();
 				}else {
@@ -57,10 +57,10 @@ public class MyPageCtrl extends HttpServlet {
 				action = new MemDelProcAction();
 				break;
 			case "/addr_view.mpg" :	// 주소록 화면
-//				action = new AddrViewAction();
+				action = new AddrViewAction();
 				break;
 			case "/addr_del.mpg" :	// 주소록 삭제 기능
-//				action = new AddrDelAction();
+				action = new AddrDelAction();
 				break;
 			case "/point_list.mpg" :	// 포인트 내역 화면
 				action = new PointListAction();

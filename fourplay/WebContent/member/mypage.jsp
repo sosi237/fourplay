@@ -2,7 +2,9 @@
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<% 
+<%
+
+OrdListInfo total = (OrdListInfo)request.getAttribute("total");
 %>
 <html>
 <head>
@@ -42,11 +44,12 @@ a { text-decoration:none;}
 		<div style="width:100%;padding:0 20px; border-left: 1px solid #eee;">
 			<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;font-size:14px;padding:10px 0;">
 				<p>총 주문금액</p>
-				<p>0원</p>
+				<p><%=total.getOl_pay() %> 원</p>
+				 
 			</div>
 			<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;font-size:14px;padding:10px 0;">
 				<p>적립금&nbsp;<a href="point_list.mpg" style="color:#000;font-weight:bold;">[내역확인]</a></p>
-				<p><%=loginMember.getMlpoint() %>원</p>
+				<p><%=loginMember.getMlpoint() %> 원</p>
 			</div>
 		</div>
 	</div>

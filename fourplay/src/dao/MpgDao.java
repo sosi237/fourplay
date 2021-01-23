@@ -22,13 +22,14 @@ public class MpgDao {
 	public void setConnection(Connection conn) {
 		this.conn = conn;
 	}
+	
 	public AddrInfo getBasicAddr(String uid) {
+	// 회원 정보 수정시 주소를 뽑아오는 메소드
 		AddrInfo addr = new AddrInfo();
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			String sql = "select * from t_member_addr where ma_basic = 'y' and ml_id = '" + uid + "' " ;
-			System.out.println(sql);
 			
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
@@ -80,6 +81,30 @@ public class MpgDao {
 		return addrList;
 	}
 	
+	public int addrDelete(String idx, String uid) {
+	// 회원이 선택한 주소(들)을 주소록에서 삭제하는 메소드
+		int result = 0;
+		Statement stmt = null;
+
+		try {
+			String[] arrIdx = idx.split(",");
+			String where = "";
+			for (int i = 0 ; i < arrIdx.length ; i++) {
+				where += " or ma_idx = " + arrIdx[i];
+			}
+			where = " and (" + where.substring(4) + ")";
+			String sql = "delete from t_member_addr where ml_id = '" + uid + "' " + where;
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+		} catch(Exception e) {
+			System.out.println("addrDelete() 오류");		e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+
+		return result;
+	}
+	
 	public int memberUpdate(MemberInfo loginMember) {
 	// 회원 수정을 위한 메소드
 		int result = 0;
@@ -120,58 +145,6 @@ public class MpgDao {
 		return result;
 	}
 	
-//	public ArrayList<MemberInfo> getAddrList(String uid) {
-//	// 회원 주소록 주소를 뽑아오는 메소드
-//		ArrayList<MemberInfo> addrList = new ArrayList<MemberInfo>();
-//		Statement stmt = null;
-//		ResultSet rs = null;
-//		
-//		try {
-//			String sql = "select * from t_member_addr where ml_id = '" + uid + "' " ;
-//			System.out.println(sql);
-//			
-//			stmt = conn.createStatement();
-//			rs = stmt.executeQuery(sql);
-//			while (rs.next()) {
-//				MemberInfo addr = new MemberInfo();
-//				addr.setMaidx(rs.getInt("ma_idx"));
-//				addr.setMazip(rs.getString("ma_zip"));
-//				addr.setMaaddr1(rs.getString("ma_addr1"));
-//				addr.setMaaddr2(rs.getString("ma_addr2"));
-//				addrList.add(addr);
-//			}
-//		} catch(Exception e) {
-//			System.out.println("getAddrList() 오류");		e.printStackTrace();
-//		} finally {
-//			close(rs);	close(stmt);
-//		}
-//
-//		return addrList;
-//	}
-	
-	public int addrDelete(String idx, String uid) {
-	// 사용자가 선택한 주소(들)을 장바구니에서 삭제하는 메소드
-		int result = 0;
-		Statement stmt = null;
-
-		try {
-			String[] arrIdx = idx.split(",");
-			String where = "";
-			for (int i = 0 ; i < arrIdx.length ; i++) {
-				where += " or ma_idx = " + arrIdx[i];
-			}
-			where = " and (" + where.substring(4) + ")";
-			String sql = "delete from t_member_addr where ml_id = '" + uid + "' " + where;
-			stmt = conn.createStatement();
-			result = stmt.executeUpdate(sql);
-		} catch(Exception e) {
-			System.out.println("addrDelete() 오류");		e.printStackTrace();
-		} finally {
-			close(stmt);
-		}
-
-		return result;
-	}
 	
 	public ArrayList<MemberInfo> getPointList(String uid) {
 	// 회원 포인트 내역을 뽑아오는 메소드
@@ -201,6 +174,28 @@ public class MpgDao {
 		}
 
 		return pointList;
+	}
+	public OrdListInfo getPayTotal(String uid) {
+	// 총 구매내역을 뽑아오는 메소드
+		OrdListInfo total = new OrdListInfo();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			String sql = "select sum(ol_pay) total from t_order_list where ol_buyer = '" + uid + "' ";
+			System.out.println(sql);
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				total.setOl_pay(rs.getInt("total"));
+				
+			}
+		} catch(Exception e) {
+			System.out.println("getPayTotal() 오류");		e.printStackTrace();
+		} finally {
+			close(rs);	close(stmt);
+		}
+		return total;
 	}
 }
 

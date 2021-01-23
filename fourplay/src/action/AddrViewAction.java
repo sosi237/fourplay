@@ -9,7 +9,7 @@ import vo.*;
 public class AddrViewAction implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("utf-8");
-		ArrayList<MemberInfo> addrList = new ArrayList<MemberInfo>();
+		ArrayList<AddrInfo> addrList = new ArrayList<AddrInfo>();
 		HttpSession session = request.getSession();
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
 		String uid = loginMember.getMlid();

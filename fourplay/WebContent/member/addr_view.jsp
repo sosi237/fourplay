@@ -4,7 +4,7 @@
 <%
 request.setCharacterEncoding("utf-8");
 MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
-ArrayList<MemberInfo> addrList = (ArrayList<MemberInfo>)request.getAttribute("addrList");
+ArrayList<AddrInfo> addrList = (ArrayList<AddrInfo>)request.getAttribute("addrList");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -68,9 +68,9 @@ if (loginMember != null) {
 		for (int i = 0; i < addrList.size(); i++) {
 %>
 <tr align="center">
-<td><%=addrList.get(i).getMazip() %></td>
-<td><%=addrList.get(i).getMaaddr1() + " " + addrList.get(i).getMaaddr2() %></td>
-<td><input type="checkbox" name="chk" value="<%=addrList.get(i).getMaidx() %>" /></td>
+<td><%=addrList.get(i).getMa_zip() %></td>
+<td><%=addrList.get(i).getMa_addr1() + " " + addrList.get(i).getMa_addr2() %></td>
+<td><input type="checkbox" name="chk" value="<%=addrList.get(i).getMa_idx() %>" /></td>
 </tr>
 <%
 		}	

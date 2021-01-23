@@ -1,7 +1,6 @@
 package action;
 
 import java.io.PrintWriter;
-import javax.servlet.*;
 import javax.servlet.http.*;	
 import svc.*;
 import vo.*;
@@ -14,11 +13,15 @@ public class MyPageAction implements Action {
 		
 		HttpSession session = request.getSession();
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
-				
 		
 		if (loginMember != null) {
+			String uid = loginMember.getMlid();
+			MyPageSvc myPageSvc = new MyPageSvc();
+			OrdListInfo total = myPageSvc.getPayTotal(uid);
+			
 			request.setAttribute("loginMember", loginMember);
-			forward.setPath("member/mypage.jsp");
+			request.setAttribute("total", total);
+			forward.setPath("/member/mypage.jsp");
 		} else {
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();
