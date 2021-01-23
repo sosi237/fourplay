@@ -7,15 +7,13 @@ import dao.*;
 import vo.*;
 
 public class ReviewFormSvc {
-	public boolean getPms(String plid, String uid) {
-		boolean isPms = false;	
+	public ReviewInfo getReview(int idx) {
+		ReviewInfo review = new ReviewInfo(); 
 		Connection conn = getConnection();
 		ReviewDao reviewDao = ReviewDao.getInstance();
 		reviewDao.setConnection(conn);
-
-		isPms = reviewDao.getPms(plid, uid);	
-
+		review = reviewDao.getReview(idx);
 		close(conn);
-		return isPms;
+		return review;
 	}
 }

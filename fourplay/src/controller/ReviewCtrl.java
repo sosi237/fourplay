@@ -22,13 +22,13 @@ public class ReviewCtrl extends HttpServlet {
 		Action action = null;
 		System.out.println(command);
 		switch (command) {
-			case "/product/review_list.review" :
+			case "/product/review_list.review" : case "/review_list.review" :
 				action = new ReviewListAction();
 				break;
-			case "/review_form.review" :
+			case "/product/review_form.review" : case "/review_form.review" :
 				action = new ReviewFormAction();
 				break;
-			case "/review_proc.review" :
+			case "/product/review_proc.review" : case "/review_proc.review" :
 				action = new ReviewProcAction();
 				break;
 		}

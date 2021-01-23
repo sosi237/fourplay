@@ -25,4 +25,42 @@ public class ReviewProcSvc {
 		close(conn);
 		return isSuccess;
 	}
+	
+	public boolean reviewUpdate(ReviewInfo review, int idx) {
+		System.out.println("ReviewProcSvc reviewUpdate");
+		boolean isSuccess = false;
+		int result = 0;
+		Connection conn = getConnection();
+		ReviewDao reviewDao = ReviewDao.getInstance();
+		reviewDao.setConnection(conn);
+		result = reviewDao.reviewUpdate(review, idx);
+		System.out.println(result);
+		if (result >0) {
+			commit(conn);
+			isSuccess = true;
+		} else {
+			rollback(conn);
+		}
+		close(conn);
+		return isSuccess;
+	}
+	
+	public boolean reviewDel(int idx) {
+		System.out.println("ReviewProcSvc reviewDel");
+		boolean isSuccess = false;
+		int result = 0;
+		Connection conn = getConnection();
+		ReviewDao reviewDao = ReviewDao.getInstance();
+		reviewDao.setConnection(conn);
+		result = reviewDao.reviewDel(idx);
+		System.out.println(result);
+		if (result >0) {
+			commit(conn);
+			isSuccess = true;
+		} else {
+			rollback(conn);
+		}
+		close(conn);
+		return isSuccess;
+	}
 }

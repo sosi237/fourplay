@@ -127,17 +127,17 @@ public class ReviewDao {
 				
 				System.out.println("b : " + b);
 				
-				if(a == b) {	// 모든 상품들에 대한 후기를 작성했으면
-					sql = "update t_order_list set ol_status = 'k' where ol_id = '"+ olid + "' ";
-					System.out.println(sql);
-					stmt4 = conn.createStatement();
-					last = stmt4.executeUpdate(sql);
-					System.out.println("last: " +last);
-					if(last > 0)	finalResult = 1;
-				} else {	// 아직 후기를 작성하지 않은 상품이 있으면  
-					finalResult = 2;
-				}
-				System.out.println(finalResult);
+//				if(a == b) {	// 모든 상품들에 대한 후기를 작성했으면
+//					sql = "update t_order_list set ol_status = 'k' where ol_id = '"+ olid + "' ";
+//					System.out.println(sql);
+//					stmt4 = conn.createStatement();
+//					last = stmt4.executeUpdate(sql);
+//					System.out.println("last: " +last);
+//					if(last > 0)	finalResult = 1;
+//				} else {	// 아직 후기를 작성하지 않은 상품이 있으면  
+//					finalResult = 2;
+//				}
+//				System.out.println(finalResult);
 			}
 			
 		} catch(Exception e) {
@@ -148,6 +148,77 @@ public class ReviewDao {
 		}
 
 		return finalResult;
+	}
+	
+	public ReviewInfo getReview(int idx) { // 어느 한 리뷰글을 보여주는 메소드
+		ReviewInfo review = new ReviewInfo(); 
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		
+		try {
+			sql = "select * from t_review_list where rl_status = 'a' and rl_idx =" +idx;
+			System.out.println(sql);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if (rs.next())	{
+				review.setMl_id(rs.getString("ml_id"));
+				review.setPl_id(rs.getString("pl_id"));
+				review.setOdidx(rs.getInt("od_idx"));
+				review.setRl_title(rs.getString("rl_title"));
+				review.setRl_rate(rs.getInt("rl_rate"));
+				review.setRl_content(rs.getString("rl_content"));
+				review.setRl_img(rs.getString("rl_img"));
+				review.setRl_date(rs.getString("rl_date"));
+				review.setRl_status(rs.getString("rl_status"));
+			}
+		} catch(Exception e) {
+			System.out.println("getReview() 오류");
+			e.printStackTrace();
+		} finally {
+			close(rs);	close(stmt);
+		}
+		
+		return review;
+	}
+	public int reviewUpdate(ReviewInfo review, int idx) {
+		Statement stmt = null;
+		int result = 0;
+		
+		try {
+			String sql = "update t_review_list set rl_title = '"+ review.getRl_title()+"', rl_rate = "+ review.getRl_rate() 
+				+", rl_content = '"+ review.getRl_content() +"', rl_img = '"+ review.getRl_img() +"'"
+				+ " where rl_idx = " + idx;
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+			System.out.println("reviewUpdate 결과: "+result);
+			
+		}catch(Exception e) {
+			System.out.println("reviewUpdate() 오류");
+			e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+		return result;
+	}
+	
+	public int reviewDel(int idx) {
+		Statement stmt = null;
+		int result = 0;
+		
+		try {
+			String sql = "update t_review_list set rl_status = 'b' where rl_idx = " + idx;
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+			System.out.println("reviewDel 결과: "+result);
+			
+		}catch(Exception e) {
+			System.out.println("reviewDel() 오류");
+			e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+		return result;
 	}
 	
 }

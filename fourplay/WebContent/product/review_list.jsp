@@ -5,7 +5,8 @@
 ArrayList<ReviewInfo> articleList = (ArrayList<ReviewInfo>)request.getAttribute("articleList");
 ReviewPageInfo reviewPageInfo = (ReviewPageInfo)request.getAttribute("reviewPageInfo");
 
-String plid = request.getParameter("id");
+String plid = request.getParameter("plid");
+String plname= request.getParameter("plname");
 MemberInfo login = (MemberInfo)session.getAttribute("loginMember");
 int rPsize = 5;
 if(request.getParameter("rPsize") != null)  rPsize = Integer.parseInt(request.getParameter("rPsize"));
@@ -34,7 +35,7 @@ a:hover { color:pink; text-decoration:none;  font-weight:bold;}
 a:active { color:#f00; text-decoration:none; }   
 a:focus { color:pink; text-decoration:none; }
 
-.wrapper {width:100%; margin:40px 0;}
+.wrapper {width:95%; margin:40px auto;}
 .rTitle {width:100%; height:30px; border:1px solid white;}
 .rTitle li, .rContent li {float:left; border:1px solid white;}
 .liTitle {width:39%; }
@@ -51,15 +52,17 @@ a:focus { color:pink; text-decoration:none; }
 .date { width:16%; text-align:center;}
 .rate { width:18%; text-align:center;}
 
-.review {width:80%; margin:5px auto;border:1px solid white; }
+.review {width:80%; height:200px; margin:5px auto; border-bottom:1px solid lightgray;}
 .liBtn {float:left; width:50px; height:50px; }
-.rBtn {width:45px; height:30px; background-color:lightgray; }
+.rBtn {
+	width:45px; height:30px; background-color:lightgray; 
+	position:relative; left:570px; top:150px;
+}
 .rBtn:first-child {margin-right:15px;}
 
 .rPaging {display:block; text-align:center; margin:40px 0; }
 
 .pointer {cursor:pointer;}
-
 </style>
 <script src="pager.js"></script>
 <script>
@@ -74,10 +77,11 @@ function showContent(idx){
 	}
 }
 function notCool(idx) {
-	if (confirm("정말 삭제하시겠습니까?")) {
-		location.href="review_proc.review?wtype=del&idx=" + idx;
+	if (confirm("정말 삭제하시겠습니까?\n다시 등록할 수 없습니다.")) {
+		location.href="review_proc.review?wtype=del&plid=<%=plid%>&idx=" + idx;
 	}
 }
+
 
 </script>
 </head>
@@ -101,7 +105,7 @@ if(articleList.size() > 0 && rCnt > 0){
 		<li class="seq"><%=seq-- %></li>
 		<li class="liTitle">
 <%
-			if(!articleList.get(i).getRl_img().equals("")){
+		if(!articleList.get(i).getRl_img().equals("")){
 %>
 		<img src="/fourplay/images/review_pic.png"  width="30" align="absmiddle"/>&nbsp;&nbsp;&nbsp;
 <%} %>
@@ -120,17 +124,22 @@ if(articleList.size() > 0 && rCnt > 0){
 	</ul>
 	<ul class="review" id="<%=idx %>" style="display:none;">
 		<li><%=articleList.get(i).getRl_content() %></li>
+<%
+		if(!articleList.get(i).getRl_img().equals("")){
+%>
 		<li><img src="/fourplay/product/r_img/<%=articleList.get(i).getRl_img() %>"  width="150"/></li>
 <%
-		if(login != null && login.getMlid().equals(articleList.get(i).getMl_id())){
+		} if(login != null && login.getMlid().equals(articleList.get(i).getMl_id())){
 %>
 		<li class="liBtn">
-			<input type="button" value="수정"  class="rBtn" onclick="location.href='review_form.review?wtype=up&idx=<%=idx %>&plid=<%=plid%>';"/>
+			<input type="button" value="수정"  class="rBtn" onclick="location.href='review_form.review?wtype=up&idx=<%=idx %>&plid=<%=plid%>&plname=<%=plname%>';"/>
 			</li>
 		<li class="liBtn"><input type="button" value="삭제"  class="rBtn" onclick="notCool(<%=idx %>);"/></li>
-	</ul>
 <%
 		}
+%>
+	</ul>
+<%
 	}
 } else {%>
 	<ul class="nContent">
@@ -141,23 +150,25 @@ if(articleList.size() > 0 && rCnt > 0){
 	<div class="rPaging">
 <%
 if (rCnt > 0) {
-	rPcnt = rCnt / 10;
-	if (rCnt % 10 > 0)	rPcnt++;
-
+System.out.println("rCnt: "+rCnt);
+System.out.println("rPcnt: "+rPcnt);
+System.out.println("rCpage: "+rCpage);
 	if (rCpage == 1) {
 		out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
 	} else {
-		out.print("<a href='pdt_list.pdt?rCpage=1"  + "'>");
+		out.print("<a href='review_list.review?rCpage=1"  + "&plid="+plid+"'>");
 		out.println("<<</a>&nbsp;&nbsp;");
-		out.print("<a href='pdt_list.pdt?rCpage=" + (rCpage - 1)  + "'>");
+		out.print("<a href='review_list.review?rCpage=" + (rCpage - 1)  + "&plid="+plid+"'>");
 		out.println("<</a>&nbsp;&nbsp;");
 	}
 
 	for (int i = 1, j = rSpage ; i <= 10 && j <= rPcnt ; i++, j++) {
+
+System.out.println("rSpage: "+rSpage);
 		if (rCpage == j) {
 			out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
 		} else {
-			out.print("&nbsp;<a href='pdt_list.pdt?rCpage=" + j  + "'>");
+			out.print("&nbsp;<a href='review_list.review?rCpage=" + j  + "&plid="+plid+"'>");
 			out.println(j + "</a>&nbsp;");
 		}
 	}
@@ -165,9 +176,9 @@ if (rCnt > 0) {
 	if (rCpage == rPcnt) {
 		out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
 	} else {
-		out.print("&nbsp;&nbsp;<a href='pdt_list.pdt?rCpage=" + (rCpage + 1)  + "'>");
+		out.print("&nbsp;&nbsp;<a href='review_list.review?rCpage=" + (rCpage + 1)  + "&plid="+plid+"'>");
 		out.println("></a>");
-		out.print("&nbsp;&nbsp;<a href='pdt_list.pdt?rCpage=" + rPcnt  + "'>");
+		out.print("&nbsp;&nbsp;<a href='review_list.review?rCpage=" + rPcnt  + "&plid="+plid+"'>");
 		out.println(">></a>");
 	}
 }

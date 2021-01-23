@@ -21,11 +21,11 @@ public class ReviewListAction implements Action {
 		rCnt = reviewListSvc.getArticleCount(plid);
 		articleList = reviewListSvc.getArticleList(plid, rCpage, rPsize);
 
-		rPcnt = rCnt / rPsize;
+		rPcnt = rCnt / rPsize;	//전체 페이지수
 		if (rCnt % rPsize > 0)	rPcnt++;
 		rSpage = (rCpage - 1) / rPsize * rPsize + 1;
 		rEpage = rSpage + rPsize - 1;
-		if (rEpage > rPcnt)	rSpage = rPcnt;
+		if (rEpage > rPcnt)	rEpage = rPcnt;
 
 		ReviewPageInfo reviewPageInfo = new ReviewPageInfo();
 		reviewPageInfo.setrCpage(rCpage);		// 현재 페이지 번호

@@ -7,23 +7,18 @@ public class ReviewPageInfo {
 	public int getrCpage() {
 		return rCpage;
 	}
-
 	public void setrCpage(int rCpage) {
 		this.rCpage = rCpage;
 	}
-
 	public int getrPcnt() {
 		return rPcnt;
 	}
-
 	public void setrPcnt(int rPcnt) {
 		this.rPcnt = rPcnt;
 	}
-
 	public int getrSpage() {
 		return rSpage;
 	}
-
 	public void setrSpage(int rSpage) {
 		this.rSpage = rSpage;
 	}
