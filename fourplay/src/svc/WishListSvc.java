@@ -14,6 +14,7 @@ public class WishListSvc {
 		cartDao.setConnection(conn);
 		wishList = cartDao.getWishList(where);
 		close(conn);
+
 		return wishList;
 	}
 }
