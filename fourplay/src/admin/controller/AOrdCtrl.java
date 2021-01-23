@@ -23,8 +23,6 @@ public class AOrdCtrl extends HttpServlet {
 		
 		ActionForward forward = null;
 		Action action = null;
-//		HttpSession session = request.getSession();
-//		AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 		
 		switch (command) {
 			case "/admin/ord_list.orda" :		// 주문 목록 화면
@@ -33,7 +31,12 @@ public class AOrdCtrl extends HttpServlet {
 			case "/admin/ord_detail.orda" :		// 주문 상세내역 팝업창
 				action = new AOrdDetailAction();
 				break;
-			
+			case "/admin/pdt_view.orda" :		// 상품정보 팝업창
+				action = new AOrdPdtAction();
+				break;
+			case "/admin/ord_proc.orda" :		// 주문 상세내역 팝업창
+				action = new AOrdProcAction();
+				break;
 		}
 		
 		try {

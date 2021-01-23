@@ -28,6 +28,7 @@ public class AOrdListSvc {
 		return ordList;
 	}
 	public OrdListInfo getOrd(String olid) {		//하나의 주문내역 정보만 가져오는 메소드
+		System.out.println("svc getOrd");
 		OrdListInfo detailInfo = new OrdListInfo();
 		Connection conn = getConnection();
 		AOrdDao aOrdDao = AOrdDao.getInstance();

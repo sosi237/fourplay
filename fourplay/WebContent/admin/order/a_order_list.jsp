@@ -21,24 +21,45 @@ int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-#wrapper table {}
 .pointer {cursor:pointer;}
 </style>
 <script>
 function openDetail(olid){
-	var win = window.open("ord_detail.orda?olid="+olid, "a_order_detail.jsp", "width=900, height=1200");
-	
+	var win = window.open("ord_detail.orda?olid="+ olid, "a_order_detail.jsp", "width=900, height=450");
+}
+function openPdt(plid){
+	var win = window.open("pdt_view.orda?id="+ plid, "a_product_detail.jsp", "width=900, height=450");
+}
+function getStatus(){
+	var arrVal = document.listFrm.status;
+	var status = "";
+	for(var i = 0; i < arrVal.length; i++){
+		status += "," + arrVal[i].options[arrVal[i].selectedIndex].value;
+	}
+	status = status.substring(1);
+	return status;
+}
+
+function chVal(){
+	var frm = document.listFrm;
+	var st = document.getElementById("st");
+	if(confirm("주문상태값을 변경하시겠습니까?")){
+		var status = getStatus();	//b,a
+		st.value = status;	
+		frm.submit();
+	}
 }
 </script>
 </head>
 <body>
 <div id="wrapper">
 <%
-//"order/a_order_detail.jsp?olid="+ olid 
-if(ordList != null) out.println("ordList not null");
-if(pageInfo != null) out.println("pageInfo not null");
+String plid = "";
 %>
 	<h3>주문 목록</h3>
+	<form name="listFrm" action="ord_proc.orda" method="post">
+	<input type="hidden" name="wtype" value="chStatus" />
+	<input type="hidden" name="st" id="st" value="" />
 	<table width="100%">
 	<tr>
 	<th>주문번호</th><th>주문자</th><th>상품명</th><th>주문금액</th>
@@ -47,7 +68,10 @@ if(pageInfo != null) out.println("pageInfo not null");
 	</tr>
 <%
 if(ordList != null && rcnt > 0){
+	String idx = "", idxs = "";
 	for(int i = 0; i < ordList.size(); i++){
+		idx = ordList.get(i).getOl_id();
+		idxs += "," + idx;
 %>
 	<tr>
 	<td><span class="pointer" onclick="openDetail(<%=ordList.get(i).getOl_id() %>);"><%=ordList.get(i).getOl_id() %></span></td>
@@ -55,9 +79,11 @@ if(ordList != null && rcnt > 0){
 	<td>
 <%
 		for(int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++){
-			String plid = ordList.get(i).getOrdDetailList().get(j).getPl_id();
+			plid = ordList.get(i).getOrdDetailList().get(j).getPl_id();
 			String plname = ordList.get(i).getOrdDetailList().get(j).getPl_name();
-			out.println("<a href='../pdt_view.pdt?id="+plid+"'>" + plname + "</a><br />");
+%>
+		<span class="pointer" onclick="openPdt('<%=plid%>');"><%=plname %></span><br />
+<%
 		}
 %>
 	</td>
@@ -65,50 +91,45 @@ if(ordList != null && rcnt > 0){
 	<td><%=ordList.get(i).getOl_date().substring(0,11).replace("-", ".") %></td>
 	<td>
 <%
-switch(ordList.get(i).getOl_payment()){
-	case "a" : out.println("카드 결제");	break; 
-	case "b" : out.println("휴대폰 결제");	break; 
-	case "c" : out.println("계좌이체");	break; 
-	case "d" : out.println("무통장 입금");	break; 
-}
+		switch(ordList.get(i).getOl_payment()){
+			case "a" : out.println("카드 결제");	break; 
+			case "b" : out.println("휴대폰 결제");	break; 
+			case "c" : out.println("계좌이체");	break; 
+			case "d" : out.println("무통장 입금");	break; 
+		}
 %>	
 	</td>
 	<td>
-<%
-switch(ordList.get(i).getOl_status()){
-	case "a": 				out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
-	case "b": 				out.print("입금 확인");								break;
-	case "c": 				out.print("상품준비중");							break;
-	case "d": 				out.print("배송중<br/>한진택배: 419079564046");		break;
-	case "e": case "k":		out.print("배송완료");								break;
-	case "f": 				out.print("교환요청");								break;
-	case "g": 				out.print("교환완료");								break;
-	case "h": 				out.print("환불요청");								break;
-	case "i": 				out.print("환불완료");								break;
-	case "j": 				out.print("취소");								break;
-}
-%>
+	<select name="status" id="status">
+		<option value="a" <%if (ordList.get(i).getOl_status().equals("a")) { %> selected="selected" <%} %>>입금 전</option>
+		<option value="b" <%if (ordList.get(i).getOl_status().equals("b")) { %> selected="selected" <%} %>>입금 확인</option>
+		<option value="c" <%if (ordList.get(i).getOl_status().equals("c")) { %> selected="selected" <%} %>>상품준비중</option>
+		<option value="d" <%if (ordList.get(i).getOl_status().equals("d")) { %> selected="selected" <%} %>>배송중</option>
+		<option value="e" <%if (ordList.get(i).getOl_status().equals("e")) { %> selected="selected" <%} %>>배송완료</option>
+		<option value="f" <%if (ordList.get(i).getOl_status().equals("f")) { %> selected="selected" <%} %>>교환요청</option>
+		<option value="g" <%if (ordList.get(i).getOl_status().equals("g")) { %> selected="selected" <%} %>>교환완료</option>
+		<option value="h" <%if (ordList.get(i).getOl_status().equals("h")) { %> selected="selected" <%} %>>환불요청</option>
+		<option value="i" <%if (ordList.get(i).getOl_status().equals("i")) { %> selected="selected" <%} %>>환불완료</option>
+		<option value="j" <%if (ordList.get(i).getOl_status().equals("j")) { %> selected="selected" <%} %>>취소</option>
+		<option value="k" <%if (ordList.get(i).getOl_status().equals("k")) { %> selected="selected" <%} %>>후기작성 완료</option>
+	</select>
 	</td>
-<!--<td>
 <%
-switch(ordList.get(i).getOl_status()){
-	case "f": case "g": case "h": case "i": case "j": 
+	} 
+	idxs = idxs.substring(1);
 %>
-	<input type="button" value="취소/반품/교환 사유" onclick=""/>
-<%
-	break;
-}
-%>
-	</td>
- -->	
+	<input type="hidden" name="idxs" value="<%=idxs %>" />
 	</tr>	
 <%
-	}
-} else{
+} 
+else {
 	out.println("<tr align='center'><td colspan='8'>주문 내역이 없습니다.</td></tr>");
 }
 %>
+	<tr><td colspan="4" style="text-align:right; padding-top:20px;">
+	<input type="button" id="statusBtn" value="주문상태 변경" onclick="chVal();"/></td></tr>
 	</table>
+	</form>
 	<div class="paging">
 	<table width="100%" cellpadding="5">
 	<tr><td align="center">

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="vo.*" %>
 <%@ page import="java.util.*" %>
 <%
@@ -12,8 +12,7 @@ String olid = request.getParameter("olid");
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-#wrapper {font-size:13px;}
-#wrapper {width:100%; position:absolute; top:300px;}
+#wrapper {width:100%; font-size:13px;}
 #wrapper table {width:800px;  border:0px; }
 #wrapper table td {border-bottom:1px solid lightgray; align:center;}
 #ordInfo th { background-color:lightgray; }
@@ -78,7 +77,7 @@ case "d": 	out.print("무통장입금");	break;
 <tr><th colspan="6">주문 상품 정보</th></tr>
 <tr><th>사진</th><th>상품정보</th><th>수량</th><th>가격</th><th>주문처리상태</th><th>취소/교환/반품</th></tr>
 <%
-for (int i = 0; i < detailInfo.getOrdDetailList().size(); i++){
+for (int i = 0; i < detailInfo.getOrdDetailList().size() ; i++){
 %>
 <tr>
 <td><img src='/fourplay/product/pdt_img/<%=detailInfo.getOrdDetailList().get(i).getPl_img1() %>' width="50" /></td>
