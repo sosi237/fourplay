@@ -4,8 +4,6 @@ import javax.servlet.http.*;
 import java.io.PrintWriter;
 import java.util.*;
 import admin.svc.*;
-import svc.DupIDSvc;
-import svc.WishDelSvc;
 import vo.*;
 
 public class AdmProcAction implements action.Action {	
@@ -19,7 +17,6 @@ public class AdmProcAction implements action.Action {
 		PrintWriter out = response.getWriter();
 
 		String wtype = request.getParameter("wtype");
-		String link = "";
 		boolean isSuccess = false;
 		if(wtype.equals("join")){
 			String idChk = request.getParameter("idChk");

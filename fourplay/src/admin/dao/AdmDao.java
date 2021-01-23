@@ -180,10 +180,7 @@ public class AdmDao {
 	
 	public int chStatus(String idxs, String st){
 		System.out.println("dao chStatus");
-//		ArrayList<AdminInfo> admList = new ArrayList<AdminInfo>();
-//		AdminInfo adminInfo = new AdminInfo();
 		Statement stmt = null;
-		ResultSet rs = null;
 		String sql = null;
 		int result = 0;
 		
