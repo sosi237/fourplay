@@ -104,7 +104,7 @@ if (aid.equals("sa")){
             <a href="pdt_in_form.pdta">상품 관리</a> 
          </li>
          <li> 
-            <a href="#">회원 관리</a> 
+            <a href="member_list.mem"">회원 관리</a> 
          </li>
          <li> 
             <a href="bbs_list.anotice">커뮤니티 관리</a> 
