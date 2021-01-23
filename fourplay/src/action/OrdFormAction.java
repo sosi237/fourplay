@@ -11,8 +11,10 @@ public class OrdFormAction implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String kind = request.getParameter("kind");		// 장바구니 또는 바로 구매를 구분하는 구분자(cart : 장바구니를 통해 구매, direct : 바로 구매)
 		String idxs = request.getParameter("idxs");		// 장바구니로 구매시 구매할 상품(들)의 카트인덱스(cl_idx) 번호(들)로 쉼표로 구분됨
+		String ismember = request.getParameter("ismember");		
+		if(request.getParameter("ismember") == null)	ismember = "n";
 		ArrayList<CartInfo> pdtList = new ArrayList<CartInfo>();		// 구매하려는 상품(들)을 담을 ArrayList
-		
+		System.out.println("OrdFormAction");
 		String where = "";
 		HttpSession session = request.getSession();
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
@@ -30,8 +32,6 @@ public class OrdFormAction implements Action {
 				where += " and c.cl_buyer = '" + loginMember.getMlid() + "' and c.cl_ismember = 'y' ";
 			}
 			
-		} else {	// 바로 구매일 경우
-			
 		}
 		OrdFormSvc ordFormSvc = new OrdFormSvc();
 		
@@ -43,9 +43,12 @@ public class OrdFormAction implements Action {
 			
 		}
 		pdtList = ordFormSvc.getOrdFrmPdtList(kind, where);
+		if(pdtList != null) {
+			System.out.println("OrdFormAction a");
+		}
 		request.setAttribute("pdtList", pdtList);
 		ActionForward forward = new ActionForward();
-		forward.setPath("/order/order_form.jsp");	
+		forward.setPath("/order/order_form.jsp?ismember="+ismember);	
 		return forward;
 	}
 }

@@ -3,9 +3,7 @@
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <%
-String ismember = "y";
-if(ismember == null)	ismember = "n";	// 비회원 구매하기로 페이지에 들어왔는지 여부를 담는 변수 
-
+String ismember = "n";
 String kind = request.getParameter("kind");	// 장바구니(cart), 바로구매(direct) 중 어디를 통해 들어왔는지 여부
 AddrInfo addrInfo = (AddrInfo)request.getAttribute("addrInfo");
 ArrayList<CartInfo> pdtList = (ArrayList<CartInfo>)request.getAttribute("pdtList");
@@ -13,6 +11,7 @@ ArrayList<CartInfo> pdtList = (ArrayList<CartInfo>)request.getAttribute("pdtList
 String name = "", p1 = "", p2 = "", p3 = "", e1 = "", e2 = "", zip = "", addr1 = "", addr2 = "";
 if (loginMember != null) {	// 로그인 한 회원일 경우
 	name = loginMember.getMlname();
+	ismember = "y";
 	String[] arrPhone = loginMember.getMlphone().split("-");
 	p1 = arrPhone[0];	p2 = arrPhone[1];	p3 = arrPhone[2];
 	String[] arrEmail = loginMember.getMlemail().split("@");
@@ -39,25 +38,13 @@ li {list-style-type:none; }
 #head {background-color:#d1d1d1; width:100%; height:190px; line-height:170px; margin:5px auto; text-align:center;}
 #head .hImg{vertical-align:middle; margin-right:10px;}
 
-#ordList {}
-#ordList #ordTitle {width:100%; height:50px; background-color:#d1d1d1; border-top:2px solid darkgray;}
-#ordList #ordTitle li { width:11%; float:left; padding:10px; text-align:center;}
-#ordList #ordTitle li:first-child { width:20%; margin-left:200px; margin-right:55px;}
-#ordList #ordTitle .cnt{ width:6%;margin-right:20px; }
-#ordList #ordTitle .point{ margin-left:20px; }
-#ordList #ordTitle .deli{ width:6%; margin-left:20px; }
-
-#ordList .ordContent  {width:100%; height:80px; border:1px solid white; font-size:14px;}
-#ordList .ordContent li {display:block; text-align:center; width:5%; float:left; margin:30px 10px 0 10px;}
-#ordList .ordContent li:first-child { width:2%; margin: 30px 17px; }
-#ordList .ordContent .pdtName {text-align:left; width:35%; }
-#ordList .ordContent .price {margin-left:80px; margin-right:65px; color:red; font-weight:bold; }
-#ordList .ordContent .point {margin-right:70px;}
-#ordList .ordContent .pdtImg {margin:10px; vertical-align:center;}
-
 #payment {height:110px; }
 #payment li {height:110px; float:left;}
 #wrapper table {width:100%;}
+#ordTitle {background-color:lightgray; border-top:2px solid darkgray;}
+#ordList {border-top:2px solid darkgray;}
+.price {color:red; font-weight:bold;}
+
 .title { 
 	width:150px; background-color:#d1d1d1; 
 	border-left:2px solid darkgray; border-bottom:1px solid darkgray; 
@@ -242,14 +229,17 @@ function onlyNumber(obj) {
 	</div>
 	<br />
 	<form name="frmOrd" action="ord_proc.ord" method="post" onsubmit="return chkData(this);">
-	<div id="ordList">
-		<ul id="ordTitle">
-			<li>상품명</li>
-			<li class="cnt">수량</li>
-			<li>가격</li>
-			<li class="point">적립 마일리지</li>
-			<li class="deli">배송비</li>
-		</ul>
+	<input type="hidden" name="wtype" value="order" />
+	<table id="ordList" cellspacing="0">
+		<tr id="ordTitle"  align="center">
+			<td></td>
+			<td></td>
+			<td>상품명</td>
+			<td class="cnt">수량</td>
+			<td>가격</td>
+			<td class="point">적립 마일리지</td>
+			<td class="deli">배송비</td>
+		</tr>
 <%
 String clIdxs = "";
 
@@ -260,9 +250,7 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	for (int i = 0 ; i < pdtList.size() ; i++) {
 		seq++;
 		CartInfo crt = pdtList.get(i);
-		
 		clIdxs += "," + crt.getCl_idx();
-		
 		String pnt = Math.floor(crt.getPrice() * 0.0001) * 100 +"";
 		pnt = pnt.substring(0, pnt.length() -2);
 		int point = Integer.valueOf(pnt);
@@ -282,18 +270,15 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 			option = option.replace("Size", "사이즈").replace("Width", "발볼").replace("Heel", "속굽");
 		}
 %>
-	
-		<ol class="ordContent">
-			<li><%=seq %></li>
-			<li class="pdtImg">
-				<img src="/fourplay/product/pdt_img/<%=crt.getPl_img1() %>" width="50" height="50" align="absmiddle" style="margin:2px 0;" />
-			</li>
-			<li class="pdtName"><%=crt.getPl_name()  + "<br /> 옵션/ " + option %></li>
-			<li><%=crt.getCl_cnt() %></li>
-			<li class="price"><%=crt.getPrice() %></li>
-			<li class="point"><%=point %></li>
-			<li>0</li>
-		</ol>
+		<tr class="ordContent" align="center">
+			<td><%=seq %></td>
+			<td class="pdtImg"><img src="/fourplay/product/pdt_img/<%=crt.getPl_img1() %>" width="50" height="50" align="absmiddle" style="margin:2px 0;" /></td>
+			<td class="pdtName" align="left"><%=crt.getPl_name()  + "<br /> 옵션/ " + option %></td>
+			<td><%=crt.getCl_cnt() %></td>
+			<td class="price"><%=crt.getPrice() %></td>
+			<td class="point"><%=point %></td>
+			<td>0</td>
+		</tr>
 <%
 		beforeDC += crt.getPl_price();
 		tPrice += crt.getPrice();
@@ -309,8 +294,10 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 <%
 }
 %>
-			<span class="tPrice">총 <%=tPrice %> 원</span>
-	</div>
+		<tr><td colspan="7"><span class="tPrice">총 <%=tPrice %> 원</span></td></tr>
+	</table>
+	
+<%if(ismember.equals("y") ){ %>
 	<h3>01 주문하시는 분</h3>
 	<div id="bInfo">
 	<table cellspacing="0">
@@ -349,7 +336,50 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	</tr>
 	</table>
 	</div>
-	
+<%
+} else {
+%>
+<h3>01 주문하시는 분</h3>
+	<div id="bInfo">
+	<table cellspacing="0">
+	<tr><th class="title">이름</th><td><input type="text" name="bname" id="bname" /></td></tr>
+	<tr><th class="title">연락처</th>
+	<td>
+	<select name="bp1">
+		<option value="010" >010</option>
+		<option value="016" >016</option>
+		<option value="02" >02</option>
+		<option value="070" >070</option>
+	</select> -
+	<input type="text" name="bp2" /> -
+	<input type="text" name="bp3" />
+	</td>
+	</tr>
+	<tr><th class="title">이메일</th>
+	<td>
+	<input type="text" name="be1"/> @ <input type="text" name="be2"/>
+	<select name="bemail">
+		<option value="naver.com" >naver.com</option>
+		<option value="gmail.com" >gmail.com</option>
+		<option value="hanmail.net" >hanmail.net</option>
+		<option value="nate.com" >nate.com</option>
+		<option value="직접입력">직접입력</option>
+	</select>
+	</td>
+	</tr>
+	<tr><th class="title">주소</th>
+	<td>
+	<input type="text" id="bzip" name="bzip" class="zip"  placeholder="우편번호" />
+	<input type="button" onclick="getZip('b')" value="우편번호 찾기" /><br>
+	<input type="text" id="baddr1" name="baddr1"  placeholder="주소" /><br />
+	<input type="text" id="baddr2" name="baddr2"  placeholder="상세주소" />
+	</td>
+	</tr>
+	</table>
+	</div>
+<%
+}
+%>
 	<h3>02 상품 받으시는 분</h3><input type="checkbox" name="sameChk" id="sameChk"/> 위 정보와 같음
 	<div id="rInfo">
 	<table cellspacing="0">
@@ -366,12 +396,14 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	<input type="text" name="rp3" />
 	</td>
 	</tr>
+<!-- 
 	<tr><th class="title">배송지 선택</th>
 	<td>
 	<input type="button" name="addrList" value="배송지 목록"/>&nbsp;
 	<input type="checkbox" name="newAddr" id="newAddr" value="신규배송지" checked="checked"/> 신규 배송지
 	</td>
 	</tr>
+ -->
 	<tr><th class="title">주소</th>
 	<td>
 	<input type="text" name="rzip" id="rzip" class="zip" placeholder="우편번호" />
@@ -399,11 +431,13 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	</tr>
 	<tr>
 	<th>마일리지</th>
-	<td colspan="3"><input type="text" name="usePnt" id="usePnt" value="0" onkeyup="onlyNumber(this);"/>
-	<input type="checkbox" name="useAll" onclick="" /> 전액사용
-<!-- <br /><input type="button" value="적용" id="pntBtn" />  -->	
+	<td colspan="3"><input type="text" name="usePnt" id="usePnt" value="0" onkeyup="onlyNumber(this);"/>(사용가능 마일리지: <%=loginMember.getMlpoint() %>)
+<!--	<input type="checkbox" name="useAll" onclick="" /> 전액사용 
+ <br /><input type="button" value="적용" id="pntBtn" /> 
+  -->
 	</td>
 	</tr>
+	
 	</table>
 	</div>
 	
@@ -415,7 +449,7 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 				<input type="radio" name="payment" value="a" checked="checked" />카드 결제<br />
 				<input type="radio" name="payment" value="b" />휴대폰 결제<br />
 				<input type="radio" name="payment" value="c" />계좌이체<br />
-				<input type="radio" name="payment" value="d"/>무통장 입금
+				<input type="radio" name="payment" value="d" />무통장 입금
 				<select name="account" id="account">
 					<option value="">입금 계좌번호 선택</option>
 					<option value="woori">우리은행</option>

@@ -23,4 +23,18 @@ public class OrdProcSvc {
 		close(conn);
 		return result;
 	}
+	public int ordCancel(String olid) {
+		Connection conn = getConnection();
+		OrdDao ordDao = OrdDao.getInstance();
+		ordDao.setConnection(conn);
+
+		int result = ordDao.ordCancel(olid);
+		if (result > 0) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
 }

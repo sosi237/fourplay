@@ -18,10 +18,9 @@ public class OrdCtrl extends HttpServlet {
 		String requestUri = request.getRequestURI();
 		String contextPath = request.getContextPath();
 		String command = requestUri.substring(contextPath.length());
-
 		ActionForward forward = null;
 		Action action = null;
-
+		System.out.println(command);
 		switch (command) {
 			case "/ord_form.ord" :
 				action = new OrdFormAction();
@@ -29,8 +28,10 @@ public class OrdCtrl extends HttpServlet {
 			case "/ord_proc.ord" :
 				action = new OrdProcAction();
 				break;
+			case "/order_success.ord" :
+//				action = new OrdProcAction();
+				break;
 		}
-
 		try {
 			forward = action.execute(request, response);
 		} catch (Exception e) {
@@ -46,13 +47,10 @@ public class OrdCtrl extends HttpServlet {
 			}
 		}
 	}
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
-
 }
