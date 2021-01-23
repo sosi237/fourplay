@@ -63,7 +63,7 @@ public class CartDao {
                " p.pl_opt, c.cl_opt, c.cl_cnt, p.pl_price,p.pl_discount, s.ps_stock " + 
                " from t_cart_list c , t_product_list p, t_product_size s" + 
                " where c.pl_id = p.pl_id and p.pl_view = 'y' and s.ps_stock != 0 " + where + 
-               " group by p.pl_id order by p.pl_id, c.cl_opt";
+               " group by c.cl_idx order by p.pl_id, c.cl_opt";
          stmt = conn.createStatement();
          rs = stmt.executeQuery(sql);
          while(rs.next()) {
@@ -77,9 +77,6 @@ public class CartDao {
             cart.setCl_cnt(rs.getInt("cl_cnt"));
             cart.setPs_stock(rs.getInt("ps_stock"));
             cart.setPl_price(rs.getInt("pl_price"));
-            
-            System.out.println("pl_price : "+cart.getPl_price());
-            
             cart.setPl_discount(rs.getInt("pl_discount"));
             int price = rs.getInt("pl_price");   // 실 구매가
             if (rs.getInt("pl_discount") > 0) {
@@ -128,9 +125,10 @@ public class CartDao {
             where += " or cl_idx = " + arrIdx[i];
          }
          where = " and (" + where.substring(4) + ")";
+
          String sql = "delete from t_cart_list where cl_buyer = '" + buyer + 
             "' and cl_ismember = '" + isMember + "' " + where;
-         System.out.println(sql);
+
          stmt = conn.createStatement();
          result = stmt.executeUpdate(sql);
       } catch(Exception e) {

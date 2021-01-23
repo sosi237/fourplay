@@ -6,12 +6,12 @@ import java.sql.*;
 import dao.*;
 import vo.*;
 
-public class CartUpCntSvc {
-	public int cartCntUpdate(String idx, String cnt, String buyer, String isMember) {
+public class CartDelSvc {
+	public int cartDelete(String idx, String buyer, String isMember) {
 		Connection conn = getConnection();
 		CartDao cartDao = CartDao.getInstance();
 		cartDao.setConnection(conn);
-		int result = cartDao.cartCntUpdate(idx, cnt, buyer, isMember);
+		int result = cartDao.cartDelete(idx, buyer, isMember);
 		if (result > 0) {
 			commit(conn);
 		} else {
