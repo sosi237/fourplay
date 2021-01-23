@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
 <%@ include file="../a_menu.jsp" %>
+<%@ include file="../community_menu.jsp" %>
 <%
 FaqInfo article = (FaqInfo)request.getAttribute("article");
 if (article == null) {

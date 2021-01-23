@@ -2,9 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ page import="vo.*" %>
 <%@ page import="java.net.*" %>
+<%@ include file="../a_menu.jsp" %>
+<%@ include file="../community_menu.jsp" %>
 <%
-AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
-
 request.setCharacterEncoding("utf-8");
 String wtype = request.getParameter("wtype");
 String args = "";

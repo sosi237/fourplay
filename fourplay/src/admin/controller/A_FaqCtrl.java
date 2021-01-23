@@ -27,19 +27,19 @@ public class A_FaqCtrl extends HttpServlet {
 		A_Action action = null;
 
 		switch (command) {
-			case "/bbs_list.afaq" :		// 게시판 목록 보기
+			case "/admin/bbs_list.afaq" : case "/admin/admin/bbs_list.afaq"	 :	// 게시판 목록 보기
 				action = new A_FaqListAction();
 				break;
 				
-			case "/bbs_form.afaq" :		// 게시판 목록 보기
+			case "/admin/bbs_form.afaq" : case "/admin/admin/bbs_form.afaq"	 :		// 게시판 목록 보기
 				action = new A_FaqFormAction();
 				break;
 				
-			case "/bbs_view.afaq" :		// 게시판 목록 보기
+			case "/admin/bbs_view.afaq" : case "/admin/admin/bbs_view.afaq"	 :		// 게시판 목록 보기
 				action = new A_FaqViewAction();
 				break;	
 				
-			case "/bbs_proc.afaq" :		// 게시판 목록 보기
+			case "/admin/bbs_proc.afaq" : case "/admin/admin/bbs_proc.afaq"	 :		// 게시판 목록 보기
 				action = new A_FaqProcAction();
 				break;
 		}

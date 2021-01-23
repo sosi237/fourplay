@@ -3,6 +3,7 @@
 <%@ page import="vo.*" %>
 <%@ page import="java.net.*" %>
 <%@ include file="../a_menu.jsp" %>
+<%@ include file="../community_menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
 String wtype = request.getParameter("wtype");

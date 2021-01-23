@@ -3,6 +3,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
 <%@ include file="../a_menu.jsp" %>
+<%@ include file="../community_menu.jsp" %>
 <%
 ArrayList<QAInfo> articleList = 
 (ArrayList<QAInfo>)request.getAttribute("articleList");
