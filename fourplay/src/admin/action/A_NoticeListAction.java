@@ -14,7 +14,8 @@ public class A_NoticeListAction implements A_Action {
 		if (request.getParameter("cpage") != null)
 			cpage = Integer.parseInt(request.getParameter("cpage"));
 		String schtype = request.getParameter("schtype");
-		String keyword = request.getParameter("keyword");	
+		String keyword = request.getParameter("keyword");
+		String status	= request.getParameter("status");	// 사용여부(a: 미사용 b: 사용중)
 
 		String where = "";	
 		if (keyword != null && !keyword.equals("")) {
@@ -24,6 +25,11 @@ public class A_NoticeListAction implements A_Action {
 			} else {
 				where = " and nl_" + schtype + " like '%" + keyword + "%' ";
 			}
+		}
+		
+		if(status != null && !status.equals(""))	{
+			if(where.equals(""))	where = " where al_status ='" + status + "' ";
+			else 					where += " and al_status ='" + status + "' ";
 		}
 
 		A_NoticeListSvc anoticeListSvc = new A_NoticeListSvc();

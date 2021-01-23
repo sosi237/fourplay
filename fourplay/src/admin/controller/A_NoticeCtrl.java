@@ -27,19 +27,19 @@ public class A_NoticeCtrl extends HttpServlet {
 		A_Action action = null;
 
 		switch (command) {
-			case "/admin/bbs_list.anotice" :		// 공지사항 목록 보기
+			case "/admin/bbs_list.anotice" : case "/admin/admin/bbs_list.anotice"	 :		// 공지사항 목록 보기
 				action = new A_NoticeListAction();
 				break;
 				
-			case "/admin/bbs_form.anotice" :		// 공지사항 글 작성/수정 폼
+			case "/admin/bbs_form.anotice" : case "/admin/admin/bbs_form.anotice"	 :		// 공지사항 글 작성/수정 폼
 				action = new A_NoticeFormAction();
 				break;
 				
-			case "/admin/bbs_view.anotice" :		// 공지사항 글 화면
+			case "/admin/bbs_view.anotice" : case "/admin/admin/bbs_view.anotice"	 :		// 공지사항 글 화면
 				action = new A_NoticeViewAction();
 				break;	
 				
-			case "/admin/bbs_proc.anotice" :		// 공지사항 글 작성/수정/삭제 기능
+			case "/admin/bbs_proc.anotice" : case "/admin/admin/bbs_proc.anotice"	 :		// 공지사항 글 작성/수정/삭제 기능
 				action = new A_NoticeProcAction();
 				break;
 		}
