@@ -86,7 +86,7 @@ public class ReviewDao {
 	
 	public int reviewInsert(ReviewInfo review, String olid) {
 		System.out.println("dao reviewInsert");
-		int cResult = 0, sResult = 0, last = 0, finalResult = 0;
+		int cResult = 0, sResult = 0, rResult = 0,last = 0, finalResult = 0;
 		Statement stmt = null, stmt2 = null, stmt3 = null, stmt4 = null;
 		CallableStatement cs = null;
 		ResultSet rs = null, rs2 = null;
@@ -107,8 +107,12 @@ public class ReviewDao {
 				System.out.println(sql);
 				stmt = conn.createStatement();
 				sResult = stmt.executeUpdate(sql);
+				sql = "update t_product_list set pl_review = pl_review + 1 where pl_id = '" + review.getPl_id() + "' ";
+				System.out.println(sql);
+				stmt = conn.createStatement();
+				rResult = stmt.executeUpdate(sql);
 			}
-			if(sResult > 0) {
+			if(sResult > 0 && rResult > 0) {
 				int a = -1, b = -2;
 				sql = "select count(od_idx) from t_order_detail where ol_id = '" + olid + "' ";
 				System.out.println(sql);
@@ -123,21 +127,21 @@ public class ReviewDao {
 				stmt3 = conn.createStatement();
 				rs2 = stmt3.executeQuery(sql);
 				rs2.next();
-				b = rs.getInt(1);	// 디테일 중 구매후기 작성된 개수
+				b = rs2.getInt(1);	// 디테일 중 구매후기 작성된 개수
 				
 				System.out.println("b : " + b);
 				
-//				if(a == b) {	// 모든 상품들에 대한 후기를 작성했으면
-//					sql = "update t_order_list set ol_status = 'k' where ol_id = '"+ olid + "' ";
-//					System.out.println(sql);
-//					stmt4 = conn.createStatement();
-//					last = stmt4.executeUpdate(sql);
-//					System.out.println("last: " +last);
-//					if(last > 0)	finalResult = 1;
-//				} else {	// 아직 후기를 작성하지 않은 상품이 있으면  
-//					finalResult = 2;
-//				}
-//				System.out.println(finalResult);
+				if(a == b) {	// 모든 상품들에 대한 후기를 작성했으면
+					sql = "update t_order_list set ol_status = 'k' where ol_id = '"+ olid + "' ";
+					System.out.println(sql);
+					stmt4 = conn.createStatement();
+					last = stmt4.executeUpdate(sql);
+					System.out.println("last: " +last);
+					if(last > 0)	finalResult = 1;
+				} else {	// 아직 후기를 작성하지 않은 상품이 있으면  
+					finalResult = 2;
+				}
+				System.out.println(finalResult);
 			}
 			
 		} catch(Exception e) {

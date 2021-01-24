@@ -41,8 +41,9 @@ if (psstock.equals("-1"))   psstock = "무제한";
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-#wrapper {width:100%; position:absolute; top:300px;}
 #none {display:none;}
+
+.detailList { width:850px; margin:0 auto;}
 .detail td { border-bottom:2px solid #efefef;}
 td .borderwide {border-bottom:4px solid #eee;}
 .detail s { color:red;}
@@ -74,11 +75,13 @@ function goCart() {   // 장바구니에 담기 버튼 클릭시
 }
 function goWish() {   // 위시리스트 담기 버튼 클릭시
    var frm = document.frmPdt;
+   var wish = document.getElementById("wish");
 <%   if (loginMember != null){%>
       frm.action = "wish_in.crt";
       frm.submit();
 <%   } else {%>
       if(confirm("로그인이 필요합니다. \n 로그인 하시겠습니까?")){
+        wish.value = "y";
          frm.action = "login_form.jsp";
          frm.submit();
       }
@@ -87,46 +90,49 @@ function goWish() {   // 위시리스트 담기 버튼 클릭시
 
 
 function goDirect() {   // 바로 구매하기 버튼 클릭시
-	var frm = document.frmPdt;
-	var kind = document.getElementById("kind");
-	var ismember = document.getElementById("ismember");
-	var now = document.getElementById("now");
-	kind.value = "cart";   
+   var frm = document.frmPdt;
+   var kind = document.getElementById("kind");
+   var ismember = document.getElementById("ismember");
+   var now = document.getElementById("now");
+   kind.value = "cart";   
 <%
-	if (loginMember == null) {   // 로그인을 하지 않은 상태일 경우
+   if (loginMember == null) {   // 로그인을 하지 않은 상태일 경우
+   session.setAttribute("url", "cart_in.crt");
 %>
-		ismember.value = "n"
-		now.value = "go"
-		frm.action = "login_form.jsp";
+      ismember.value = "n"
+      now.value = "go"
+      frm.action = "login_form.jsp";
 <% 
-	} else {   // 로그인을 한 상태일 경우
+   } else {   // 로그인을 한 상태일 경우
 %>
-		ismember.value = "y"
-		now.value = "go"
-		frm.action = "cart_in.crt";
+      ismember.value = "y"
+      now.value = "go"
+      frm.action = "cart_in.crt";
 <%
-	} %>
+   } %>
    frm.submit();
 }
 
 function reviewIn(){
-	<%
-	if(loginMember == null){
-	%>
-		alert("회원 전용 기능입니다.\n로그인해주세요");
-		location.href="/fourplay/login_form.jsp";
-	<%
-	} else {
-	%>
-		location.href="order_list.mpg";
-	<%
-	}
-	%>
+   <%
+   if(loginMember == null){
+   %>
+      alert("회원 전용 기능입니다.\n로그인해주세요");
+      location.href="/fourplay/login_form.jsp";
+   <%
+   } else {
+   %>
+      location.href="order_list.mpg";
+   <%
+   }
+   %>
 }
 </script>
 </head>
 <body>
-<div id="wrapper" align="center">
+<div id="wrapper">
+
+<div class="detailList">
 <h2 id="none">상품 상세보기 화면</h2>
 <table width="800" cellpadding="5" cellspacing="0">
 <tr>
@@ -159,13 +165,14 @@ function reviewIn(){
    <tr><td>소비자가</td><td><%=price %></td></tr>
    <tr><td>적립금</td><td><%=df.format(point) %> (1%)</td></tr>
    <form name="frmPdt" action="" method="post">
+   <input type="hidden" name="now" id="now" value="" />
    <input type="hidden" name="kind" id="kind" value="" />
+   <input type="hidden" name="wish" id="wish" value="" />
+   <input type="hidden" name="ismember" id="ismember" value="" />
    <input type="hidden" name="id" value="<%=id %>" />
    <input type="hidden" name="args" value="<%=args %>" />
    <input type="hidden" name="price" value="<%=price %>" />
    <input type="hidden" name="point" value="<%=point %>" />
-   <input type="hidden" name="ismember" id="ismember" value="" />
-   <input type="hidden" name="now" id="now" value="" />
 <%
 String dis = "";   // 재고파악
 int max = pdtInfo.getPs_stock();
@@ -210,54 +217,55 @@ if (pdtInfo.getPl_opt() != null && !pdtInfo.getPl_opt().equals("")) {
    </table>
 </td>
 </tr>
-	<table width="800">
-	<tr><td colspan="2" align="center"><hr width="100%" /></td></tr>
-	<tr>
-	   <td id="detail">
-	      <div width="100%">
-	         <ul class="view" align="center">
-	            <li><strong><span>DETAIL VIEW</span></strong>&nbsp;&nbsp;&nbsp;|</li>
-	            <li><a href="#review"><span>REVIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
-	            <li><a href="#qna"><span>Q&A</span></a></li>
-	         </ul>
-	      </div>
-	   </td>
-	</tr>
-	<tr><td colspan="2" align="center">
-	   <img src="/fourplay/product/pdt_img/<%=pdtInfo.getPl_desc() %>" width="780" />
-	</td></tr>
-	<tr><td colspan="2" align="center"><hr width="100%" /></td></tr>
-	</td></tr>
-	<tr>
-	   <td id="review">
-	      <div>
-	         <ul class="view" align="center">
-	            <li><a href="#detail"><span>DETAIL VIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
-	            <li><strong><span>REVIEW</span></strong>&nbsp;&nbsp;&nbsp;|</li>
-	            <li><a href="#qna"><span>Q&A</span></a></li>
-	         </ul>
-	      </div>
-	   </td>
-	</tr>
-	<tr><td>
-	<iframe src="product/review_list.review?plid=<%=id %>&plname=<%=plname %>" width="100%" height="500px" ></iframe>
-	</td></tr>
-	<tr>
-	   <td id="qna">
-	      <div>
-	         <ul class="view" align="center">
-	            <li><a href="#detail"><span>DETAIL VIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
-	            <li><a href="#review"><span>REVIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
-	            <li><strong><span>Q&A</span></strong></li>
-	         </ul>
-	      </div>
-	   </td>
-	</tr>
-	<tr><td>
-	Q&A 게시판 구역<br/>
-	</td></tr>
-	</table>
+   <table width="800">
+   <tr><td colspan="2" align="center"><hr width="100%" /></td></tr>
+   <tr>
+      <td id="detail">
+         <div width="100%">
+            <ul class="view" align="center">
+               <li><strong><span>DETAIL VIEW</span></strong>&nbsp;&nbsp;&nbsp;|</li>
+               <li><a href="#review"><span>REVIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
+               <li><a href="#qna"><span>Q&A</span></a></li>
+            </ul>
+         </div>
+      </td>
+   </tr>
+   <tr><td colspan="2" align="center">
+      <img src="/fourplay/product/pdt_img/<%=pdtInfo.getPl_desc() %>" width="780" />
+   </td></tr>
+   <tr><td colspan="2" align="center"><hr width="100%" /></td></tr>
+   </td></tr>
+   <tr>
+      <td id="review">
+         <div>
+            <ul class="view" align="center">
+               <li><a href="#detail"><span>DETAIL VIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
+               <li><strong><span>REVIEW</span></strong>&nbsp;&nbsp;&nbsp;|</li>
+               <li><a href="#qna"><span>Q&A</span></a></li>
+            </ul>
+         </div>
+      </td>
+   </tr>
+   <tr><td>
+   <iframe src="product/review_list.review?plid=<%=id %>&plname=<%=plname %>" width="100%" height="500px" ></iframe>
+   </td></tr>
+   <tr>
+      <td id="qna">
+         <div>
+            <ul class="view" align="center">
+               <li><a href="#detail"><span>DETAIL VIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
+               <li><a href="#review"><span>REVIEW</span></a>&nbsp;&nbsp;&nbsp;|</li>
+               <li><strong><span>Q&A</span></strong></li>
+            </ul>
+         </div>
+      </td>
+   </tr>
+   <tr><td>
+   Q&A 게시판 구역<br/>
+   </td></tr>
+   </table>
 </table>
+</div>
 </div>
 </body>
 </html>

@@ -45,7 +45,7 @@ public class ReviewProcAction implements action.Action {
 			review.setMl_id(uid);				review.setPl_id(plid);
 			review.setRl_content(content);		review.setRl_img(reviewImg);
 			review.setRl_rate(rRate);			review.setRl_title(title);
-			review.setOdidx(odidx);
+			review.setOdidx(odidx);				
 			boolean isSuccess = reviewProcSvc.reviewInsert(review, olid);
 			if (isSuccess) {	// 리뷰등록에 성공했으면
 				forward.setPath("pdt_view.pdt?id="+plid);
