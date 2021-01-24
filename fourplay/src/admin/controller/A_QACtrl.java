@@ -27,19 +27,19 @@ public class A_QACtrl extends HttpServlet {
 		A_Action action = null;
 System.out.println(command);
 		switch (command) {
-			case "/admin/brd_list.aqna" :		// qna 게시판 목록 보기
+			case "/admin/brd_list.aqna" : case "/admin/admin/brd_list.aqna"	 : 		// qna 게시판 목록 보기
 				action = new A_QAListAction();
 				break;
 				
-			case "/admin/brd_form.aqna" :		// qna 글작성 폼
+			case "/admin/brd_form.aqna" : case "/admin/admin/brd_form.aqna"	 :		// qna 글작성 폼
 				action = new A_QAFormAction();
 				break;
 				
-			case "/admin/brd_view.aqna" :		// qna 보기
+			case "/admin/brd_view.aqna" : case "/admin/admin/brd_view.aqna"	 :		// qna 보기
 				action = new A_QAViewAction();
 				break;	
 				
-			case "/admin/brd_proc.aqna" :		// qna 등록/수정/삭제 기능
+			case "/admin/brd_proc.aqna" : case "/admin/admin/brd_proc.aqna"	 :		// qna 등록/수정/삭제 기능
 				action = new A_QAProcAction();
 				break;
 		}
