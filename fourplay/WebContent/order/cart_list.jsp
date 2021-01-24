@@ -8,6 +8,7 @@
 request.setCharacterEncoding("utf-8");
 DecimalFormat df = new DecimalFormat("###,###");
 ArrayList<CartInfo> cartList = (ArrayList<CartInfo>)request.getAttribute("cartList");
+String now = request.getParameter("now");
 int cpage = 1, psize = 12;
 if (request.getParameter("cpage") != null)
    cpage = Integer.parseInt(request.getParameter("cpage"));
@@ -33,7 +34,7 @@ if (ord != null && !ord.equals(""))         args += "&ord=" + ord;
 <title>Insert title here</title>
 <style>
 #head, #ordList, #bInfo, #rInfo, #payList, #payment {
-	width:100%; border:1px solid lightgray; 
+   width:100%; border:1px solid lightgray; 
 }
 #kTitle {color:#8e8e8e; font-size:17px; }
 #head {background-color:#d1d1d1; width:100%; height:190px; line-height:170px; margin:20px auto; text-align:center;}
@@ -62,22 +63,22 @@ function chCnt(idx, cnt) {   // 상품의 수량을 변경시키는 함수
          }
       });
    }
-function getSelectChk() {	// 사용자가 선택한 체크박스들의 value를 추출하는 함수
-	var arrChk = document.frmCart.chk;
-	// 문서내의 frmCart폼안에 있는컨트롤들 중 chk라는 이름을 가진 컨트롤들을 배열로 받아옴
-	// 단 chk라는 이름을 가진 컨트롤이 하나일 경우에는 배열이 만들어 지지 않음
-	var idx = "";
-	for (var i = 0 ; i < arrChk.length ; i++) {
-		if (arrChk[i].checked) {	// i인덱스의 체크박사가 선택된 상태라면
-			idx += "," + arrChk[i].value;	// 선택된 체크박스의 value(cl_idx값)를 idx변수에 누적
-		}
-	}
-	if (idx != "") {
-		if(idx.indexOf(",,") > -1)	idx = idx.substring(2);	// 전체 구매시
-		else						idx = idx.substring(1);	// 선택한 상품 구매시
-	}
-	
-	return idx;
+function getSelectChk() {   // 사용자가 선택한 체크박스들의 value를 추출하는 함수
+   var arrChk = document.frmCart.chk;
+   // 문서내의 frmCart폼안에 있는컨트롤들 중 chk라는 이름을 가진 컨트롤들을 배열로 받아옴
+   // 단 chk라는 이름을 가진 컨트롤이 하나일 경우에는 배열이 만들어 지지 않음
+   var idx = "";
+   for (var i = 0 ; i < arrChk.length ; i++) {
+      if (arrChk[i].checked) {   // i인덱스의 체크박사가 선택된 상태라면
+         idx += "," + arrChk[i].value;   // 선택된 체크박스의 value(cl_idx값)를 idx변수에 누적
+      }
+   }
+   if (idx != "") {
+      if(idx.indexOf(",,") > -1)   idx = idx.substring(2);   // 전체 구매시
+      else                  idx = idx.substring(1);   // 선택한 상품 구매시
+   }
+   
+   return idx;
 }
 function cartDel(idx) {
    var isConfirm = false;
@@ -124,42 +125,49 @@ function chkAll(all) {
 }
 
 function allBuy(){
-	var all = document.frmCart.checkAll;	// 전체 선택용 체크박스
-	all.checked = true;						// 전체 선택용 체크박스를 인위적으로 체크하게 만듦
-	chkAll(all);							// 전체 선택용 체크박스를 이용하여 전체를 선택하게 만듦
-	chkBuy();								// 선택된 상품을 구매하는 함수 호출
+   var all = document.frmCart.checkAll;   // 전체 선택용 체크박스
+   all.checked = true;                  // 전체 선택용 체크박스를 인위적으로 체크하게 만듦
+   chkAll(all);                     // 전체 선택용 체크박스를 이용하여 전체를 선택하게 만듦
+   chkBuy();                        // 선택된 상품을 구매하는 함수 호출
 }
 
 function goWish() {   // 위시리스트 담기 버튼 클릭시
    var frm = document.frmCart;
+   var wish = document.getElementById("wish");
 <%   if (loginMember != null){%>
-      frm.action = "wish_in.crt";
-      frm.submit();
+   wish.value = "y";
+   frm.action = "wish_in.crt";
+   frm.submit();
 <%   } else {%>
-      if(confirm("로그인이 필요합니다. \n 로그인 하시겠습니까?")){
-         frm.action = "login_form.jsp<%=args%>";
-         frm.submit();
-      }
+   if(confirm("로그인이 필요합니다. \n 로그인 하시겠습니까?")){
+       wish.value = "y";
+      frm.action = "login_form.jsp<%=args%>";
+      frm.submit();
+   }
 <%   }%>
+}
+function buyNow(){
+   allBuy();
 }
 </script>
 </head>
-<body>
-<div id="wrapper">	
+<body<% if ( now !=null && now.equals("go") ){ %> onload="buyNow();" <%} %>>
+<div id="wrapper">   
 <h2>MY CART <span id="kTitle"> 장바구니</span></h2>
-	<div id="head">
-		<img src="/fourplay/images/CARTLIST.png" name="cartImg" class="hImg" width="128" alt="장바구니"
-		style="padding:8px; border:6px solid darkgray;"/>
-		<img src="/fourplay/images/checklist.png" name="ordFormImg" class="hImg" width="128" />
-		<img src="/fourplay/images/computer_mouse.png" name="ordChkImg" class="hImg" width="128"/>
-		<img src="/fourplay/images/delivery_complete.png" name="ordDoneImg" class="hImg" width="128"/><br />
-	</div>
+   <div id="head">
+      <img src="/fourplay/images/CARTLIST.png" name="cartImg" class="hImg" width="128" alt="장바구니"
+      style="padding:8px; border:6px solid darkgray;"/>
+      <img src="/fourplay/images/checklist.png" name="ordFormImg" class="hImg" width="128" />
+      <img src="/fourplay/images/computer_mouse.png" name="ordChkImg" class="hImg" width="128"/>
+      <img src="/fourplay/images/delivery_complete.png" name="ordDoneImg" class="hImg" width="128"/><br />
+   </div>
 <form name="frmCart" action="ord_form.ord" method="post">
 <input type="hidden" name="chk" value="" />
 <input type="hidden" name="idxs" value="" />
 <input type="hidden" name="kind" value="cart" />
+<input type="hidden" name="wish" id="wish" value="" />
 <div id="crtList" width="100%" align="center">
-<table width="100%"  id="table1" cellpadding="10" cellspacing="0">      
+<table width="700"  id="table1" cellpadding="10" cellspacing="0">      
 <tr id="crtTitle">
 <th width="5%"><input type="checkbox" checked="checked" id="checkAll" onclick="chkAll(this);"/></th>
 <th width="*%">상품명 / 옵션</th><th width="10%">수량</th>

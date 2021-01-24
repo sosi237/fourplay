@@ -12,15 +12,26 @@ public class CartInAction implements Action {
 		String plid = request.getParameter("id");		// 상품아이디
 		String cnt = request.getParameter("cnt");		// 구매 수량
 		String price = request.getParameter("price");	// 실구매가
+		String buyNow = request.getParameter("buyNow"); // 바로구매로 들어왔는지 확인
 		String now = request.getParameter("now");
+		String idxs = request.getParameter("idxs");	
+		String args = "?now=" + now;
+		if(request.getParameter("args") != null && request.getParameter("args").equals("")) {
+			args = request.getParameter("args") + "&now=" + now;
+		}
 		int optCnt = 0;
 		String optValue = "";
-		if (request.getParameter("optCnt") != null) {
-			optCnt = Integer.parseInt(request.getParameter("optCnt"));	// 옵션의 개수
-			for (int i = 0 ; i < optCnt ; i++) {
-				optValue += "," + request.getParameter("opt" + i);
+		if(buyNow !=null && buyNow.equals("y")) { // 상품 디테일에서 바로구매로 들어 왔으면
+			optCnt = Integer.parseInt(request.getParameter("optCnt"));
+			optValue = request.getParameter("optValue");
+		} else {	// 장바구니 추가로 들어왔으면
+			if (request.getParameter("optCnt") != null) {
+				optCnt = Integer.parseInt(request.getParameter("optCnt"));	// 옵션의 개수
+				for (int i = 0 ; i < optCnt ; i++) {
+					optValue += "," + request.getParameter("opt" + i);
+				}
+				optValue = optValue.substring(1);
 			}
-			optValue = optValue.substring(1);
 		}
 
 		String buyer, isMember = "n";
@@ -53,11 +64,7 @@ public class CartInAction implements Action {
 		}
 
 		ActionForward forward = new ActionForward();
-		if(now.equals("go")) {
-			forward.setPath("ord_form.ord");	// 이동할 URL 지정
-		}else {
-			forward.setPath("cart_list.crt" + request.getParameter("args"));	// 이동할 URL 지정			
-		}
+		forward.setPath("cart_list.crt" + args);	// 이동할 URL 지정			
 		forward.setRedirect(true);
 		return forward;
 	}
