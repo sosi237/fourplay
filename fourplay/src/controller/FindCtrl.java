@@ -1,22 +1,11 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import action.Action;
-import action.MemberForm;
-import action.MemberProcAction;
-import svc.LoginSvc;
-import vo.ActionForward;
-import vo.MemberInfo;
+import javax.servlet.http.*;
+import action.*;
+import vo.*;
 
 @WebServlet("*.find")
 public class FindCtrl extends HttpServlet {
@@ -37,12 +26,18 @@ public class FindCtrl extends HttpServlet {
 		Action action = null;
 		
 		switch (command) {
-			 case "/find_id.find" :	// 아이디 찾는 폼
+			 case "/find_id.find" :	// 아이디 찾는 화면
 				action = new FindIdAction();
 				break;
+			 case "/find_id_proc.find" :	// 아이디 찾는 기능
+				action = new FindIdProcAction();
+					break;
 			 case "/find_pwd.find" :	// 비밀번호 찾는 폼
-				action = new MemberProcAction();
+				action = new FindPwdAction();
 				break;
+			 case "/find_pwd_proc.find" :	// 비밀번호 찾는 기능
+				action = new FindPwdProcAction();
+
 		}
 
 		try {

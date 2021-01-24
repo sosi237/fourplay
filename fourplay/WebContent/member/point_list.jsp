@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
-<%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
+<%@ page import="vo.*" %>
+
 <%
 request.setCharacterEncoding("utf-8");
 ArrayList<MemberInfo> pointList = (ArrayList<MemberInfo>)request.getAttribute("pointList");
@@ -48,7 +49,7 @@ if (loginMember != null) {
 <div align="right">
 <input type="button" value="뒤로가기" onclick="history.back();"  />
 </div>
-</div>
 </form>
+</div>
 </body>
 </html>
