@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="java.text.*" %>
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <%
@@ -7,6 +8,7 @@ String ismember = "n";
 String kind = request.getParameter("kind");	// 장바구니(cart), 바로구매(direct) 중 어디를 통해 들어왔는지 여부
 AddrInfo addrInfo = (AddrInfo)request.getAttribute("addrInfo");
 ArrayList<CartInfo> pdtList = (ArrayList<CartInfo>)request.getAttribute("pdtList");
+DecimalFormat df = new DecimalFormat("###,###");
 
 String name = "", p1 = "", p2 = "", p3 = "", e1 = "", e2 = "", zip = "", addr1 = "", addr2 = "";
 if (loginMember != null) {	// 로그인 한 회원일 경우
@@ -60,6 +62,7 @@ li {list-style-type:none; }
 .sBtn {width:100px; height:35px; background-color:black; margin-right:30px; }
 .rBtn {width:100px; height:35px; background-color:lightgray; border:0;}
 h3 { margin-top:30px; margin-bottom:15px;}
+
 </style>
 <script src="jquery-3.5.1.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false"></script>
@@ -78,6 +81,13 @@ $(document).ready(function (){
 		    $("#newAddr").removeAttr("checked");
 		}
 	});
+	$("input:radio[name=payment]").click(function(){	//무통장 입금 선택시에만 계좌선택 콤보박스 활성화
+		if($("input[name=payment]:checked").val() == "d"){
+			$("#account").attr("disabled", false);
+		} else {
+			$("#account").attr("disabled", true);
+		}
+	});
 	
 	$("#newAddr").click(function(){
 		if($("#newAddr").is(":checked") == true){	//신규 배송지 체크박스를 체크하면
@@ -86,14 +96,6 @@ $(document).ready(function (){
 			document.getElementById("raddr2").value = "";
 		}
 	});
-	
-	if($("input[name=payment]:checked").val() != "d"){
-		$("#account").attr("disabled", true);
-	} else {
-		$("#account").attr("disabled", false);
-	}
-	
-	
 });
 /* 우편번호 찾기 기능 - 다음 API 활용 */
 function getZip(type) {
@@ -215,6 +217,14 @@ function chkData(frm){
 function onlyNumber(obj) {
 	if (isNaN(obj.value))	obj.value = "";
 }
+function chMail(){
+	var self = document.getElementById("self");
+	var be2 = document.getElementById("be2");
+	var bemail = document.getElementById("bemail");
+	var val = bemail.options[bemail.selectedIndex].value;
+	be2.value = val;
+	
+}
 </script>
 </head>
 <body>
@@ -275,14 +285,13 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 			<td class="pdtImg"><img src="/fourplay/product/pdt_img/<%=crt.getPl_img1() %>" width="50" height="50" align="absmiddle" style="margin:2px 0;" /></td>
 			<td class="pdtName" align="left"><%=crt.getPl_name()  + "<br /> 옵션/ " + option %></td>
 			<td><%=crt.getCl_cnt() %></td>
-			<td class="price"><%=crt.getPrice() %></td>
-			<td class="point"><%=point %></td>
+			<td class="price"><%=df.format(crt.getPrice()) %></td>
+			<td class="point"><%=df.format(point) %></td>
 			<td>0</td>
 		</tr>
 <%
 		beforeDC += crt.getPl_price();
 		tPrice += crt.getPrice();
-		System.out.println("beforeDC: "+beforeDC +" / tPrice: " + tPrice);
 	}
 	if (clIdxs.indexOf(',') > -1)	clIdxs = clIdxs.substring(1);
 } else {	// 구매할 상품이 없으면
@@ -304,7 +313,7 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	<tr><th class="title">이름</th><td><input type="text" name="bname" id="bname" value="<%=name%>"/></td></tr>
 	<tr><th class="title">연락처</th>
 	<td>
-	<select name="bp1">
+	<select name="bp1" >
 		<option value="010" <%if(p1.equals("010")) { %> selected="selected" <%} %>>010</option>
 		<option value="016" <%if(p1.equals("016")) { %> selected="selected" <%} %>>016</option>
 		<option value="02" <%if(p1.equals("02")) { %> selected="selected" <%} %>>02</option>
@@ -316,13 +325,13 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	</tr>
 	<tr><th class="title">이메일</th>
 	<td>
-	<input type="text" name="be1" value="<%=e1%>"/> @ <input type="text" name="be2" value="<%=e2%>"/>
-	<select name="bemail">
+	<input type="text" name="be1" value="<%=e1%>"/> @ <input type="text" name="be2" id="be2" value="<%=e2%>"/>
+	<select name="bemail" id="bemail" onchange="chMail();">
 		<option value="naver.com" <%if(e2.equals("naver.com")) { %> selected="selected" <%} %>>naver.com</option>
 		<option value="gmail.com" <%if(e2.equals("gmail.com")) { %> selected="selected" <%} %>>gmail.com</option>
 		<option value="hanmail.net" <%if(e2.equals("hanmail.net")) { %> selected="selected" <%} %>>hanmail.net</option>
 		<option value="nate.com" <%if(e2.equals("nate.com")) { %> selected="selected" <%} %>>nate.com</option>
-		<option value="직접입력">직접입력</option>
+		<option value="">직접입력</option>
 	</select>
 	</td>
 	</tr>
@@ -357,13 +366,14 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	</tr>
 	<tr><th class="title">이메일</th>
 	<td>
-	<input type="text" name="be1"/> @ <input type="text" name="be2"/>
-	<select name="bemail">
-		<option value="naver.com" >naver.com</option>
+	<input type="text" name="be1"/> @ <input type="text" name="be2" id="be2"/>
+	<select name="bemail" id="bemail" onchange="chMail();">
+		<option value="">도메인 선택</option>
+		<option value="naver.com">naver.com</option>
 		<option value="gmail.com" >gmail.com</option>
 		<option value="hanmail.net" >hanmail.net</option>
 		<option value="nate.com" >nate.com</option>
-		<option value="직접입력">직접입력</option>
+		<option value="">직접입력</option>
 	</select>
 	</td>
 	</tr>
@@ -421,26 +431,76 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 	<table id="t_payList" cellspacing="0" cellpadding="5">
 	<tr class="payTitle" align="center"><th>총 주문금액</th><th></th><th>배송비</th><th></th><th>할인금액</th><th></th><th>결제 예정 금액</th></tr>
 	<tr align="center">
-		<td><%=beforeDC %></td>
+		<td><%=df.format(beforeDC) %></td>
 		<td><img src="images/plus.png" width="45" alt="plus"/></td>
 		<td>0</td>
 		<td><img src="images/minus.png"  width="45" alt="minus"/></td>
-		<td><span id="tatal"><%=beforeDC - tPrice %></span></td>
+		<td><span id="dc"><%=df.format(beforeDC - tPrice) %></span></td>
 		<td><img src="images/equals.png"  width="35" alt="equals"/></td>
-		<td><%=tPrice %></td>
+		<td><span id="realPay"><%=df.format(tPrice) %></span></td>
 	</tr>
+<%
+if(loginMember != null){
+	if (loginMember.getMlpoint() >= 1000) { 
+%>
+<script>
+function calPoint(obj) {
+	var tPrice = <%=tPrice%>;
+	var point = <%=loginMember.getMlpoint()%>;
+	if (obj.value != "") {
+		if (obj.value > tPrice) {
+			alert("사용하려는 포인트가 결제 금액보다 클 수 없습니다.");		obj.value = "0";
+		} else if (obj.value > point) {
+			alert("사용하려는 포인트가 보유한 포인트보다 클 수 없습니다.");	obj.value = "0";
+		} else if (obj.value % 1000 > 0) {
+			alert("포인트 사용은 1000 단위로 해야 합니다.");				obj.value = "0";
+		}
+	} else	obj.value = "0";
+}
+
+
+var dc = document.getElementById("dc");
+var realPay = document.getElementById("realPay");
+function use(box, usePnt){
+	var usePnt = document.getElementById("usePnt");
+	if(box.checked == true)	{
+		usePnt.value = <%=Math.floor(loginMember.getMlpoint()/1000)*1000 %>;
+		dc.innerHTML = <%=beforeDC - tPrice%>  + parseInt(usePnt.value);
+		realPay.innerHTML = <%=tPrice %> - parseInt(usePnt.value);
+	} else {
+		usePnt.value = "0";
+		dc.innerHTML = <%=beforeDC - tPrice %>;
+		realPay.innerHTML = <%=df.format(tPrice) %>;
+	}
+}
+
+function chPay(val){
+	dc.innerHTML = <%=beforeDC - tPrice%>  + parseInt(usePnt.value);
+	realPay.innerHTML = <%=tPrice %> - parseInt(usePnt.value);
+}
+
+</script>
+
 	<tr>
 	<th>마일리지</th>
-	<td colspan="3"><input type="text" name="usePnt" id="usePnt" value="0" onkeyup="onlyNumber(this);"/>(사용가능 마일리지: <%=loginMember.getMlpoint() %>)
-<!--	<input type="checkbox" name="useAll" onclick="" /> 전액사용 
- <br /><input type="button" value="적용" id="pntBtn" /> 
-  -->
+	<td colspan="3">
+		<input type="text" name="usePnt" id="usePnt" value="0" onkeyup="onlyNumber(this);"  onfocus="this.value='';" 
+		onblur="calPoint(this);" onchange="chPay(this.value);"/>(사용가능 마일리지: <%=df.format(loginMember.getMlpoint()) %>)
+<!-- 숫자만 입력, 결제금액보다 이하로 사용, 보유포인트보다 이하로 사용, 1000단위로 사용 -->
+	<input type="checkbox" name="useAll" id="useAll" onchange="use(this, this.form.usePnt);" /> 전액사용 
+<!-- <br /><input type="button" value="적용" id="pntBtn" /> --> 
+<%
+	} else { 
+%>
+		<br />현재 보유 포인트가 <%=df.format(loginMember.getMlpoint()) %>이므로 사용할 수 없습니다.
+<%	
+	} 
+} 
+%>
 	</td>
 	</tr>
-	
 	</table>
 	</div>
-	
 	<h3>04 결제정보</h3>
 	<div id="payment">
 		<ul>
@@ -449,12 +509,10 @@ if (pdtList != null && pdtList.size() > 0) {	// 구매할 상품이 있으면
 				<input type="radio" name="payment" value="a" checked="checked" />카드 결제<br />
 				<input type="radio" name="payment" value="b" />휴대폰 결제<br />
 				<input type="radio" name="payment" value="c" />계좌이체<br />
-				<input type="radio" name="payment" value="d" />무통장 입금
-				<select name="account" id="account">
-					<option value="">입금 계좌번호 선택</option>
-					<option value="woori">우리은행</option>
+				<input type="radio" name="payment" value="d" id="acnt"/>무통장 입금
+				<select name="account" id="account" disabled="disabled">>
+					<option value="woori">우리은행 1002143653716 박소연</option>
 				</select>
-				<span class="accountMsg"> </span>
 			</li>
 		</ul>
 	</div>

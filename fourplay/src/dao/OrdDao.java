@@ -379,8 +379,7 @@ public class OrdDao {
 
 		return result;
 	}	
-	 public int ordCancel(String olid) {
-	// 사용자가 선택한 상품(들)을 장바구니에서 삭제하는 메소드
+	 public int ordCancel(String olid) {	// 주문 취소 클릭시 
 		int result = 0, finalResult = 0;;
 		Statement stmt = null;
 
