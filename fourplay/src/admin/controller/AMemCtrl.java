@@ -29,8 +29,11 @@ public class AMemCtrl extends HttpServlet {
 //		AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 		
 		switch (command) {
-			case "/admin/member_list.mem" :	case "/admin/member/member_list.mem" :	// 관리자 목록 화면	// 회원 목록 화면
+			case "/admin/member_list.mem" :	case "/admin/member/member_list.mem" :	// 회원 목록 화면
 				action = new AMemListAction();
+				break;
+			case "/admin/member_detail.mem" :	case "/admin/member/member_detail.mem" :	// 회원 정보 화면
+				action = new AMemDetailAction();
 				break;
 		}
 		

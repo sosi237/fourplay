@@ -80,5 +80,64 @@ public class AMemDao {
 		}
 		return memberList;
 	}
+	
+	public MemberInfo getMember(String id) {
+		MemberInfo member = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+			
+		try {
+			String sql = "select * from t_member_list where ml_id = '" + id + "' ";
+			System.out.println(sql);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				member = new MemberInfo();
+				member.setMlid(id);
+				member.setMlpwd(rs.getString("ml_pwd"));
+				member.setMlname(rs.getString("ml_name"));
+				member.setMlgender(rs.getString("ml_gender"));
+				member.setMlbirth(rs.getString("ml_birth"));
+				member.setMlphone(rs.getString("ml_phone"));
+				member.setMlemail(rs.getString("ml_email"));
+				member.setMldate(rs.getString("ml_date"));
+				member.setMllast(rs.getString("ml_last"));
+				member.setMlstatus("a");
+				member.setMlpoint(rs.getInt("ml_point"));
+			}
+		} catch(Exception e) {
+			System.out.println("getMember() 오류");
+			e.printStackTrace();
+		} finally {
+			close(rs);	close(stmt);
+		}
+
+		return member;
+	}
+	
+	public AddrInfo getBasicAddr(String id) {
+		AddrInfo addr = new AddrInfo();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			String sql = "select * from t_member_addr where ma_basic = 'y' and ml_id = '" + id + "' " ;
+			
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				addr.setMa_idx(rs.getInt("ma_idx"));
+				addr.setMl_id(rs.getString("ml_id"));
+				addr.setMa_zip(rs.getString("ma_zip"));
+				addr.setMa_addr1(rs.getString("ma_addr1"));
+				addr.setMa_addr2(rs.getString("ma_addr2"));
+				addr.setMa_basic(rs.getString("ma_basic"));
+			}
+		} catch(Exception e) {
+			System.out.println("getBasicAddr() 오류");		e.printStackTrace();
+		} finally {
+			close(rs);	close(stmt);
+		}
+		return addr;
+	}
 }
 

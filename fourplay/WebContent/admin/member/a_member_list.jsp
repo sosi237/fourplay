@@ -84,12 +84,12 @@ args = "&cpage=" + cpage + schArgs;
 		<th>마지막 방문일<a href="member_list.mem?ord=lasta">▲</a> <a href="member_list.mem?ord=lastd">▼</a></th>
 		</tr>
 	<%
-	String status = "";
+	
 	for(int i = 0; i < memberList.size(); i++) {
 	%>
 		<tr>
-		<td><a href="member_view.mem?id=<%=memberList.get(i).getMlid() %>"><%=memberList.get(i).getMlid() %></a></td>
-		<td><a href="member_view.mem?name=<%=memberList.get(i).getMlname() %>"><%=memberList.get(i).getMlname() %></a></td>
+		<td><a href="member_detail.mem?id=<%=memberList.get(i).getMlid() %>"><%=memberList.get(i).getMlid() %></a></td>
+		<td><a href="member_detail.mem?name=<%=memberList.get(i).getMlname() %>"><%=memberList.get(i).getMlname() %></a></td>
 		<td><%=memberList.get(i).getMlgender() %></td>
 		<td><%=memberList.get(i).getMlbirth() %></td>
 		<td><%=memberList.get(i).getMlpoint() %></td>
