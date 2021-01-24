@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../a_menu.jsp" %>
+<%@ include file="../pdt_menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
 
@@ -124,6 +126,7 @@ function chVal(){
 </script>
 </head>
 <body>
+<div id="wrapper">
 <h2>상품 수정 폼</h2>
 <form name="frmPdt" action="pdt_up_proc.pdta" method="post" enctype="multipart/form-data">
 <input type="hidden" name="opt" value="" />
@@ -182,19 +185,17 @@ for (int i = 0 ; i < cataSmallList.size() ; i++) {
 String fullOpt = pdtInfo.getPl_opt(); // 전체옵션
 String[] arrOpt = null;
 String[] sizeOpt = null;
-if(fullOpt != null && !fullOpt.equals("") && fullOpt.indexOf(":") > 0 ){ // 옵션이 여러개있으면
+if(fullOpt != null && !fullOpt.equals("")){ // 옵션이 여러개있으면
 	arrOpt = fullOpt.split(":");
-	fullOpt = arrOpt[0].toString();
-	fullOpt = fullOpt.substring(5);
+	fullOpt = arrOpt[0].toString().substring(5);
 	sizeOpt = fullOpt.split(",");
 %>
 <td colspan="3">
-<%		for (int i = 240, j = 0; i <= 285 ; i += 5, j++){ 
+<%		for (int i = 240, j = 0; i <= 285 && j < sizeOpt.length ; i += 5, j++){ 
 %>
-			<input type="checkbox" name="opt"<%if(sizeOpt[j].equals(i + "")){%> checked="checked" <%}%> value="<%=i %>" /> <%=i %>
+		<input type="checkbox" name="opt"<%if(sizeOpt[j].equals(i + "")){%> checked="checked" <%}%> value="<%=i %>" /> <%=i %>
 <%
-		}
-
+	}
 } else {
 %>
 <td colspan="3">옵션 선택불가
@@ -240,5 +241,6 @@ if(fullOpt != null && !fullOpt.equals("") && fullOpt.indexOf(":") > 0 ){ // 옵�
 </td></tr>
 </table>
 </form>
+</div>
 </body>
 </html>

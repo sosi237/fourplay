@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
+<%@ include file="../a_menu.jsp" %>
+<%@ include file="../pdt_menu.jsp" %>
 <%
 ArrayList<PdtInfo> pdtList = (ArrayList<PdtInfo>)request.getAttribute("pdtList");
 ArrayList<CataBigInfo> cataBigList = (ArrayList<CataBigInfo>)request.getAttribute("cataBigList");
@@ -124,6 +126,7 @@ function setCategory(obj, target) {
 </script>
 </head>
 <body>
+<div id="wrapper">
 <h2>상품 목록 화면</h2>
 <form name="frmSch" action="" method="get">
 <table width="800" cellpadding="5">
@@ -325,5 +328,6 @@ if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 �
 </td>
 </tr>
 </table>
+</div>
 </body>
 </html>
