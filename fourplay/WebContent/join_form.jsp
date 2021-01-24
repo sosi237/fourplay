@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="../menu.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ include file="menu.jsp" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -140,6 +140,9 @@ function chkAll(all) {
 </script>
 </head>
 <body>
+<div style="width: 80%;
+min-width: 800px;
+padding-top:350px;">
 <h2 class="join-title">Join Us</h2>
 <form name="frmJoin" action="join_proc.jsp" method="post" onsubmit="return chkData(this);">
 <input type="hidden" name="idChk" id="idChk" value="N" />
@@ -168,6 +171,7 @@ function chkAll(all) {
 </div>
 </form>
 <jsp:include page="/content.jsp"></jsp:include>
+</div>
 </body>
 </html>
 
