@@ -3,6 +3,7 @@ package vo;
 public class AddrInfo {
 	private int ma_idx;
 	private String ml_id, ma_zip, ma_addr1, ma_addr2, ma_basic, ma_date;
+	
 	public int getMa_idx() {
 		return ma_idx;
 	}

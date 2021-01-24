@@ -12,8 +12,9 @@ public class MemberProcAction implements Action {
 			request.setCharacterEncoding("utf-8");
 			ActionForward forward = new ActionForward();
 			MemberProcSvc memberProcSvc = new MemberProcSvc();
-			
-			String pwd		= request.getParameter("pwd").trim();
+
+			String uid 		= request.getParameter("uid");
+			String pwd		= request.getParameter("pwd");
 			String e1		= request.getParameter("e1");
 			String e2		= request.getParameter("e2");
 			String p1		= request.getParameter("p1");
@@ -22,13 +23,24 @@ public class MemberProcAction implements Action {
 			String phone = p1 + "-" + p2 + "-" + p3;
 			String email = e1 + "@" + e2;
 			
-			boolean isSuccess = false;
+//			String zip		= request.getParameter("zip");
+//			String addr1	= request.getParameter("addr1");
+//			String addr2	= request.getParameter("addr2");
+			
 			MemberInfo loginMember = new MemberInfo();
 			loginMember.setMlpwd(request.getParameter("pwd"));
 			loginMember.setMlemail(request.getParameter("email"));
 			loginMember.setMlphone(request.getParameter("phone"));
 			
-			isSuccess = memberProcSvc.memberUpdate(loginMember);
+//			AddrInfo addr = new AddrInfo();
+//			addr.setMa_zip(request.getParameter("zip"));
+//			addr.setMa_addr1(request.getParameter("addr1"));
+//			addr.setMa_addr2(request.getParameter("addr2"));
+			
+			
+			
+			boolean isSuccess = false;
+			isSuccess = memberProcSvc.memberUpdate(loginMember, uid);
 			
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();

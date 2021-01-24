@@ -3,6 +3,7 @@
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <%
+
 AddrInfo addr = (AddrInfo)request.getAttribute("addr");
 String b1 = null; String b2 = null; String b3 = null;
 String p1 = null, p2 = null, p3 = null, e1 = null, e2 = null;
@@ -23,28 +24,42 @@ e1 = email[0];	e2 = email[1];
 <style>
 .msg { font-size:12px; }
 th { background:#eee; }
+.member-info-table{width:100%;}
+.member-info-table tr{line-height:40px;}
+.member-info-table th{text-indent:15px;}
+.member-info-table td{padding-left:15px;}
+
+.flex{height:60px;display:flex;justify-content: space-between;align-items: center;}
+.btn{text-align:center;padding-top:30px;}
+.btn .input1{width:150px;height:40px;text-align:center;font-size:14px;background:black;color:#fff;border:none;}
+.btn .input2{width:150px;height:40px;text-align:center;font-size:14px;background:gray;color:#fff;border:none;}
 </style>
 <script>
+function openPop1() {
+// 팝업창 뛰우는 메소드
+	var w = (screen.width - 500) / 2;	// 수평 중심점
+	var h = (screen.height - 400) / 2;	// 수직 중심점
+	var win = window.open("/fourplay/addr_form.mpg", "", "width=500,height=400,left=" + w + ",top=" + h);
+}
+
 function openPop2() {
 // 팝업창 뛰우는 메소드
 	var w = (screen.width - 500) / 2;	// 수평 중심점
 	var h = (screen.height - 400) / 2;	// 수직 중심점
 	var win = window.open("/fourplay/addr_view.mpg", "", "width=500,height=400,left=" + w + ",top=" + h);
 }
-function selectEmail(obj) {
-// 이메일 선택시 변경되는 메소드
-	document.frm.e2.value = document.frm.e3.value;
-}
 </script>
 </head>
 <body>
 <div id="wrapper">
-<h2 align=center>MEMBER INFORMATION</h2>
-<h3 class="msg">HOME > MYPAGE > 회원정보 수정</h3>
-<form name="frm" action="member_proc.mpg">
+	<div class="flex">
+		<h2 align=center>MEMBER INFORMATION</h2>
+		<h3 class="msg">HOME > MYPAGE > 회원정보 수정</h3>
+	</div>
+<form name="frmInfo" action="member_proc.mpg">
 <input type="hidden" name="id"  value="<%=loginMember.getMlname() %>" />
 <input type="hidden" name="name" value="<%=loginMember.getMlid() %>" />
-<table cellpadding="5" cellspacing="0" align="center" border="1px solid #eee">
+<table cellpadding="5" cellspacing="0" align="center" border="1px solid #eee" class="member-info-table">
 <tr>
 <th>이름</th><td><%=loginMember.getMlname() %></td></tr>
 <tr>
@@ -73,7 +88,7 @@ function selectEmail(obj) {
 	<br /><span class="msg">* ID, 비밀번호 찾기 시 입력된 이메일로 전달되므로 정확한 메일 주소를 입력해 주세요.</span>
 </td>
 </tr>
-<tr><th>이메일 수신여부</th><td><input type="radio" checked="checked" /> 동의합니다. <input type="radio" name="" /> 동의하지 않습니다.</td></tr>
+<tr><th>이메일 수신여부</th><td><input type="radio" name="mail-chk" checked="checked" /> 동의합니다. <input type="radio" name="mail-chk" /> 동의하지 않습니다.</td></tr>
 <tr>
 <th>휴대폰</th>
 <td>
@@ -84,27 +99,25 @@ function selectEmail(obj) {
 		<option value="019" <% if (p1.equals("019")) { %>selected="selected"<% } %>>019</option>
 	</select> -
 	<input type="text" name="p2" size="4" maxlength="4" value="<%=p2%> "/> -
-	<input type="text" name="p3" size="4" maxlength="4" value="<%=p2%>" />
+	<input type="text" name="p3" size="4" maxlength="4" value="<%=p3%>" />
 	<span class="msg"> * 휴대폰 번호는 마이페이지에서 수정하실 수 있습니다.</span>
 </td>
 </tr>
-<tr><th>sms 수신여부</th><td><input type="radio" checked="checked" /> 동의합니다. <input type="radio" name="" /> 동의하지 않습니다.</td></tr>
+<tr><th>sms 수신여부</th><td><input type="radio" name="sms-chk" checked="checked" /> 동의합니다. <input type="radio" name="sms-chk" /> 동의하지 않습니다.</td></tr>
 <tr>
 <th>주소</th>
-<td><input type="text" name="mazip" value="<%=addr.getMa_zip() %>" />
-	<input type="button" value="우편번호 검색" /> 
+<td><input type="text" id="zip" name="zip" value="<%=addr.getMa_zip() %>" />
+	<input type="button" value="우편번호 검색" onclick="openPop1();" /> 
 	<input type="button" value="배송지 목록" onclick="openPop2();" /><br />
-	<input type="text" size="48" name="maaddr1" value="<%=addr.getMa_addr1() %>" /><br />
-	<input type="text" size="48"name="maaddr2" value="<%=addr.getMa_addr2() %>" />
-</td>
-</tr>
-<tr>
-<td colspan="2" align="center">
-	<input type="submit" value="회원정보 수정" /> 
-	<input type="reset" value="취소" />
+	<input type="text" id="addr1" size="48" name="addr1" value="<%=addr.getMa_addr1() %>" /><br />
+	<input type="text" id="addr2" size="48" name="addr2" value="<%=addr.getMa_addr2() %>" />
 </td>
 </tr>
 </table>
+<div class="btn">
+	<input type="submit" value="회원정보 수정" class="input1"/> 
+	<input type="button" value="취소" onclick="history.back();" class="input2"/>
+</div>
 </form>
 </div>
 </body>

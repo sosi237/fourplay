@@ -12,11 +12,12 @@ public class AddrViewAction implements Action {
 		ArrayList<AddrInfo> addrList = new ArrayList<AddrInfo>();
 		HttpSession session = request.getSession();
 		MemberInfo loginMember = (MemberInfo)session.getAttribute("loginMember");
-		String uid = loginMember.getMlid();
-	
-		
 		AddrViewSvc addrViewSvc = new AddrViewSvc();
+		
+		
+		String uid = loginMember.getMlid();
 		addrList = addrViewSvc.getAddrList(uid);
+		
 		request.setAttribute("addrList", addrList);
 		
 		ActionForward forward = new ActionForward();

@@ -105,24 +105,24 @@ public class MpgDao {
 		return result;
 	}
 	
-	public int memberUpdate(MemberInfo loginMember) {
-	// 회원 수정을 위한 메소드
-		int result = 0;
-		Statement stmt = null;
-		String sql = null;
-		
-		try {
-			sql = "update t_member_list set ml_pwd = '" + loginMember.getMlpwd() + "', ml_phone = '"+ loginMember.getMlphone()
-				+ "', ml_email = '"+ loginMember.getMlemail() +"' where ml_id = '"+ loginMember.getMlid() +"' ";
-			stmt = conn.createStatement();
-			result = stmt.executeUpdate(sql);
-		} catch(Exception e) {
-			System.out.println("memberUpdate() 오류");			e.printStackTrace();
-		} finally {
-			close(stmt);
-		}
-		return result;
-	}
+//	public int memberUpdate(MemberInfo loginMember, String uid) {
+//	// 회원 수정을 위한 메소드
+//		int result = 0;
+//		Statement stmt = null ;
+//		String sql = null;
+//		
+//		try {
+//			sql = "update t_member_list set ml_pwd = '" + loginMember.getMlpwd() + "', ml_phone = '"+ loginMember.getMlphone()
+//				+ "', ml_email = '"+ loginMember.getMlemail() + "' where ml_id = '" + uid + "' ";
+//			stmt = conn.createStatement();
+//			result = stmt.executeUpdate(sql);
+//		} catch(Exception e) {
+//			System.out.println("memberUpdate() 오류");			e.printStackTrace();
+//		} finally {
+//			close(stmt);
+//		}
+//		return result;
+//	}
 	
 	public int memDelete(String uid, String pwd) {
 	// 회원 삭제 처리를 위한 메소드
@@ -197,7 +197,45 @@ public class MpgDao {
 		}
 		return total;
 	}
+	
+	public int addrInsert(AddrInfo addr, String uid) {
+		int result = 0;
+		Statement stmt = null;
+		
+		try {
+			String sql = "insert into t_member_addr (ml_id, ma_zip, ma_addr1, ma_addr2) values " +
+					" ('" + uid + "', '" + addr.getMa_zip() + "', '" + addr.getMa_addr1() + "', '"+ addr.getMa_addr2() + "') "; 
+			stmt = conn.createStatement();
+			result = stmt.executeUpdate(sql);
+		} catch(Exception e) {
+			System.out.println("addrInsert() 오류");		e.printStackTrace();
+		} finally {
+			close(stmt);
+		}
+
+		return result;
+	}
+	
+	public int memberUpdate(MemberInfo loginMember, String uid) {
+		// 회원 수정을 위한 메소드
+			int result = 0;
+			Statement stmt = null ;
+			String sql = null;
+			
+			try {
+				sql = "update t_member_list set ml_pwd = '" + loginMember.getMlpwd() + "', ml_phone = '"+ loginMember.getMlphone()
+					+ "', ml_email = '"+ loginMember.getMlemail() + "' where ml_id = '" + uid + "' ";
+				stmt = conn.createStatement();
+				result = stmt.executeUpdate(sql);
+			} catch(Exception e) {
+				System.out.println("memberUpdate() 오류");			e.printStackTrace();
+			} finally {
+				close(stmt);
+			}
+			return result;
+		}
 }
+
 
 
 
