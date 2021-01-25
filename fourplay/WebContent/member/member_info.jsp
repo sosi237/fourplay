@@ -48,6 +48,11 @@ function openPop2() {
 	var h = (screen.height - 400) / 2;	// 수직 중심점
 	var win = window.open("/fourplay/addr_view.mpg", "", "width=500,height=400,left=" + w + ",top=" + h);
 }
+function selectEmail() {
+	document.frmInfo.e2.value = document.frmInfo.e3.value;
+}
+
+
 </script>
 </head>
 <body>
@@ -78,12 +83,11 @@ function openPop2() {
 <td>
 	<input type="text" name="e1" size="20" value="<%=e1%>" /> @
 	<input type="text" name="e2" size="20" value="<%=e2%>" />
-	<select name="e3"  onchange="selectEmail(this);">
-		<option value="">도메인 선택</option>
+	<select name="e3"  onchange="selectEmail();">
 		<option value="naver.com" <% if (e2.equals("naver.com")) { %>selected="selected"<% } %>>naver.com</option>
 		<option value="gmail.com" <% if (e2.equals("gmail.com")) { %>selected="selected"<% } %>>gmail.com</option>
 		<option value="nate.com"  <% if (e2.equals("nate.com")) { %>selected="selected"<% } %>>gmail.com</option>
-		<option value="direct"></option>
+		<option value=''>직접입력
 	</select>
 	<br /><span class="msg">* ID, 비밀번호 찾기 시 입력된 이메일로 전달되므로 정확한 메일 주소를 입력해 주세요.</span>
 </td>

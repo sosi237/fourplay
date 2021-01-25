@@ -30,7 +30,8 @@ public class A_FaqDao {
 		int result = 0;
 		
 		try {
-			sql = "select count(*) from t_faq_list " + where;
+			sql = "select count(*) from t_faq_list " +
+					" where fq_status = 'a' " + where;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if (rs.next())	result = rs.getInt(1);
@@ -55,8 +56,8 @@ public class A_FaqDao {
 		int snum = (cpage - 1) * limit;
 
 		try {
-			sql ="select * from t_faq_list  " + 
-			where + " order by fq_idx desc limit " + snum + ", " + limit;
+			sql ="select * from t_faq_list where fq_status = 'a' " + 
+					where + " order by fq_idx desc limit " + snum + ", " + limit;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
@@ -100,6 +101,7 @@ public class A_FaqDao {
 				article.setFq_title(rs.getString("fq_title"));
 				article.setFq_content(rs.getString("fq_content"));
 				article.setFq_date(rs.getString("fq_date"));
+				article.setFq_status(rs.getString("fq_status"));
 			}
 		} catch(Exception e) {
 			System.out.println("getArticle() ¿À·ù");

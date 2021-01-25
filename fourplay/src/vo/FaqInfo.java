@@ -2,7 +2,7 @@ package vo;
 
 public class FaqInfo {
 	private int fq_idx, fq_read, al_idx;
-	private String fq_writer, fq_title, fq_content, fq_date;
+	private String fq_writer, fq_title, fq_content, fq_date, fq_status;
 	public int getFq_idx() {
 		return fq_idx;
 	}
@@ -44,6 +44,12 @@ public class FaqInfo {
 	}
 	public void setFq_date(String fq_date) {
 		this.fq_date = fq_date;
+	}
+	public String getFq_status() {
+		return fq_status;
+	}
+	public void setFq_status(String fq_status) {
+		this.fq_status = fq_status;
 	}
 	
 	

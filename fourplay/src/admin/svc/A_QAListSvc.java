@@ -8,7 +8,6 @@ import vo.*;
 
 public class A_QAListSvc {
 	public int getArticleCount(String where) {
-		System.out.println("svc getArticleCount");
 		int rcnt = 0;	
 		Connection conn = getConnection();
 		A_QADao aqaDao = A_QADao.getInstance();
@@ -20,7 +19,6 @@ public class A_QAListSvc {
 	}
 	
 	public ArrayList<QAInfo> getArticleList(String where, int cpage, int limit) {
-		System.out.println("svc getArticleList");
 		ArrayList<QAInfo> articleList = null;
 		Connection conn = getConnection();
 		A_QADao aqaDao = A_QADao.getInstance();

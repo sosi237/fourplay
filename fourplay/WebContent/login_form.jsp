@@ -116,10 +116,10 @@ function goDirect() {
 	<input type="hidden" name="optCnt" value="<%=optCnt %>" />
 	<input type="hidden" name="optValue" value="<%=optValue %>" />
 	<tr>
-	   <td>아이디&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uid"  class="text" /></td>
+	   <td>아이디&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="uid" value="sungda123" class="text" /></td>
 	   <td rowspan="2" align="right"><input type="button" value="LOGIN" class="btn" onclick="logSubmit()" /></td>
 	</tr>
-	<tr><td>비밀번호&nbsp;&nbsp;&nbsp;<input type="password" name="pwd" class="text"/></td></tr>
+	<tr><td>비밀번호&nbsp;&nbsp;&nbsp;<input type="password" name="pwd"  value="1234" class="text"/></td></tr>
 	</table>
 	</form>
 	<hr />

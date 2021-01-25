@@ -6,15 +6,15 @@
 FaqInfo article = (FaqInfo)request.getAttribute("article");
 if (article == null) {
 // 저장된 게시물이 없으면
-   out.println("<script>");
-   out.println("alert('잘못된 경로로 들어오셨습니다.');");
-   out.println("history.back();");
-   out.println("</script>");
-   out.close();
+	out.println("<script>");
+	out.println("alert('잘못된 경로로 들어오셨습니다.');");
+	out.println("history.back();");
+	out.println("</script>");
+	out.close();
 }
 
 String uid = null;
-if (adminMember != null)   uid = adminMember.getAl_id();
+if (adminMember != null)	uid = adminMember.getAl_id();
 
 int idx = Integer.parseInt(request.getParameter("idx"));
 int cpage = Integer.parseInt(request.getParameter("cpage"));
@@ -22,7 +22,7 @@ String schtype = request.getParameter("schtype");
 String keyword = request.getParameter("keyword");
 String args = "?cpage=" + cpage;
 if (schtype != null && keyword != null && !keyword.equals("")) {
-   args += "&schtype=" + schtype + "&keyword=" + keyword;
+	args += "&schtype=" + schtype + "&keyword=" + keyword;
 }
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

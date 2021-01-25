@@ -62,10 +62,16 @@ function openPop1() {
 <tr><th>잔여포인트</th><td><input type="text" value="<%=member.getMlpoint() %>"/></td></tr>
 <tr>
 <th>주소</th>
-<td><input type="text" name="zip" value="<%=addr.getMa_zip() %>" />
-	<input type="button" value="배송지 목록" onclick="openPop1();" /><br />
-	<input type="text" size="48" name="addr1" value="<%=addr.getMa_addr1() %>" /><br />
-	<input type="text" size="48"name="addr2" value="<%=addr.getMa_addr2() %>" />
+<td><input type="text" name="zip" value="<%= (addr.getMa_zip() == null) ? "" : addr.getMa_zip()  %>" />
+<%
+if(addr.getMa_zip() != null){
+%>
+	<input type="button" value="배송지 목록" onclick="openPop1();" />
+<%
+}
+%>
+	<br /><input type="text" size="48" name="addr1" value="<%= (addr.getMa_addr1() == null) ? "" : addr.getMa_addr1()  %>" />
+	<br /><input type="text" size="48"name="addr2" value="<%= (addr.getMa_addr2() == null) ? "" : addr.getMa_addr2()  %>" />
 </td>
 </table>
 

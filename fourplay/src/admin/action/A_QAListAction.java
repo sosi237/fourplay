@@ -1,32 +1,33 @@
 package admin.action;
 
 import javax.servlet.http.*;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-
+import java.util.*;
 import admin.svc.*;
+import svc.QAListSvc;
 import vo.*;
 
 public class A_QAListAction implements A_Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ArrayList<QAInfo> articleList = new ArrayList<QAInfo>();
-		System.out.println("A_QAListAction");
+		
 		request.setCharacterEncoding("utf-8");
 		int cpage = 1, limit = 10;
-		if (request.getParameter("cpage") != null)			cpage = Integer.parseInt(request.getParameter("cpage"));
+		if (request.getParameter("cpage") != null)
+			cpage = Integer.parseInt(request.getParameter("cpage"));
 		String schtype = request.getParameter("schtype");
-		String keyword = request.getParameter("keyword");	
+		String keyword = request.getParameter("keyword");	// 검색어
 
-		String where = "";	
+		String where = "";	// 쿼리 작업시 사용할 조건을 저장할 변수
 		if (keyword != null && !keyword.equals("")) {
-			if (schtype.equals("tc")) {	
-				where = " and (ql_title like '%" + keyword + "%' or ql_content like '%" + keyword + "%') ";
-			} else {
+			if (schtype.equals("tc")) {	// 검색 조건이 '제목+내용' 이면
+				where = " and (ql_title like '%" + keyword + "%' " + " or ql_content like '%" + keyword + "%') ";
+			} else {	// 검색조건이 제목 또는 내용 또는 작성자 이면
 				where = " and ql_" + schtype + " like '%" + keyword + "%' ";
 			}
 		}
 
 		A_QAListSvc aqaListSvc = new A_QAListSvc();
+
 		int rcnt = aqaListSvc.getArticleCount(where);
 		articleList = aqaListSvc.getArticleList(where, cpage, limit);
 
@@ -36,7 +37,7 @@ public class A_QAListAction implements A_Action {
 		int epage = spage + limit - 1;
 		if (epage > pcnt)	epage = pcnt;
 
-		PageInfo pageInfo = new PageInfo();
+		QAPageInfo pageInfo = new QAPageInfo();
 		pageInfo.setCpage(cpage);		// 현재 페이지 번호
 		pageInfo.setRcnt(rcnt);			// 전체 게시글 수
 		pageInfo.setPcnt(pcnt);			// 전체 페이지 수

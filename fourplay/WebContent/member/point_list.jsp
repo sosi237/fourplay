@@ -13,10 +13,21 @@ ArrayList<MemberInfo> pointList = (ArrayList<MemberInfo>)request.getAttribute("p
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="./css/reset.css" type="text/css" rel="stylesheet" />
+<style>
+table tr{height:50px; font-size:14px;}
+table th{background:#eee; text-align:center;}
+table td{text-indent:15px;}
+
+.flex{height:60px; display:flex; justify-content: space-between; align-items: center;}
+</style>
 <script src="jquery-3.5.1.js"></script>
 </head>
 <body>
 <div id="wrapper">
+<div class="flex">
+	<h2>MEMBER INFORMATION</h2>
+	<h3>HOME > MYPAGE > 회원정보 수정</h3>
+</div>
 <form name= "frmPoint" action="" method="post">
 <table border="1px solid balck" width="100%" >
 <tr><th width="20%">날짜</th><th width="*">적립내용</th><th width="15%">적립/사용내역</th></tr>

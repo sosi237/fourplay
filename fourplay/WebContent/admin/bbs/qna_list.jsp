@@ -2,10 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
-<%@ include file="../menu.jsp" %>
 <%
-ArrayList<QAInfo> articleList = (ArrayList<QAInfo>)request.getAttribute("articleList");
+
+ArrayList<QAInfo> articleList = 
+	(ArrayList<QAInfo>)request.getAttribute("articleList");
 QAPageInfo pageInfo = (QAPageInfo)request.getAttribute("pageInfo");
+
 String schtype = null, keyword = null, schargs = "", args = "";
 if (pageInfo.getSchtype() == null || pageInfo.getKeyword() == null) {
 	schtype = "";	keyword = "";
@@ -14,6 +16,7 @@ if (pageInfo.getSchtype() == null || pageInfo.getKeyword() == null) {
 	keyword = pageInfo.getKeyword();	
 	if (keyword != null && !keyword.equals("")) {
 		schargs = "&schtype=" + schtype + "&keyword=" + keyword;
+		
 	}
 }
 int cpage = pageInfo.getCpage();	
@@ -30,15 +33,6 @@ args = "&cpage=" + cpage + schargs;
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-.bfaq { font-size:13px; }
-#aname td { border-bottom:2px #BDBDBD solid; }
-#bqsub { background-color:#EAEAEA; font-family:'Nanum Gothic'; }
-#bqcon { height:50px; }
-#bqcon td { border-bottom:1px #8C8C8C solid; }
-#bqcon select { vertical-align:middle; text-align-last:center; }
-#submit { border:0px; background-color:#002266; color:#FFFFFF; font-size:13px; }
-#submit1 { border:0px; background-color:#002266; color:#FFFFFF; font-size:13px; }
-
 #brdList tr { height:40px; }
 #brdList td, #brdList th { border-bottom:1px black solid; }
 a:link { color:#4f4f4f; text-decoration:none; }
@@ -49,25 +43,11 @@ a:focus { color:#f00; text-decoration:underline; }
 </style>
 </head>
 <body>
-<div id="wrapper">
-<table class="commenu" width="100%">
-<tr>
-<td>COMMUNITY&nbsp;&nbsp;&nbsp;&nbsp;</td>
-<td>&nbsp;<a href="bbs_list.notice">NOTICE</a></td>
-<td>/&nbsp;<a href="bbs_list.faq">FAQ</a></td>
-<td>&nbsp;/&nbsp;<a href="brd_list.qna">Q&A</a></td>
-<td width="80%"></td>
-</tr>
-<tr height="60">
-</tr>
-</table>
-<table class="bfaq" width="100%" cellpadding="5" cellspacing="0">
-<tr id="aname"><td colspan="4">
 <span>Q&A</span> &nbsp;&nbsp;&nbsp;&nbsp; 자유질문 게시판입니다.
-</td></tr>
-<tr height="15"></tr>
-<tr id="bqsub"  align="center">
-<th width="12%">번호</th><th width="*">제목</th><th width="15%">작성자</th>
+
+<table width="700" cellpadding="5" cellspacing="0" id="brdList">
+<tr>
+<th width="8%">번호</th><th width="*">제목</th><th width="15%">작성자</th>
 <th width="15%">작성일</th><th width="8%">상태</th>
 </tr>
 <%
@@ -77,26 +57,20 @@ if (articleList != null && rcnt > 0) {	// 검색결과가 있으면
 	for (int i = 0 ; i < articleList.size() ; i++) {
 		title = articleList.get(i).getQl_title();
 		lnk = "<a href='brd_view.qna?idx=" + 
-			articleList.get(i).getQl_idx() +"&mlid=" + articleList.get(i).getQl_writer() + args + 
+			articleList.get(i).getQl_idx() + args + 
 			"' title='" + title + "'>";
 
 		if (title.length() > 28)
 			title = title.substring(0, 26) + "...";
 
 %>
-<tr id="bqcon" align="center">
+<tr align="center" onmouseover="this.style.background='#efefef';" 
+	onmouseout="this.style.background='';">
 <td><%=seq-- %></td>
 <td align="left"><%=lnk + title + "</a>" + reply %></td>
 <td><%=articleList.get(i).getQl_writer() %></td>
 <td><%=articleList.get(i).getQl_qdate().substring(2, 10).replace('-', '.') %></td>
-<!-- ------------------------------------------------------------------------------ -->
-<% if (articleList.get(i).getQl_status().equals("a")) { %>
-<td>답변 대기중</td>
-<% } else { %>
-<td>답변 완료</td>
-<%  } %>
-<!-- ------------------------------------------------------------------------------ -->
-
+<td><%=articleList.get(i).getQl_adate().substring(2, 10).replace('-', '.') %></td>
 </tr>
 <%
 	}
@@ -105,15 +79,11 @@ if (articleList != null && rcnt > 0) {	// 검색결과가 있으면
 	out.println("검색 결과가 없습니다.</td></tr>");
 }
 %>
-<tr height="10"></tr>
-<tr><td colspan="5" align="right">
-<input  id="submit1" type="button" value="글쓰기" onclick="location.href='brd_form.qna?wtype=in';" />
-</td></tr>
 </table>
 <br />
-<table width="100%" cellpadding="5">
+<table width="700" cellpadding="5">
 <tr>
-<td width="*" align="center">
+<td width="*">
 <%
 if (rcnt > 0) {
 	pcnt = rcnt / 10;
@@ -148,12 +118,14 @@ if (rcnt > 0) {
 }
 %>
 </td>
+<td width="10%">
+	<input type="button" value="글쓰기" onclick="location.href='brd_form.qna?wtype=in';" />
+</td>
 </tr>
-<tr height="100"></tr>
 </table>
 <form name="frmSch" method="get">
-<table width="100%" cellpadding="5">
-<tr><td align="center">
+<table width="700" cellpadding="5">
+<tr><td align="right">
 	<select name="schtype">
 		<option value="title" <% if (schtype.equals("title")) { %>
 			selected="selected"<% } %>>제목</option>
@@ -169,6 +141,5 @@ if (rcnt > 0) {
 </td></tr>
 </table>
 </form>
-</div>
 </body>
 </html>

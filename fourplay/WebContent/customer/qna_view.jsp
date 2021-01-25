@@ -31,7 +31,8 @@ if (schtype != null && keyword != null && !keyword.equals("")) {
 <title>Insert title here</title>
 <style>
 .bnview { font-size:13px; }
-.nvcon td { border-bottom:1px #8C8C8C solid; }
+.commenu td { align:left; }
+.nvcon td { border-bottom:1px #8C8C8C solid; height:30px; }
 .nvcon input { border:1px #8C8C8C solid;}
 #aname td { border-bottom:2px #BDBDBD solid; }
 #content { width:100%; height:300px; border:1px #8C8C8C solid; }
@@ -40,23 +41,34 @@ if (schtype != null && keyword != null && !keyword.equals("")) {
 </head>
 <body>
 <div id="wrapper">
-	<table class="bnview" width="700" cellpadding="5" cellspacing="0">
-	<tr id="aname"><td colspan="6">
-	Q&A
-	</td></tr>
-	<tr class="nvcon">
-	<td align="center" width="10%">제목</td><td width="30%"><%=article.getQl_title() %></td>
-	<td width="*" colspan="2"><td>
-	</tr>
-	<tr class="nvcon">
-	<th align="center">작성자</th><td><%=article.getQl_writer() %></td>
-	<th>작성일</th><td><%=article.getQl_qdate() %></td>
-	<td width="*" colspan="2"></td>
-	</tr>
-	<tr><th>내용</th>
-	<td colspan="3"><%=article.getQl_content().replace("\r\n", "<br />") %></td></tr>
-	<tr><td colspan="4" align="center">
-		<input type="button" value="목록으로" onclick="location.href='brd_list.qna<%=args %>';" />
+<table class="commenu" width="100%">
+<tr>
+<td>Q&A&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;<a href="bbs_list.notice">NOTICE</a></td>
+<td>/&nbsp;<a href="bbs_list.faq">FAQ</a></td>
+<td>&nbsp;/&nbsp;<a href="brd_list.qna">Q&A</a></td>
+<td width="80%"></td>
+</tr>
+<tr height="60">
+</tr>
+</table>
+<table class="bnview" width="100%" cellpadding="5" cellspacing="0">
+<tr id="aname"><td colspan="6">
+Q&A
+</td></tr>
+<tr class="nvcon">
+<td align="center" width="10%">제목</td><td width="30%"><%=article.getQl_title() %></td>
+<td width="*"><td>
+<td align="right">작성일</td>
+<td width="12%" align="right"><%=article.getQl_qdate().substring(2, 10).replace('-', '.') %>&nbsp;&nbsp;&nbsp;</td>
+</tr>
+<tr>
+<td colspan="6">
+<textarea id="content" name="content" rows="10" cols="60" readonly="readonly">
+<%=article.getQl_content().replace("\r\n", "<br />") %></textarea>
+</td></tr>
+<tr height="30"></tr>
+<tr>
 	<%
 	boolean isPms = false;	// 수정 및 삭제 권한이 있는지 여부를 저장할 변수
 	String link1 = null, link2 = null;
@@ -80,19 +92,19 @@ if (schtype != null && keyword != null && !keyword.equals("")) {
 	</script>
 <%
 			}
-%>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" value="수정" onclick="location.href='<%=link1 %>';" />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" value="삭제" onclick="<%=link2 %>" />
-<% 
+ 
 	} 
 %>
 	</td></tr>
+	<tr><td align="right" colspan="6">
+	<input type="button" class="button" value="수정" onclick="location.href='<%=link1 %>';" />&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" class="button" value="삭제" onclick="<%=link2 %>" />
+	</td></tr>
+	<tr height="20"></tr>
 	</table>
 
-<hr />
-		<table class="bnview"  width="700" cellpadding="5" cellspacing="0">
+
+		<table class="bnview"  width="100%" cellpadding="5" cellspacing="0">
 		<tr id="aname"><td colspan="6">
 		Q&A 답변
 		</td></tr>
@@ -121,6 +133,9 @@ if (uid != null && article.getQl_status().equals("b"))  {
 <% } else  { //답변이 없을 경우  %> 
 <tr><td colspan="4">답변이 없습니다.</td></tr>
 <% } %>
+<tr>
+<td align="right" colspan="6"><input class="button" type="button" value="목록으로" onclick="location.href='bbs_list.notice<%=args %>';" />
+</td></tr>
 </table>
 </div>
 </body>

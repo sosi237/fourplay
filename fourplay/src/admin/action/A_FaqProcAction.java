@@ -40,7 +40,9 @@ public class A_FaqProcAction implements A_Action {
 		boolean isSuccess = false;	// 쿼리(등록, 수정, 삭제) 성공여부를 저장할 변수
 		String link = null;			// 작업(등록, 수정, 삭제) 후 이동할 URL을 저장할 변수
 
-		if (wtype.equals("in")) {	
+		if (wtype.equals("in")) {
+			faqInfo.setFq_status("a");
+			
 			//faqInfo.setFq_ip(request.getRemoteAddr());	// 등록자 IP주소 지정
 			isSuccess = afaqProcSvc.afaqInsert(faqInfo);
 			link = "bbs_list.afaq";

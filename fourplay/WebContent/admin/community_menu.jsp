@@ -26,7 +26,7 @@ AdminInfo admMember = (AdminInfo)session.getAttribute("adminMember");
 <ol>
 	<li<%if(command.equals("/admin/bbs/a_notice_list.jsp")) { %> class="selected" <%} %>><a href="bbs_list.anotice">공지사항</a></li>
 	<li<%if(command.equals("/admin/bbs/a_faq_list.jsp")) { %> class="selected" <%} %>><a href="bbs_list.afaq">FAQ</a></li>
-	<li<%if(command.equals("/admin/brd/a_aqa_list.jsp")) { %> class="selected" <%} %>><a href="brd_list.aqna">Q&A</a></li>
+<!-- 	<li<%if(command.equals("/admin/brd/a_aqa_list.jsp")) { %> class="selected" <%} %>><a href="brd_list.aqna">Q&A</a></li> -->
 </ol>
 </div>
 
