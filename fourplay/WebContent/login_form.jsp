@@ -31,25 +31,23 @@ if (request.getParameter("optCnt") != null) {   // 옵션이 있으면
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-.lginBox {width:50%; margin:10px auto; }
+#wrapper h2 {margin-bottom:20px; position:relative; left:-20px;}
+.adm {color:red; font-weight:bold; margin-bottom:10px; font-size:13px;}
+.lginBox {display:block; width:540px; margin:10px auto; }
 
 .btn { 
-   width:100px; height:80px; background-color:black;  
+   width:100px; height:80px; background-color:black;  margin-left:40px;
    border:solid 1px black; color:white; font-size:20px; 
 }
-.btn2 {
-   width:140px; height:30px; background-color:black;  
+.btn2, .btn3 {
+   width:150px; height:30px; margin-left:5px;
    border:solid 1px black; color:white; font-size:15px; 
 }
-.btn3 {
-   width:140px; height:30px; background-color:gray;  
-   border:solid 1px gray; color:white; font-size:15px; 
-}
-.text { width:250px; height:20px; }
+.btn2 {   background-color:black; }
+.btn3 {   background-color:gray; }
+.text { width:300px; height:20px; }
 #text2 { font-size:14px; color:gray; }
-hr {
-   width:530px;
-}
+hr {   width:540px; margin:10px 0;}
 </style>
 <script>
 function logSubmit() {		// 로그인버튼 클릭시 실행시키는 함수
@@ -103,6 +101,7 @@ function goDirect() {
 <div id="wrapper">
 	<h2 align="center">LOGIN</h2>
 	<div class="lginBox">
+	<span class="adm">관리자 계정(sa / 1234)으로 로그인시 어드민 메뉴로 이동합니다.</span>
 	<form name="frmLogin" action="login" method="post">
 	<table cellpadding="3" align="center"> 
 	<input type="hidden" name="now" id="now" value=""/>
