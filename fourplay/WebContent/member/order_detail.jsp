@@ -1,23 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="vo.*" %>
+<%@ page import="java.text.*" %>
 <%@ page import="java.util.*" %>
 <%@ include file="../menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
 OrdListInfo detailInfo = (OrdListInfo)request.getAttribute("detailInfo");
+DecimalFormat df = new DecimalFormat("###,###");
 
 String status = "";
 switch(detailInfo.getOl_status()){
-case "a": 	status = "입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)";		break;
-case "b": 	status = "입금 확인";	break;
-case "c": 	status = "상품준비중";	break;
-case "d": 	status = "배송중<br/>한진택배: 419079564046";		break;
-case "e": case "k": 	status = "배송완료";				break;
-case "f": 	status = "교환요청";	break;
-case "g": 	status = "교환완료";	break;
-case "h": 	status = "환불요청";	break;
-case "i": 	status = "환불완료";	break;
-case "j": 	status = "취소";		break;
+	case "a": 	status = "입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)";		break;
+	case "b": 	status = "입금 확인";	break;
+	case "c": 	status = "상품준비중";	break;
+	case "d": 	status = "배송중<br/>한진택배: 419079564046";								break;
+	case "e": 	case "k": 	
+				status = "배송완료";	break;
+	case "f": 	status = "교환요청";	break;
+	case "g": 	status = "교환완료";	break;
+	case "h": 	status = "환불요청";	break;
+	case "i": 	status = "환불완료";	break;
+	case "j": 	status = "취소";		break;
 }
 
 %>
@@ -41,7 +44,13 @@ a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
 a:active { color:#f00; text-decoration:none; }	
 a:focus { color:#f00; text-decoration:underline; }
 
-.btn {text-align:right;}
+.list {text-align:center; }
+.list td {padding:15px 0;}
+.right {text-align:right;}
+.left{text-align:left;}
+.rBtn {width:80px; height:30px;  background-color:black; color:white; }
+.lBtn {width:90px; height:30px;  background-color:darkgray; color:white; border:0;}
+
 .detailList {display:block; margin:15px auto;}
 </style>
 <!-- 
@@ -71,12 +80,12 @@ function ordCancel(olid) {
 	<h2>ORDER DETAIL</h2>
 	<div id="ordInfo">
 	<%if (detailInfo != null){ %>
-	<table cellpadding="5" cellspacing="0" border="1">
+	<table cellpadding="5" cellspacing="0" border="0">
 	
 	<tr><th colspan="2">주문정보</th><th colspan="2">결제정보</th></tr>
 	<tr>
 	<th>주문번호</th><td><%=detailInfo.getOl_id() %></td>
-	<th rowspan="2">총 결제금액</th><td rowspan="2"><%=detailInfo.getOl_pay() %></td>
+	<th rowspan="2">총 결제금액</th><td rowspan="2"><%=df.format(detailInfo.getOl_pay()) %></td>
 	</tr>
 	<tr><th>주문일자</th><td><%=detailInfo.getOl_date() %></td>
 	</tr>
@@ -85,10 +94,10 @@ function ordCancel(olid) {
 	<td rowspan="2">
 	<%
 	switch(detailInfo.getOl_payment()){
-	case "a": 	out.print("카드");		break;
-	case "b": 	out.print("휴대폰");		break;
-	case "c": 	out.print("계좌이체");	break;
-	case "d": 	out.print("무통장입금");	break;
+		case "a": 	out.print("카드");		break;
+		case "b": 	out.print("휴대폰");		break;
+		case "c": 	out.print("계좌이체");	break;
+		case "d": 	out.print("무통장입금");	break;
 	}
 	 %>
 	</td>
@@ -105,12 +114,12 @@ function ordCancel(olid) {
 	<%
 	for (int i = 0; i < detailInfo.getOrdDetailList().size(); i++){
 	%>
-	<tr>
+	<tr class="list">
 	<td><img src='/fourplay/product/pdt_img/<%=detailInfo.getOrdDetailList().get(i).getPl_img1() %>' width="50" /></td>
-	<td><%=detailInfo.getOrdDetailList().get(i).getPl_name() + "<br />옵션: " 
+	<td class="left"><%=detailInfo.getOrdDetailList().get(i).getPl_name() + "<br />옵션: " 
 	+ (detailInfo.getOrdDetailList().get(i).getOd_opt().equals("") ? "없음" : detailInfo.getOrdDetailList().get(i).getOd_opt().replace(':', ',')) %></td>
 	<td><%=detailInfo.getOrdDetailList().get(i).getOd_cnt() %></td>
-	<td><%=detailInfo.getOrdDetailList().get(i).getOd_price() %></td>
+	<td><%=df.format(detailInfo.getOrdDetailList().get(i).getOd_price()) %></td>
 	<td><%=status%></td>
 	<td>
 		<% switch(detailInfo.getOrdDetailList().get(i).getOd_status()){
@@ -118,7 +127,7 @@ function ordCancel(olid) {
 			case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
 			case "e":	
 				if(loginMember != null){
-					out.print("<input type='button' value='구매후기' onclick=\"location.href='review_form.review?wtype=in&plid="
+					out.print("<input type='button' class='rBtn' value='구매후기' onclick=\"location.href='review_form.review?wtype=in&plid="
 					+ detailInfo.getOrdDetailList().get(i).getPl_id()+ "&plname="+detailInfo.getOrdDetailList().get(i).getPl_name()
 					+ "&odidx=" + detailInfo.getOrdDetailList().get(i).getOd_idx() 
 					+ "&olid=" + detailInfo.getOrdDetailList().get(i).getOl_id() +"';\"/>");							
@@ -145,7 +154,7 @@ function ordCancel(olid) {
 	<tr><th>우편번호</th><td><%=detailInfo.getOl_rzip() %></td>
 	<tr><th>주소</th><td><%=detailInfo.getOl_raddr1() + " " + detailInfo.getOl_raddr2() %></td>
 	<tr><th>전화</th><td><%=detailInfo.getOl_rphone() %></td>
-	<tr class="btn"><td colspan="2"><input type="button" value="주문내역으로" onclick="location.href='order_list.mpg';"/></td></tr>
+	<tr class="right"><td colspan="2"><input type="button" class="lBtn" value="주문내역으로" onclick="location.href='order_list.mpg';"/></td></tr>
 	</table>
 	</div>
 	</div>

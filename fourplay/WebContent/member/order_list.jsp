@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="java.text.*" %>
 <%@ page import="vo.*" %>
 <%@ include file="../menu.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
 ArrayList<OrdListInfo> ordList = (ArrayList<OrdListInfo>)request.getAttribute("ordList");
 OrdPageInfo pageInfo = (OrdPageInfo)request.getAttribute("pageInfo");
+DecimalFormat df = new DecimalFormat("###,###");
 int cpage	= pageInfo.getCpage();	// 현재 페이지 번호
 int pcnt	= pageInfo.getPcnt();	// 전체 페이지 수
 int psize	= pageInfo.getPsize();	// 페이지 크기
@@ -25,10 +27,14 @@ String status = "";
 <link href="css/base.css" type="text/css" rel="stylesheet" />
  -->
 <style>
-#wrapper table td {border-bottom:1px solid lightgray; align:center;}
+#wrapper h2 { margin-bottom:30px;}
+#wrapper th, #wrapper td {padding:10px 0;}
+.list td {border-bottom:1px solid lightgray; align:center; text-align:center;}
+.list .left{text-align:left;}
 .paging {
-	width:100%; position:relative; top:30%; border:0;
+	width:100%; display:block; margin-top:20px;border:0;
 }
+.rBtn {width:80px; height:30px; background-color:black; color:white; }
 </style>
 <script src="jquery-3.5.1.js"></script>
 <script>
@@ -46,16 +52,13 @@ function ordCancel(olid) {
 	}
 }
 </script>
-</script>
 </head>
 <body>
 <div id="wrapper">
 <h2>ORDER LIST</h2>
 <table width="100%" cellpadding="5" cellspacing="0" border="0">
-	<div class="head">
-	<tr style="background-color:#e1e1e1; "><th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
+	<tr class="title" style="background-color:#e1e1e1; "><th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
 	<th width="8%">가격</th><th width="10%">주문처리상태</th><th width="15%">취소/교환/반품</th></tr>
-	</div>
 <%
 if(ordList != null && rcnt > 0){
 	for(int i = 0; i < ordList.size(); i++){ 
@@ -73,11 +76,11 @@ if(ordList != null && rcnt > 0){
 			case "j": 	status = "취소";									break;	
 	}
 %>
-	<tr>
+	<tr class="list">
 	<td><a href="order_detail.mpg?olid=<%=ordList.get(i).getOl_id() %>">
 	<%=ordList.get(i).getOl_date().substring(0,11) %><br />[<%=ordList.get(i).getOl_id() %>]</a></td>
 	<td><img src='/fourplay/product/pdt_img/<%=ordList.get(i).getOrdDetailList().get(0).getPl_img1() %>' width='50' align="absmiddle"/></td>
-	<td>
+	<td class="left">
 <%
 		for (int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++) {
 			String plid = ordList.get(i).getOrdDetailList().get(j).getPl_id();
@@ -104,14 +107,19 @@ if(ordList != null && rcnt > 0){
 		out.print(cnt);
 %>
 	</td>
-	<td><%=ordList.get(i).getOl_pay() %></td>
+	<td><%=df.format(ordList.get(i).getOl_pay()) %></td>
 	<td><%=status%></td>
 	<td>
 		<% switch(ordList.get(i).getOl_status()){
-			case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		break;
-			case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
-			case "e":	out.print("<input type='button' value='구매후기' onclick='location.href=\"order_detail.mpg?olid="+ordList.get(i).getOl_id()+"\" '/>");		
-			break;
+			case "a": case "b": case"c": 	
+				out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		
+				break;
+			case "d": case "g":				
+				out.print("<input type='button' value='교환/반품' onclick=''/>");					
+				break;
+			case "e":	
+				out.print("<input type='button' value='구매후기' class='rBtn' onclick='location.href=\"order_detail.mpg?olid="+ordList.get(i).getOl_id()+"\" '/>");		
+				break;
 			case "f": 	out.print("교환요청");	break;
 			case "h": 	out.print("환불요청");	break;
 			case "i": 	out.print("환불완료");	break;
