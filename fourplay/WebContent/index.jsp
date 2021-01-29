@@ -16,10 +16,6 @@
 #bestList {width:80%; position:absolute; top:950px; left:150px;}
 
 </style>
-<!-- 
-<link href="css/reset.css" type="text/css" rel="stylesheet" />
-<link href="css/base.css" type="text/css" rel="stylesheet" />
- -->
 </head>
 <body>
 <%
@@ -86,7 +82,7 @@ if(bestList != null){
 %>
 <td>
 	<div class="pdtBox<%=max%>">
-      <%=lnk %><img src="/fourplay/product/pdt_img/<%=bestList.get(i).getPl_img1() %>" width="<%=max == 3 ? 250 : 190 %>" height="<%=max == 3 ? 200 : 140 %>" /></a><br />
+      <%=lnk %><img src="/fourplay/pdt_img/<%=bestList.get(i).getPl_img1() %>" width="<%=max == 3 ? 250 : 190 %>" height="<%=max == 3 ? 200 : 140 %>" /></a><br />
       <%=lnk + bestList.get(i).getPl_name() %></a><br />
       <%= price %><br/>
    </div>
@@ -106,7 +102,7 @@ if(bestList != null){
 	out.println("오류가 발생했습니다.");
 }finally{
 	try {
-		rs.close(); 	rs2.close();	stmt.close();		stmt2.close();		conn.close();
+		rs.close(); 	rs2.close();	stmt.close();	stmt2.close();	conn.close();
 	} catch(Exception e){
 		e.printStackTrace();
 	}
