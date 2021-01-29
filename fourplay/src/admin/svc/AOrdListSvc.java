@@ -8,22 +8,22 @@ import dao.OrdDao;
 import vo.*;
 
 public class AOrdListSvc {
-	public int getOrdCount() {	//한 회원의 전체 주문 개수를 리턴
+	public int getOrdCount(String where) {	//한 회원의 전체 주문 개수를 리턴
 		int rcnt = 0;	
 		Connection conn = getConnection();
 		AOrdDao aOrdDao = AOrdDao.getInstance();
 		aOrdDao.setConnection(conn);
-		rcnt = aOrdDao.getOrdCount();
+		rcnt = aOrdDao.getOrdCount(where);
 		close(conn);
 
 		return rcnt;
 	}
-	public ArrayList<OrdListInfo> getOrdList(int cpage, int psize){
+	public ArrayList<OrdListInfo> getOrdList(String where, String orderby, int cpage, int psize){
 		ArrayList<OrdListInfo> ordList = new ArrayList<OrdListInfo>();
 		Connection conn = getConnection();
 		AOrdDao aOrdDao = AOrdDao.getInstance();
 		aOrdDao.setConnection(conn);
-		ordList = aOrdDao.getOrdList(cpage, psize);
+		ordList = aOrdDao.getOrdList(where, orderby, cpage, psize);
 		close(conn);
 		return ordList;
 	}

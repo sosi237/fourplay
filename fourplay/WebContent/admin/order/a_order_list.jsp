@@ -1,11 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.text.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="vo.*" %>
 <%@ include file="../a_menu.jsp" %>
 <%
 ArrayList<OrdListInfo> ordList = (ArrayList<OrdListInfo>)request.getAttribute("ordList");
 OrdPageInfo pageInfo = (OrdPageInfo)request.getAttribute("pageInfo");
+DecimalFormat df = new DecimalFormat("###,###");
+
+String status, schtype, keyword, ord;
+schtype =	pageInfo.getSchtype();	// 검색조건(관리자 아이디, 관리자 이름)
+keyword =	pageInfo.getKeyword();	// 검색어
+status =	pageInfo.getStatus();	// 계정 사용여부
+ord =		pageInfo.getOrd();		// 정렬조건
+
+if(keyword == null)					keyword = "";
+if(schtype == null)					schtype = "";
+
+String args = "", schArgs = "";
+if (status != null) {
+	schArgs += "&status=" + status;		
+} else {
+	status = "";
+}
+
+if (!keyword.equals("")) {
+	schArgs += "&schtype=" + schtype + "&keyword=" + keyword;
+}
+else {
+	schtype = "";	keyword = "";
+}
+
+if (ord != null)		schArgs += "&ord=" + ord;			
+else					ord = "";
+
 int cpage	= pageInfo.getCpage();	// 현재 페이지 번호
 int pcnt	= pageInfo.getPcnt();	// 전체 페이지 수
 int psize	= pageInfo.getPsize();	// 페이지 크기
@@ -14,6 +43,8 @@ int spage	= pageInfo.getSpage();	// 블록 시작 페이지 번호
 int epage	= pageInfo.getEpage();	// 블록 종료 페이지 번호
 int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
 
+schArgs = "&psize=" + psize + schArgs;
+args = "&cpage=" + cpage + schArgs;
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -21,7 +52,18 @@ int rcnt	= pageInfo.getRcnt();	// 검색된 게시물 개수
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
+#wrapper h2 {margin-bottom:20px;}
+.title th {padding:20px 0; border-bottom:1px solid black; font-size:18px;}
+.list td {padding:15px 3px; border-bottom:1px solid black; text-align:center;}
+.list .left {text-align:left;}
+.ex {color:red; font-weight:bold;}
 .pointer {cursor:pointer;}
+
+.sch {width:100%; height:40px; border:1px solid white; display:block; text-align:right; margin:10px 0;}
+.schtype { width:150px;  height:25px; font-size:15px; }
+.keyword { height:20px; font-size:15px;  }
+.schBtn {width:70px; height:25px; background-color:darkgray; color:white; font-size:15px; align:absmiddle;}
+.statusBtn {margin-right:30px; width:100px; height:30px;background-color:black; color:white;}
 </style>
 <script>
 function openDetail(olid){
@@ -56,14 +98,34 @@ function chVal(){
 <%
 String plid = "";
 %>
-	<h3>주문 목록</h3>
+	<h2>주문 목록</h2>
+	<span class="ex">주문번호를 누르면 주문 상세내역을, 상품명을 누르면 상품 상세내역을 팝업창으로 확인할 수 있습니다.</span>
+	<form name="schFrm" action="" method="get">
+	<div class="sch">
+	<ul>
+		<li>
+		<select name="schtype" class="schtype">
+			<option value="buyer" <% if (schtype.equals("buyer")) { %>selected="selected"<% } %>>주문자 아이디</option>
+			<option value="id" <% if (schtype.equals("id")) { %>selected="selected"<% } %>>주문번호</option>
+		</select>
+		<input type="text" name="keyword" class="keyword" />
+		<input type="submit" class="schBtn" value="검색" />
+		</li>
+	</ul>
+	</div>
+	</form>
 	<form name="listFrm" action="ord_proc.orda" method="post">
 	<input type="hidden" name="wtype" value="chStatus" />
 	<input type="hidden" name="st" id="st" value="" />
-	<table width="100%">
-	<tr>
-	<th>주문번호</th><th>주문자</th><th>상품명</th><th>주문금액</th>
-	<th>주문일</th><th>결제방법</th><th>주문상태</th>
+	<table width="100%" cellspacing="0">
+	<tr class="title">
+	<th>주문번호<a href="ord_list.orda?ord=ida">▲</a> <a href="ord_list.orda?ord=idd">▼</a></th>
+	<th>주문자<a href="ord_list.orda?ord=buyera">▲</a> <a href="ord_list.orda?ord=buyerd">▼</a></th>
+	<th>상품명</th>
+	<th>주문금액</th>
+	<th>주문일<a href="ord_list.orda?ord=datea">▲</a> <a href="ord_list.orda?ord=dated">▼</a></th>
+	<th>결제방법</th>
+	<th>주문상태</th>
 <!-- <th>취소/반품/교환 사유</th>  -->
 	</tr>
 <%
@@ -73,10 +135,10 @@ if(ordList != null && rcnt > 0){
 		idx = ordList.get(i).getOl_id();
 		idxs += "," + idx;
 %>
-	<tr>
+	<tr class="list">
 	<td><span class="pointer" onclick="openDetail(<%=ordList.get(i).getOl_id() %>);"><%=ordList.get(i).getOl_id() %></span></td>
 	<td><%=(ordList.get(i).getOl_buyer().length() > 20) ? "비회원" : ordList.get(i).getOl_buyer() %></td>
-	<td>
+	<td class="left">
 <%
 		for(int j = 0; j < ordList.get(i).getOrdDetailList().size(); j++){
 			plid = ordList.get(i).getOrdDetailList().get(j).getPl_id();
@@ -87,7 +149,7 @@ if(ordList != null && rcnt > 0){
 		}
 %>
 	</td>
-	<td><%=ordList.get(i).getOl_pay() %></td>
+	<td><%=df.format(ordList.get(i).getOl_pay()) %></td>
 	<td><%=ordList.get(i).getOl_date().substring(0,11).replace("-", ".") %></td>
 	<td>
 <%
@@ -100,6 +162,9 @@ if(ordList != null && rcnt > 0){
 %>	
 	</td>
 	<td>
+<%if (ordList.get(i).getOl_status().equals("k")) { %> 
+		후기작성 완료
+<%} else {%>
 	<select name="status" id="status">
 		<option value="a" <%if (ordList.get(i).getOl_status().equals("a")) { %> selected="selected" <%} %>>입금 전</option>
 		<option value="b" <%if (ordList.get(i).getOl_status().equals("b")) { %> selected="selected" <%} %>>입금 확인</option>
@@ -111,8 +176,8 @@ if(ordList != null && rcnt > 0){
 		<option value="h" <%if (ordList.get(i).getOl_status().equals("h")) { %> selected="selected" <%} %>>환불요청</option>
 		<option value="i" <%if (ordList.get(i).getOl_status().equals("i")) { %> selected="selected" <%} %>>환불완료</option>
 		<option value="j" <%if (ordList.get(i).getOl_status().equals("j")) { %> selected="selected" <%} %>>취소</option>
-		<option value="k" <%if (ordList.get(i).getOl_status().equals("k")) { %> selected="selected" <%} %>>후기작성 완료</option>
 	</select>
+<%} %>
 	</td>
 <%
 	} 
@@ -126,37 +191,37 @@ else {
 	out.println("<tr align='center'><td colspan='8'>주문 내역이 없습니다.</td></tr>");
 }
 %>
-	<tr><td colspan="4" style="text-align:right; padding-top:20px;">
-	<input type="button" id="statusBtn" value="주문상태 변경" onclick="chVal();"/></td></tr>
+	<tr><td colspan="7" style="text-align:right; padding-top:20px;">
+	<input type="button" class="statusBtn" value="주문상태 변경" onclick="chVal();"/></td></tr>
 	</table>
 	</form>
 	<div class="paging">
 	<table width="100%" cellpadding="5">
 	<tr><td align="center">
 <%
-if (rcnt > 0) {	// 검색결과 상품들이 있을 경우에만 페이징을 함
+if (ordList != null && rcnt > 0) {	// 검색결과 주문들이 있을 경우에만 페이징을 함
 	if (cpage == 1) {
 		out.println("<<&nbsp;&nbsp;<&nbsp;&nbsp;");
 	} else {
-		out.print("<a href='ord_list.orda?cpage=1'>");
+		out.print("<a href='ord_list.orda?cpage=1"+ schArgs +"'>");
 		out.println("<<</a>&nbsp;&nbsp;");
-		out.print("<a href='ord_list.orda?cpage=" + (cpage - 1) +  "'>");
+		out.print("<a href='ord_list.orda?cpage=" + (cpage - 1) + schArgs + "'>");
 		out.println("<</a>&nbsp;&nbsp;");
 	}
 	for (int i = 1, j = spage ; i <= bsize && j <= pcnt ; i++, j++) {
 		if (cpage == j) {
 			out.println("&nbsp;<strong>" + j + "</strong>&nbsp;");
 		} else {
-			out.print("&nbsp;<a href='ord_list.orda?cpage=" + j +  "'>");
+			out.print("&nbsp;<a href='ord_list.orda?cpage=" + j + schArgs + "'>");
 			out.println(j + "</a>&nbsp;");
 		}
 	}
 	if (cpage == pcnt) {
 		out.println("&nbsp;&nbsp;>&nbsp;&nbsp;>>");
 	} else {
-		out.print("&nbsp;&nbsp;<a href='ord_list.orda?cpage=" + (cpage + 1)  + "'>");
+		out.print("&nbsp;&nbsp;<a href='ord_list.orda?cpage=" + (cpage + 1)  + schArgs + "'>");
 		out.println("></a>");
-		out.print("&nbsp;&nbsp;<a href='ord_list.orda?cpage=" + pcnt  + "'>");
+		out.print("&nbsp;&nbsp;<a href='ord_list.orda?cpage=" + pcnt + schArgs + "'>");
 		out.println(">></a>");
 	}
 }

@@ -23,12 +23,12 @@ public class AOrdDao {
 	public void setConnection(Connection conn) {
 		this.conn = conn;
 	}
-	public int getOrdCount() {	// 총 주문개수를 가져오는 메소드
+	public int getOrdCount(String where) {	// 검색된 총 주문개수를 가져오는 메소드
 		int rcnt = 0;
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			String sql = "select count(*) from t_order_list ";
+			String sql = "select count(*) from t_order_list " + where;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if (rs.next())	rcnt = rs.getInt(1);
@@ -40,7 +40,7 @@ public class AOrdDao {
 		return rcnt;
 	}
 	
-	public ArrayList<OrdListInfo> getOrdList(int cpage, int psize){	// 모든 회원/비회원의 총 주문내역을 가져오는 메소드
+	public ArrayList<OrdListInfo> getOrdList(String where, String orderby, int cpage, int psize){	// 검색된 모든 회원/비회원의 총 주문내역을 가져오는 메소드
 		ArrayList<OrdListInfo> ordList = new ArrayList<OrdListInfo>();
 		ArrayList<OrdDetailInfo> ordDetailList = new ArrayList<OrdDetailInfo>();
 		Statement stmt = null;
@@ -49,7 +49,7 @@ public class AOrdDao {
 		int snum = (cpage -1) * psize; // 쿼리의 limit 명령에서 데이터를 가져올 시작 인덱스 번호
 		
 		try {
-			String sql = "select * from t_order_list group by ol_id order by ol_date desc limit "+ snum + ", " + psize;
+			String sql = "select * from t_order_list "+ where +" group by ol_id "+ orderby +" limit "+ snum + ", " + psize;
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
@@ -92,6 +92,7 @@ public class AOrdDao {
 		OrdDetailInfo ordDetailInfo = null;
 		try {
 			String sql = "select * from t_order_detail a, t_product_list b where a.pl_id = b.pl_id and ol_id = '" + olid + "' ";
+			System.out.println(sql);
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {

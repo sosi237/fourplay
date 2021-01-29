@@ -20,13 +20,33 @@ public class AOrdListAction implements action.Action {
 
 		HttpSession session = request.getSession();
 		AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
-		String buyer = "";
 		
-		if(adminMember != null) {	// 로그인한 회원이면
+		if(adminMember != null) {	// 관리자 계정으로 로그인되어있으면
 			AOrdListSvc aOrdListSvc = new AOrdListSvc();
+			String status, schtype, keyword;
+			status	= request.getParameter("status");	// 주문상태
+			schtype = request.getParameter("schtype");	// 주문상태, 검색조건, 키워드(주문자 아이디, 주문번호)
+			keyword = request.getParameter("keyword");	// 검색어
+			String ord = request.getParameter("ord");	// 정렬조건으로 주문자 아이디(오a내d), 주문번호(오a내d), 주문일date(오a내d), 계정사용여부(오a내d)
 			
-			rcnt = aOrdListSvc.getOrdCount();	// 페이징을 위해 전체 주문내역 수를 받아옴
-			ordList = aOrdListSvc.getOrdList(cpage, psize);	// 전체 주문목록을 받아옴
+			String where = "", orderby = " order by ol_date desc ";
+			if (keyword != null && !keyword.equals(""))	{
+				where += " and ol_" + schtype + " like '%" + keyword + "%' ";
+			}
+			if(status != null && !status.equals(""))	{
+				where += " and ol_status ='" + status + "' ";
+			}
+			if (ord != null && !ord.equals("")) {
+				orderby = " order by ol_" + ord.substring(0, ord.length() - 1) + 
+				(ord.substring(ord.length() - 1).equals("d") ? " desc" : " asc");
+			}	// 정렬값 : buyera, buyerd, ida, idd, datea, dated, ol_statusa, ol_statusd
+			
+			if(!where.equals("") && where.substring(0,4).equals(" and")) {
+				where = " where " + where.substring(4);
+			}
+			
+			rcnt = aOrdListSvc.getOrdCount(where);	// 페이징을 위해 전체 주문내역 수를 받아옴
+			ordList = aOrdListSvc.getOrdList(where, orderby, cpage, psize);	// 전체 주문목록을 받아옴
 			
 			pcnt = rcnt / psize;
 			if (rcnt % psize > 0)	pcnt++;				// 전체 페이지수
@@ -39,9 +59,13 @@ public class AOrdListAction implements action.Action {
 			pageInfo.setPcnt(pcnt);			// 전체 페이지 개수
 			pageInfo.setSpage(spage);		// 블록 시작페이지 번호
 			pageInfo.setEpage(epage);		// 블록 종료페이지 번호
-			pageInfo.setRcnt(rcnt);			// 전체 상품(레코드) 개수
+			pageInfo.setRcnt(rcnt);			// 전체 주문(레코드) 개수
 			pageInfo.setBsize(bsize);		// 블록내 페이지 개수
-			pageInfo.setPsize(psize);		// 페이지내 상품 개수
+			pageInfo.setPsize(psize);		// 페이지내 주문 개수
+			pageInfo.setSchtype(schtype);
+			pageInfo.setKeyword(keyword);
+			pageInfo.setStatus(status);
+			pageInfo.setOrd(ord);			// 정렬조건
 			
 			request.setAttribute("ordList", ordList);
 			request.setAttribute("pageInfo", pageInfo);
