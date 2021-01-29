@@ -14,11 +14,14 @@ AdminInfo admMember = (AdminInfo)session.getAttribute("adminMember");
 <title>Insert title here</title>
 <style>
 .comMenu {
-	position:absolute; top:30%; left:25px; width:100px; border:1px solid gray;
+	position:absolute; top:30%; left:50px; width:100px;  padding:10px;
+	font-size:18px; text-align:center;
 }
 .comMenu ol { list-style:none; margin:0; padding:0; width:100%;}	
-.comMenu li {list-style-type:none; margin:0; padding:0; border-bottom:1px solid gray; height:30px; }
-.selected {background-color:lightgray; }
+.comMenu li {height:30px; list-style-type:none; margin-bottom:10px; padding:0; }
+.selected {background-color:#5b8588; font-weight:bold;}
+.selected a{ text-decoration: none; color: white; }
+
 </style>
 </head>
 <body>

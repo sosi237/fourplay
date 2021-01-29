@@ -27,11 +27,16 @@ switch(command){
 <title>Insert title here</title>
 <style>
 .admMenu {
-	position:absolute; top:30%; left:25px; width:100px; border:1px solid gray;
+	position:absolute; top:30%; left:50px; width:100px;  padding:10px;
+	font-size:18px; text-align:center;
 }
 .admMenu ol { list-style:none; margin:0; padding:0; width:100%;}	
-.admMenu li {list-style-type:none; margin:0; padding:0; border-bottom:1px solid gray;}
-.selected {background-color:lightgray; }
+.admMenu li {
+	height:60px; list-style-type:none; margin-bottom:10px; padding:0;
+}
+.admMenu li:first-child {height:30px; }
+.selected {background-color:#5b8588; font-weight:bold;}
+.selected a{ text-decoration: none; color: white; }
 </style>
 </head>
 <body>

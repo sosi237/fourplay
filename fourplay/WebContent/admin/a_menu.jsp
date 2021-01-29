@@ -2,7 +2,7 @@
 <%@ page import="vo.*" %>
 <%
 request.setCharacterEncoding("utf-8");
-session.setMaxInactiveInterval(18000);
+session.setMaxInactiveInterval(1000);
 AdminInfo adminMember = (AdminInfo)session.getAttribute("adminMember");
 if(adminMember == null){
 	out.println("<script>");
@@ -36,6 +36,11 @@ a:focus { color:pink; text-decoration:none; }
 	width:80%; min-width:800px; position:absolute; top:200px; left:15%;
 }
 
+/* 여기만 추가 */
+@media (max-width:1000px){
+	#wrapper{padding-left:180px;}
+}
+
 /* header */
 .page-header { 
 	background:#fff; z-index:9999; position:fixed; top:0; opacity:1; background:#fff; 
@@ -45,17 +50,11 @@ a:focus { color:pink; text-decoration:none; }
 .mode {color:red;}
 #logo a {
 	font-size:30px; font-weight:bold; display:block; width:200px; text-align:left; margin-left:20px; 
-	margin-right:30px; position:absolute; top:15px;
+	position:absolute; top:15px;
 }
 .primary-nav { background:#fff; z-index:9999; width: 100%; border-bottom: 1px solid #ddd; }
 .primary-nav .main_menu{ overflow: hidden; width:100%; margin: auto; }
-.primary-nav .main_menu>li { 
-	float: left; position:relative; width: 10%; padding: 30px 0; text-align: center;
-}
-.primary-nav .main_menu>li:first-child { 
-	margin-left:200px;
-}
-
+.primary-nav .main_menu>li { float: left; position:relative; width: 10%; padding: 30px 0; text-align: center;}
 .primary-nav .main_menu>li>a{ font-size:15px; }
 .primary-nav .sub_menu{ 
 	background:#fff; z-index:9999; overflow: hidden; width: 100%; height: 0; padding-top: 20px; 
@@ -77,11 +76,10 @@ if(adminMember != null){
 		 <li><%=aid %> (<%=name %>)님</li>
 <%} %>
    	  </ul>
-      <ul>
+      <ul class="main_menu" width="900">
       	 <li>
    	  	 	<h1 id="logo"> <a href="../index.jsp" >fourplay</a> </h1>
    	  	 </li>
-   	  <div  class="main_menu">
          <li> 
 <%
 if (aid.equals("sa")){
@@ -91,28 +89,29 @@ if (aid.equals("sa")){
             <a href="admin_form.adm">ADMIN</a>
 <%} %> 
          </li>
-<!-- 
+         <!-- 
          <li> 
             <a href="#">사이트 관리</a> 
          </li>
- -->
+          -->
          <li> 
             <a href="ord_list.orda">주문 관리</a> 
          </li>
          <li> 
-  			<a href="pdt_list.pdta">상품 관리</a>	         
+            <a href="pdt_list.pdta">상품 관리</a> 
          </li>
          <li> 
-            <a href="member_list.mem"">회원 관리</a> 
+            <a href="member_list.mem">회원 관리</a> 
          </li>
          <li> 
             <a href="bbs_list.anotice">커뮤니티 관리</a> 
          </li>
- <!-- <li> <a href="#">스케줄</a> </li> -->        
          <li> 
-            <a href="stat/mthlyCGSForm.jsp">통계</a> 
+            <a href="#">스케줄</a> 
          </li>
-      </div>
+         <li> 
+            <a href="mem_stat.stat?kind=gender">통계</a> 
+         </li>
       </ul>
    </div>
 </header>
