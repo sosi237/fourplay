@@ -106,9 +106,11 @@ if (aid.equals("sa")){
          <li> 
             <a href="bbs_list.anotice">커뮤니티 관리</a> 
          </li>
+<!-- 
          <li> 
             <a href="#">스케줄</a> 
          </li>
+ -->
          <li> 
             <a href="mem_stat.stat?kind=gender">통계</a> 
          </li>

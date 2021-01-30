@@ -2,7 +2,8 @@ package vo;
 
 public class StatPdtInfo {
 	private String ol_date, pl_id, pl_name, od_cnt, year, month;
-	private int orders, refund, exchange, cancel;
+	private int orders, refund, exchange, cancel, sales;
+	// 주문건수, 반품건수, 교환건수, 취소건수, 매출액
 	public String getOl_date() {
 		return ol_date;
 	}
@@ -63,4 +64,11 @@ public class StatPdtInfo {
 	public void setCancel(int cancel) {
 		this.cancel = cancel;
 	}
+	public int getSales() {
+		return sales;
+	}
+	public void setSales(int sales) {
+		this.sales = sales;
+	}
+	
 }

@@ -7,9 +7,6 @@
 <%@ page import="javax.sql.*" %>
 <%@ page import="javax.naming.*" %>
 <%@ include file="a_menu.jsp" %>
-<%
-System.out.println();
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,10 +15,7 @@ System.out.println();
 <script src="stat/js/Chart.min.js"></script>
 <script src="stat/js/utils.js"></script>
 <style>
-.status, .sales_stat, .pdt_stat, .mem_stat { 
-	width:100px; height:100px; border:1px solid gray; 
-}
-.order, .member {border:1px solid gray; margin:20px auto; padding:10px;}
+.order, .member, .product, .sales {border:1px solid gray; margin:20px auto; padding:10px;}
 .order {font-weight:bold; font-size:16px;}
 canvas {
 	-moz-user-select: none;
@@ -29,6 +23,36 @@ canvas {
 	-ms-user-select: none;
 }
 </style>
+<script>
+
+window.onload = function() {
+
+	var memCtx = document.getElementById('member').getContext('2d');
+	window.myPie = new Chart(memCtx, memConfig);
+
+	var salesCtx = document.getElementById('sales').getContext('2d');
+	window.myLine = new Chart(salesCtx, salesConfig);
+	
+	var pdtCtx = document.getElementById('canvas').getContext('2d');
+	
+	window.myBar = new Chart(pdtCtx, {
+		type: 'bar',
+		data: barChartData,
+		options: {
+			responsive: true,
+			legend:{ position:'top' }, 
+			title:{ display:true, text:'누적 판매량 상위 10 상품' },
+			scales: {
+				yAxes : [{
+					ticks: {
+						beginAtZero:true
+					}
+				}]
+			},
+		}
+	});
+};
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -68,30 +92,22 @@ try{
 	stmt = conn.createStatement();
 	rs = stmt.executeQuery(sql);
 	rs.next();  	refund = rs.getInt(1);
-		
-%>
-	<h3>미처리 주문현황:</h3>
-	<div class="order">
-		 입금전: <%=before %><br />
-		 입금확인: <%=after %><br />
-		 상품준비중: <%=ready %><br />
-		 교환요청: <%=exchange %><br />
-		 환불요청: <%=refund %><br />
-	</div>
-	<h3>회원통계</h3>
-<%
 	int female = 0, male = 0;
 	sql = "select count(*) from t_member_list where ml_gender = 'F' ";
 	stmt = conn.createStatement();
 	rs = stmt.executeQuery(sql);
-	if (rs.next())	female = rs.getInt(1);
+	if (rs.next())	{
+		female = rs.getInt(1);
+	}
 	sql = "select count(*) from t_member_list where ml_gender = 'M' ";
 	stmt = conn.createStatement();
 	rs = stmt.executeQuery(sql);
-	if (rs.next())	male = rs.getInt(1);
+	if (rs.next())	{
+		male = rs.getInt(1);
+	}
 %>
 <script>
-var config = {
+var memConfig = {
 	type: 'pie',
 	data: {
 		datasets: [{
@@ -104,20 +120,120 @@ var config = {
 		}],
 		labels: ["남자", "여자"]
 	},
-	options: { responsive:false, title:{ display:true, text:'회원 성별' } }
+	options: { responsive:true, title:{ display:true, text:'회원 성별' } }
 };
 
-window.onload = function() {
-	var ctx = document.getElementById('chart-area').getContext('2d');
-	window.myPie = new Chart(ctx, config);
+</script>
+<%
+	sql =  "select p.pl_id, p.pl_name, sum(s.ps_salecnt) as salecnt from t_product_size s, t_product_list p " + 
+		" where p.pl_id = s.pl_id and s.ps_stock != 0 group by p.pl_id order by salecnt desc limit 10 ";
+	stmt = conn.createStatement();
+	rs = stmt.executeQuery(sql);
+	String plname = "", order = "";
+	StatPdtInfo statPdtInfo = null;
+	ArrayList<StatPdtInfo> statPdtList = new ArrayList<StatPdtInfo>();
+	if(rs.next()){
+		statPdtInfo = new StatPdtInfo();
+		do{
+			plname += ", '"+ rs.getString("p.pl_name")+ "'";
+			order += ", "+ rs.getInt("salecnt");
+		}while(rs.next());
+		plname = plname.substring(1);
+		order = order.substring(1);
+%>
+<script>
+var color = Chart.helpers.color;
+var barChartData = {
+	labels: [<%=plname%>],
+	datasets: [{
+		label: '판매량',
+		backgroundColor: [
+			'rgba(255, 99, 132, 0.5)',			'rgba(54, 162, 235, 0.5)',			'rgba(255, 206, 86, 0.5)',			'rgba(75, 192, 192, 0.5)',
+			'rgba(153, 102, 255, 0.5)',			'rgba(255, 159, 64, 0.5)',			'rgba(96, 36, 99, 0.5)',			'rgba(54, 222, 54, 0.5)',
+			'rgba(125, 77, 55, 0.5)',			'rgba(255, 187, 64, 0.5)'
+		],
+		borderColor: [
+			'rgba(255, 99, 132, 1)',			'rgba(54, 162, 235, 1)',			'rgba(255, 206, 86, 1)',			'rgba(75, 192, 192, 1)',
+			'rgba(153, 102, 255, 1)',			'rgba(255, 159, 64, 1)',			'rgba(96, 36, 99, 1)',			'rgba(54, 222, 54, 1)',
+			'rgba(125, 77, 55, 1)',				'rgba(255, 187, 64, 1)'
+		],
+		borderWidth: 1,
+		data: [<%=order%>]
+	}]
 };
 </script>
+<%
+	}
+	Calendar today = Calendar.getInstance();
+//	String year = today.get(Calendar.YEAR) + "";
+	String year = "2020";
+	String month = "", sales = "";
+	sql = "select left(l.ol_date,7), mid(l.ol_date,6,2), sum(d.od_price) as sales " + 
+			" from t_product_size s, t_product_list p , t_order_detail d, t_order_list l where p.pl_id = s.pl_id and d.ol_id = l.ol_id and p.pl_id = d.pl_id " + 
+			" and (d.od_status != 'f' and d.od_status != 'g' and d.od_status != 'h' and d.od_status != 'i' and d.od_status != 'j' ) " + 
+			" and left(l.ol_date,4) = '" + year + "' group by left(l.ol_date,7) order by left(l.ol_date,4) desc";
+	stmt = conn.createStatement();
+	rs = stmt.executeQuery(sql);
+	while(rs.next()){
+		month += ", '" + rs.getString(2) + "월' ";
+		sales += ", " + rs.getInt(3);
+	}
+	month = month.substring(1);
+	sales = sales.substring(1);
+%>
+<script>
+var salesConfig = {
+	type: 'line',
+	data: {
+		labels: [<%=month%>], 
+		datasets: [{
+			label: '매출액', 
+			backgroundColor: window.chartColors.red,
+			borderColor: window.chartColors.red,
+			data: [<%=sales%>], 
+			fill: false,
+		}]
+	},
+	options: {
+		responsive: true,
+		title: { display: true, text: '<%=year%>년 월별 매출' }, 
+		tooltips: { mode: 'index', intersect: false }, 
+		hover: { mode: 'nearest', intersect: true }, 
+		scales: { 
+			xAxes: [{ display:true, scaleLabel:{ display:true, labelString:'월별' } }],
+			yAxes: [{ display:true, scaleLabel:{ display:true, labelString:'금액' } }]
+		}
+	}
+};
+</script>
+	<h3>미처리 주문현황:</h3>
+	<div class="order">
+		 입금전: <%=before %><br />
+		 입금확인: <%=after %><br />
+		 상품준비중: <%=ready %><br />
+		 교환요청: <%=exchange %><br />
+		 환불요청: <%=refund %><br />
+	</div>
+	<h3>회원통계</h3>
 	<div class="member">
 		<div id="canvas-holder" style="width:70%">
-		<canvas id="chart-area" style="height:30vh; width:50vw"></canvas>
+			<canvas id="member" style="height:30vh; width:50vw"></canvas>
+		</div>
+	</div>
+	<h3>상품통계</h3>
+	<div class="product">
+		<div id="container" style="width: 75%;">
+			<canvas id="canvas" style="height:30vh; width:50vw"></canvas>
+		</div>
+	</div>
+	<h3>매출통계</h3>
+	<div class="sales">
+		<div style="width:75%;">
+		<canvas id="sales" style="height:30vh; width:50vw"></canvas>
 		</div>
 	</div>
 <%
+
 }catch(Exception e){
 	e.printStackTrace();
 	out.println("오류가 발생했습니다.");
