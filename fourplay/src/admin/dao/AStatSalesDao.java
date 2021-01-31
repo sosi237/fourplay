@@ -28,7 +28,7 @@ public class AStatSalesDao {
 		ResultSet rs = null;
 		
 		try {
-			String sql = "select left(l.ol_date,7), mid(l.ol_date,6,2), sum(d.od_price) as sales " + 
+			String sql = "select left(l.ol_date,7), mid(l.ol_date,6,2), sum(d.od_price * d.od_cnt) as sales " + 
 					" from t_product_size s, t_product_list p , t_order_detail d, t_order_list l where p.pl_id = s.pl_id and d.ol_id = l.ol_id and p.pl_id = d.pl_id " + 
 					" and (d.od_status != 'f' and d.od_status != 'g' and d.od_status != 'h' and d.od_status != 'i' and d.od_status != 'j' ) " + 
 					" and left(l.ol_date,4) = '" + year + "' group by left(l.ol_date,7) order by left(l.ol_date,4) desc";

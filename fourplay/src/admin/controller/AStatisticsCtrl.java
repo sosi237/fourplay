@@ -28,7 +28,7 @@ System.out.println(command);
 			case "/admin/pdt_stat.stat" :		// 상품 통계 화면
 				action = new AStatPdtAction();	break;
 			case "/admin/sales_stat.stat" :		// 매출 통계 화면
-//				action = new AStatSalesAction();	break;
+				action = new AStatSalesAction();	break;
 		}
 		try {
 			forward = action.execute(request, response);
