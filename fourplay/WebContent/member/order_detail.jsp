@@ -37,7 +37,6 @@ switch(detailInfo.getOl_status()){
 #ordInfo th { background-color:lightgray; }
 #pdtInfo th { background-color:lightgray; }
 #delivery th { background-color:lightgray; }
-#delivery {}
 a:link { color:#4f4f4f; text-decoration:none; }
 a:visited { color:#4f4f4f; text-decoration:none; }
 a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
@@ -50,7 +49,7 @@ a:focus { color:#f00; text-decoration:underline; }
 .left{text-align:left;}
 .rBtn {width:80px; height:30px;  background-color:black; color:white; }
 .lBtn {width:90px; height:30px;  background-color:darkgray; color:white; border:0;}
-
+.cBtn {width:80px; height:30px; background-color:lightgray; color:white;  border:0px;}
 .detailList {display:block; margin:15px auto;}
 </style>
 <!-- 
@@ -123,7 +122,7 @@ function ordCancel(olid) {
 	<td><%=status%></td>
 	<td>
 		<% switch(detailInfo.getOrdDetailList().get(i).getOd_status()){
-			case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' onclick='ordCancel("+ detailInfo.getOl_id()+");'/>");		break;
+			case "a": case "b": case"c": 	out.print("<input type='button' value='주문취소' class='cBtn' onclick='ordCancel("+ detailInfo.getOl_id()+");'/>");		break;
 			case "d": case "g":				out.print("<input type='button' value='교환/반품' onclick=''/>");					break;
 			case "e":	
 				if(loginMember != null){

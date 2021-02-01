@@ -35,6 +35,7 @@ String status = "";
 	width:100%; display:block; margin-top:20px;border:0;
 }
 .rBtn {width:80px; height:30px; background-color:black; color:white; }
+.cBtn {width:80px; height:30px; background-color:lightgray; color:white;  border:0px;}
 </style>
 <script src="jquery-3.5.1.js"></script>
 <script>
@@ -57,7 +58,8 @@ function ordCancel(olid) {
 <div id="wrapper">
 <h2>ORDER LIST</h2>
 <table width="100%" cellpadding="5" cellspacing="0" border="0">
-	<tr class="title" style="background-color:#e1e1e1; "><th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
+	<tr class="title" style="background-color:#e1e1e1; ">
+	<th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
 	<th width="8%">가격</th><th width="10%">주문처리상태</th><th width="15%">취소/교환/반품</th></tr>
 <%
 if(ordList != null && rcnt > 0){
@@ -112,7 +114,7 @@ if(ordList != null && rcnt > 0){
 	<td>
 		<% switch(ordList.get(i).getOl_status()){
 			case "a": case "b": case"c": 	
-				out.print("<input type='button' value='주문취소' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		
+				out.print("<input type='button' value='주문취소' class='cBtn' onclick='ordCancel("+ ordList.get(i).getOl_id()+");'/>");		
 				break;
 			case "d": case "g":				
 				out.print("<input type='button' value='교환/반품' onclick=''/>");					

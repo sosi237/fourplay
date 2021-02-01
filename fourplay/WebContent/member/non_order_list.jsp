@@ -16,20 +16,28 @@ OrdListInfo ordInfo = (OrdListInfo)request.getAttribute("ordInfo");
 <link href="css/base.css" type="text/css" rel="stylesheet" />
  -->
 <style>
-#wrapper {width:100%; position:absolute; top:300px;}
-#wrapper {font-size:12px;}
-#wrapper table td {border-bottom:1px solid lightgray; align:center;}
-a:link { color:#4f4f4f; text-decoration:none; }
-a:visited { color:#4f4f4f; text-decoration:none; }
-a:hover { color:pink; text-decoration:underline;  font-weight:bold;}
-a:active { color:#f00; text-decoration:none; }	
-a:focus { color:#f00; text-decoration:underline; }
-#wrapper {width:100%; position:absolute; top:300px;}
+#wrapper h2 { margin-bottom:30px;}
+#wrapper th, #wrapper td {padding:10px 0;}
+.list td {border-bottom:1px solid lightgray; align:center; text-align:center;}
+.list .left{text-align:left;}
+.paging {
+	width:100%; display:block; margin-top:20px;border:0;
+}
+.rBtn {width:80px; height:30px; background-color:black; color:white; }
 </style>
+<script src="jquery-3.5.1.js"></script>
 <script>
-function ordCancel(olid){
-	if(confirm('주문을 취소하시겠습니까?\n취소 철회는 불가능합니다.')){
-		location.href="ord_proc.ord?olid="+olid;
+function ordCancel(olid) {
+	if (confirm('주문을 취소하시겠습니까?\n취소 철회는 불가능합니다.')) {
+		$.ajax({
+			type : "POST", 
+			url : "/fourplay/ord_proc.ord", 
+			data : { "olid" : olid, "wtype" : "cancel" }, 
+			success : function(chkRst) {
+				if(chkRst == 0)		alert("주문 취소에 실패했습니다.\n다시 시도해 주십시오.");
+				else				location.reload();
+			}
+		});
 	}
 }
 </script>
@@ -37,13 +45,11 @@ function ordCancel(olid){
 <body>
 <div id="wrapper">
 <h2>비회원 ORDER LIST</h2>
-<table width="900" cellpadding="5" cellspacing="0" border="0">
-	<div class="head">
-	<tr style="background-color:#e1e1e1; ">
+<table width="100%" cellpadding="5" cellspacing="0" border="0">
+	<tr class="title" style="background-color:#e1e1e1; ">
 	<th width="15%">주문일자<br />[주문번호]</th><th width="10%">사진</th><th width="*">상품정보</th><th width="5%">수량</th>
 	<th width="8%">가격</th><th width="10%">주문처리상태</th><th width="15%">취소/교환/반품</th>
 	</tr>
-	</div>
 	<div class="ordList">
 	<tr>
 	<td><a href="non_order_detail.mpg?olid=<%=ordInfo.getOl_id() %>&bname=<%=ordInfo.getOl_bname()%>">
@@ -82,14 +88,14 @@ function ordCancel(olid){
 	switch(ordInfo.getOl_status()){
 		case "a": 							out.print("입금 전<br />계좌번호: 국민은행<br />6131802-01473-365(김현수)");		break;
 		case "b": 							out.print("입금 확인");														break;
-		case "c": 							out.print("상품준비중");													break;
-		case "d": 							out.print("배송중<br/>한진택배: 419079564046");								break;
+		case "c": 							out.print("상품준비중");														break;
+		case "d": 							out.print("배송중<br/>한진택배: 419079564046");									break;
 		case "e": 	case "k":				out.print("배송완료");														break;
 		case "f": 							out.print("교환요청");														break;
 		case "g": 							out.print("교환완료");														break;
 		case "h": 							out.print("환불요청");														break;
 		case "i": 							out.print("환불완료");														break;
-		case "j": 							out.print("취소");														break;
+		case "j": 							out.print("취소");															break;
 	}
 	%></td>
 	<td>
