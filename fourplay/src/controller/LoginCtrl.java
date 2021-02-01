@@ -23,17 +23,17 @@ public class LoginCtrl extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginMember", loginMember);
 			response.sendRedirect("index.jsp");
-		} else {	// ÀÏ¹İ È¸¿øÀÌ ¾Æ´Ï¸é
+		} else {	
 			AdminInfo adminMember = loginSvc.getAdminMember(uid, pwd);
 			if (adminMember != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("adminMember", adminMember);
 				response.sendRedirect("admin/a_index.jsp");
-			} else {	// ÀÏ¹İÈ¸¿øµµ, °ü¸®ÀÚ°èÁ¤µµ ¾Æ´Ï¸é
+			} else {	
 				response.setContentType("text/html;charset=utf-8");
 				PrintWriter out = response.getWriter();
 				out.println("<script>");
-				out.println("alert('·Î±×ÀÎ¿¡ ½ÇÆĞÇß½À´Ï´Ù.');");
+				out.println("alert('ë¡œê·¸ì¸ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.');");
 				out.println("history.back();");
 				out.println("</script>");
 			}
