@@ -22,7 +22,6 @@ public class AMemStatDao {
 	}
 	
 	public int getMemCount(String gender) {	
-		System.out.println("AMemStatDao getMemCount");
 		int g = 0;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -39,5 +38,29 @@ public class AMemStatDao {
 			close(rs);	close(stmt);
 		}
 		return g;
+	}
+	public ArrayList getAgeList() {
+		ArrayList ageList = new ArrayList();
+		int ageMem = 0;
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		try {
+			for(int i = 10; i <= 50; i += 10) {
+				sql = "select count(*) from t_member_list " + 
+						"where (left(now(), 4) - left(ml_birth, 4) +1 ) >= " + i + " and (left(now(), 4) - left(ml_birth, 4) +1 ) < " + (i + 10) ;
+				stmt = conn.createStatement();
+				rs = stmt.executeQuery(sql);
+				if(rs.next()) {
+					ageMem = rs.getInt(1);
+					ageList.add(ageMem);
+				}
+			}
+		} catch(Exception e) {
+			System.out.println("getAgeList() ¿À·ù");	e.printStackTrace();
+		} finally {
+			close(rs);	close(stmt);
+		}
+		return ageList;
 	}
 }

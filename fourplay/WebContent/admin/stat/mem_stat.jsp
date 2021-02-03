@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
 <%@ include file="../a_menu.jsp" %>
 <%@ include file="../statistics_menu.jsp" %>
 <%
 request.setCharacterEncoding("utf-8");
-int male = (int)request.getAttribute("male");
-int female = (int)request.getAttribute("female");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -20,8 +19,16 @@ canvas {
 </style>
 <script src="stat/js/Chart.min.js"></script>
 <script src="stat/js/utils.js"></script>
+</head>
+<body>
+<div id="wrapper">
+<%
+if(kind.equals("gender")){
+	int male = (int)request.getAttribute("male");
+	int female = (int)request.getAttribute("female");
+%>
 <script>
-var config = {
+var gConfig = {
 	type: 'pie',
 	data: {
 		datasets: [{
@@ -38,16 +45,59 @@ var config = {
 };
 
 window.onload = function() {
-	var ctx = document.getElementById('chart-area').getContext('2d');
-	window.myPie = new Chart(ctx, config);
+	var gCtx = document.getElementById('chart-gender').getContext('2d');
+	window.myPie = new Chart(gCtx, gConfig);
 };
 </script>
-</head>
-<body>
-<div id="wrapper">
-<div id="canvas-holder" style="width:70%">
-<canvas id="chart-area"></canvas>
-</div>
+	<div id="canvas-holder" style="width:70%">
+	<canvas id="chart-gender"></canvas>
+	</div>
+<%
+} else if(kind.equals("age")){
+	ArrayList ageList = (ArrayList)request.getAttribute("ageList");
+	String age = "";
+	for(int i = 0; i < ageList.size(); i++){
+		System.out.print(ageList.get(i) + ", ");
+		age += ", " + ageList.get(i);
+	}
+	age = age.substring(1);
+	System.out.println(age);
+%>
+<script>
+var aConfig = {
+	type: 'doughnut',
+	data: {
+		datasets: [{
+			data: [<%=age%>], 
+			backgroundColor: [
+				window.chartColors.orange, 
+				window.chartColors.red, 
+				window.chartColors.yellow, 
+				window.chartColors.green, 
+				window.chartColors.blue
+			],
+			label: '점유율'
+		}],
+		labels: ["10대", "20대", "30대", "40대", "50대"]
+	},
+	options: {
+		responsive: true, legend: { position: 'top', }, 
+		title: { display: true, text: '회원 연령 통계' },
+		animation: { animateScale: true, animateRotate: true }
+	}
+};
+
+window.onload = function() {
+	var aCtx = document.getElementById('chart-age').getContext('2d');
+	window.myDoughnut = new Chart(aCtx, aConfig);
+};
+</script>
+	<div id="canvas-holder" style="width:70%">
+		<canvas id="chart-age"></canvas>
+	</div>	
+<%
+}
+%>
 </div>
 </body>
 </html>
