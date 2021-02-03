@@ -43,6 +43,11 @@ $(document).ready(function(){
 	$("#product").addClass("selected");
 <%} else {%>
 	$("#sales").addClass("selected");
+	<% if(kind != null && kind.equals("monthly")){%>
+		$("#monthly").addClass("subSlt");
+	<%} else if(kind != null && kind.equals("quarter")){%>
+		$("#quarter").addClass("subSlt");
+	<%}%>
 <%}%>
 });
 </script>
@@ -56,7 +61,12 @@ $(document).ready(function(){
 			<li id="age" class="sub"><a href="mem_stat.stat?kind=age">연령 통계</a></li>
 		<%} %>
 	<li id="product"><a href="pdt_stat.stat">상품 통계</a></li>
-	<li id="sales" ><a href="sales_stat.stat">매출 통계</a></li>
+	
+	<li id="sales" ><a href="sales_stat.stat?kind=monthly">매출 통계</a></li>
+		<%if(command.equals("/admin/stat/sales_stat.jsp")) { %>
+			<li id="monthly" class="sub"><a href="sales_stat.stat?kind=monthly">월별</a></li>
+			<li id="quarter" class="sub"><a href="sales_stat.stat?kind=quarter">분기별</a></li>
+		<%} %>
 </ol>
 </div>
 </body>

@@ -21,7 +21,6 @@ public class AStatSalesDao {
 		this.conn = conn;
 	}
 	public ArrayList<StatPdtInfo> getMonthSales(String year) {	// 특정 연도 월별 매출을 보여주는 메소드
-		System.out.println("AStatSalesDao getMonthSales");
 		StatPdtInfo statSaleInfo = null;
 		ArrayList<StatPdtInfo> statSalesList = new ArrayList<StatPdtInfo>();
 		Statement stmt = null;

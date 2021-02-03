@@ -14,10 +14,13 @@ public class AStatSalesAction implements action.Action{
 		year = "2020";
 		AStatSalesSvc aStatSalesSvc = new AStatSalesSvc();
 		ArrayList<StatPdtInfo> statSalesList = new ArrayList<StatPdtInfo>();
-		statSalesList = aStatSalesSvc.getMonthSales(year);
-		request.setAttribute("year", year);
-		request.setAttribute("statSalesList", statSalesList);
-		forward.setPath("stat/sales_stat.jsp");
+		
+		if(kind.equals("monthly") || kind.equals("quarter")) {
+			statSalesList = aStatSalesSvc.getMonthSales(year);
+			request.setAttribute("year", year);
+			request.setAttribute("statSalesList", statSalesList);
+			forward.setPath("stat/sales_stat.jsp?kind=" + kind);
+		} 
 
 		return forward;
 	}

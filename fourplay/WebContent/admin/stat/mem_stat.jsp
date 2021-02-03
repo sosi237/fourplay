@@ -61,7 +61,6 @@ window.onload = function() {
 		age += ", " + ageList.get(i);
 	}
 	age = age.substring(1);
-	System.out.println(age);
 %>
 <script>
 var aConfig = {
