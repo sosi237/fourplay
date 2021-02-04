@@ -31,6 +31,9 @@ public class AdmCtrl extends HttpServlet {
 			case "/admin/admin_list.adm" :	case "/admin/admin/admin_list.adm" :	// 관리자 목록 화면
 				action = new AdmListAction();
 				break;
+			case "/admin/admin_pms.adm" :		// 관리자 권한설정 화면
+				action = new AdmPmsAction();
+				break;
 			case "/admin/admin_join.adm" :	case "/admin/admin/admin_join.adm" : 	// 관리자 계정 생성 화면
 				action = new AdmJoinAction();
 				break;
@@ -40,7 +43,7 @@ public class AdmCtrl extends HttpServlet {
 			case "/admin_del.adm" : 	case "/admin/admin_del.adm" :	case "/admin/admin/admin_del.adm" :		// 관리자 계정 수정 화면
 				action = new AdmDelAction();
 				break;
-			case "/admin/admin_proc.adm" :	case "/admin/admin/admin_proc.adm" :	// 관리자 계정 수정/삭제, 상태변경 처리 기능 
+			case "/admin/admin_proc.adm" :	case "/admin/admin/admin_proc.adm" :	// 관리자 계정 수정/삭제, 상태변경, 권한설정 처리 기능 
 				action = new AdmProcAction();
 				break;
 		}
