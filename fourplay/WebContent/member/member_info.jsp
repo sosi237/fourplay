@@ -34,25 +34,49 @@ th { background:#eee; }
 .btn .input1{width:150px;height:40px;text-align:center;font-size:14px;background:black;color:#fff;border:none;}
 .btn .input2{width:150px;height:40px;text-align:center;font-size:14px;background:gray;color:#fff;border:none;}
 </style>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false"></script>
 <script>
 function openPop1() {
 // 팝업창 뛰우는 메소드
 	var w = (screen.width - 500) / 2;	// 수평 중심점
 	var h = (screen.height - 400) / 2;	// 수직 중심점
-	var win = window.open("/fourplay/addr_form.mpg", "", "width=500,height=400,left=" + w + ",top=" + h);
+	var win = window.open("addr_form.mpg", "", "width=500,height=400,left=" + w + ",top=" + h); 
+	
 }
 
 function openPop2() {
 // 팝업창 뛰우는 메소드
 	var w = (screen.width - 500) / 2;	// 수평 중심점
 	var h = (screen.height - 400) / 2;	// 수직 중심점
-	var win = window.open("/fourplay/addr_view.mpg", "", "width=500,height=400,left=" + w + ",top=" + h);
+	var win = window.open("addr_view.mpg", "", "width=500,height=400,left=" + w + ",top=" + h);
+	
 }
+
 function selectEmail() {
 	document.frmInfo.e2.value = document.frmInfo.e3.value;
 }
 
-
+function getZip() {
+	daum.postcode.load(function(){
+	    new daum.Postcode({
+	        oncomplete: function(data) {
+	        	var addr = "";
+	        	// 사용자가 선택한 	주소 타입에 따라 해당 주소 가져옴
+	        	if(data.userSelectedType === "R"){	// 도로명 주소를 선택했을 경우
+	        		addr = data.roadAddress;
+	        	} else {	// 지번 주소를 선택했을 경우
+	        		addr = data.jibunAddress;
+	        	}
+	        	
+	        	document.getElementById("zip").value = data.zonecode;
+	        	document.getElementById("addr1").value = addr;
+	        	document.getElementById("addr2").value = "";
+	        	document.getElementById("addr2").focus();
+	        	
+	        }
+	    }).open();
+	});
+}
 </script>
 </head>
 <body>
@@ -110,11 +134,17 @@ function selectEmail() {
 <tr><th>sms 수신여부</th><td><input type="radio" name="sms-chk" checked="checked" /> 동의합니다. <input type="radio" name="sms-chk" /> 동의하지 않습니다.</td></tr>
 <tr>
 <th>주소</th>
-<td><input type="text" id="zip" name="zip" value="<%=addr.getMa_zip() %>" />
-	<input type="button" value="우편번호 검색" onclick="openPop1();" /> 
-	<input type="button" value="배송지 목록" onclick="openPop2();" /><br />
-	<input type="text" id="addr1" size="48" name="addr1" value="<%=addr.getMa_addr1() %>" /><br />
-	<input type="text" id="addr2" size="48" name="addr2" value="<%=addr.getMa_addr2() %>" />
+<td><input type="text" id="zip" name="zip" value="<%= (addr.getMa_zip() == null) ? "" : addr.getMa_zip()  %>" />
+	<input type="button" value="우편번호 검색" onclick="getZip();" /> 
+<%
+if(addr.getMa_zip() != null){
+%>	
+	<input type="button" value="배송지 목록" onclick="openPop2();" />
+<%
+}
+%>
+	<br /><input type="text" id="addr1" size="48" name="addr1" value="<%= (addr.getMa_addr1() == null) ? "" : addr.getMa_addr1()  %>" />
+	<br /><input type="text" id="addr2" size="48" name="addr2" value="<%= (addr.getMa_addr2() == null) ? "" : addr.getMa_addr2()  %>" />
 </td>
 </tr>
 </table>

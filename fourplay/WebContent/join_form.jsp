@@ -74,7 +74,8 @@ function chkDupId(){
 function chkData(frm) {
 	var name = frm.name.value;		var pwd = frm.pwd.value;	 	var pwd2 = frm.pwd2.value;
 	var email = frm.email.value;	var phone = frm.phone.value;	var birth = frm.birth.value;
-	var uid = frm.uid.value;		var gender = frm.gender;	
+	var uid = frm.uid.value;		var gender = frm.gender;		var chk1 = frm.chk[1].value;
+	
 	
 	if (name == "") {
 		alert("이름을 입력하세요.");		frm.name.focus();		return false;
@@ -95,6 +96,8 @@ function chkData(frm) {
 			}
 		}
 	}
+	
+
 	
 	if (pwd == "") {
 		alert("비밀번호를 입력하세요.");	frm.pwd.focus();		return false;
@@ -132,14 +135,25 @@ function chkData(frm) {
 	if (isChk) {
 		alert("성별을 입력하세요.");		return false;
 	}
+	
+	if (frm.chk[1].checked == false) {
+		alert("약관동의를 해주세요.");		return false ;
+	}
+	
+	if (frm.chk[2].checked == false) {
+		alert("개인정보 수집을 동의해주세요.");		return false ;
+	}
+	
 }
 
 function chkAll(all) {
-	var arrChk = document.frmChk.chk;
+	var arrChk = document.frmJoin.chk;
 	for (var i = 0 ; i < arrChk.length ; i++) {
 		arrChk[i].checked = all.checked;
 	}
 }
+
+
 </script>
 </head>
 <body>
@@ -170,9 +184,36 @@ function chkAll(all) {
 		<input type="reset" value="취소" class="btn3"/>
 	</div>
 </div>
+
+<br><br><br>
+<div class="agree-box2">
+	<table>
+		<tr>
+			<td colspan="2"><input type="checkbox"  name="chk" onclick="chkAll(this);"/> 전체동의</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="checkbox"  name="chk" value="" /> 이용약관
+				<a href="">내용보기</a>
+			</td>
+			<td>
+				<input type="checkbox"  name="chk" value="" /> 개인정보 수집 및 이용 안내
+				<a href="">내용보기</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="checkbox"  name="chk" /> 마케팅 수신동의(선택)&nbsp;&nbsp;( <input type="checkbox"  name="chk" value="" /> 이메일 <input type="checkbox"  name="chk" value="" /> sms )
+			</td>
+		</tr>
+	</table>
+	<div class="text">
+		<p>쇼핑몰에서 제공하는 신상품 소식 / 할인 정보를 무상으로 보내드립니다!<br>단, 상품 구매 정보는 수신동의 여부와 관계없이 발송됩니다.</p>
+		<b>제공 동의를 하지 않으셔도 서비스 이용에는 문제가 없습니다.</b>
+	</div>
+</div>
 </form>
 <jsp:include page="/content.jsp"></jsp:include>
 </div>
 </body>
 </html>
-
